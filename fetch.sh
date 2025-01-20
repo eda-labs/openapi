@@ -74,6 +74,8 @@ EDA_APIS=$(curl -sk ${EDA_API_URL}/openapi/v3 \
   -H "Authorization: Bearer ${EDA_ACCESS_TOKEN}" \
   -H 'Content-Type: application/json')
 
+echo $EDA_APIS | jq .
+
 echo "$EDA_APIS" | jq -r '.paths | to_entries[] | .key + " " + .value.serverRelativeURL' | while read -r path url; do
     # Create directory structure
     mkdir -p "${path}"
@@ -85,7 +87,7 @@ echo "$EDA_APIS" | jq -r '.paths | to_entries[] | .key + " " + .value.serverRela
     echo "Fetching ${EDA_API_URL}${url}"
     curl -sk "${EDA_API_URL}${url}" \
         -H "Authorization: Bearer ${EDA_ACCESS_TOKEN}" \
-        -H 'Content-Type: application/json' > "${path}/${filename}"
+        -H 'Content-Type: application/json' | jq . > "${path}/${filename}"
         
     echo "Fetched ${path} to ${path}/${filename}"
 done

@@ -2,7 +2,9 @@
 
 Unofficial catalog of the OpenAPI specs for the [Nokia EDA](https://docs.eda.dev).
 
-* [Core](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/heads/main/apps/core.eda.nokia.com/v1/core.json)
+* Core
+  * [core](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/heads/main/core/core.json)
+  * [apps/core](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/heads/main/apps/core.eda.nokia.com/v1/core.json)
 * [AAA](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/heads/main/apps/aaa.eda.nokia.com/v1alpha1/aaa.json)
 * [AppStore](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/heads/main/apps/appstore.eda.nokia.com/v1/appstore.json)
 * [Bootstrap](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/heads/main/apps/bootstrap.eda.nokia.com/v1alpha1/bootstrap.json)
