@@ -5946,9 +5946,6 @@
             "$ref": "#/components/schemas/Metadata"
           },
           "spec": {
-            "additionalProperties": {
-              "type": "object"
-            },
             "type": "object"
           }
         },
