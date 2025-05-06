@@ -245,142 +245,387 @@
       "UIResult": {
         "type": "string"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup": {
-        "description": "NodeGroup is the Schema for the nodegroups API",
+      "com.nokia.eda.aifabrics.v1alpha1.Backend": {
+        "description": "Backend is the Schema for the backends API",
         "properties": {
           "apiVersion": {
-            "default": "aaa.eda.nokia.com/v1alpha1",
+            "default": "aifabrics.eda.nokia.com/v1alpha1",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-visible-if": "false"
             }
           },
           "kind": {
-            "default": "NodeGroup",
+            "default": "Backend",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend_metadata"
           },
           "spec": {
-            "description": "NodeGroup is a representation of a group on a node, including the services it has access to, any RBAC, and TACACS configuration.\nNodeGroups are deployed to nodes by NodeUser or other permission-consuming resources.",
+            "description": "BackendSpec defines the desired state of Backend",
             "properties": {
-              "groupName": {
-                "description": "Set the local name for this group. If not provided, the resource name will be used.",
-                "title": "Group Name",
+              "asnPool": {
+                "description": "Reference to an IndexAllocationPool pool to use for Autonomous System Number allocations.  Used when eBGP is configured as an underlay protocol.",
+                "title": "Autonomous System Pool",
                 "type": "string",
                 "x-eda-nokia-com": {
+                  "ui-auto-completes": [
+                    {
+                      "condition": "true",
+                      "group": "core.eda.nokia.com",
+                      "resource": "indexallocationpools",
+                      "type": "gvr",
+                      "version": "v1"
+                    }
+                  ],
+                  "ui-category": "UnderlayProtocol",
                   "ui-column-span": 2,
-                  "ui-order-priority": 100,
-                  "ui-single-line-group": "NameServices"
+                  "ui-order-priority": 250,
+                  "ui-single-line-group": "systemasn"
                 }
               },
-              "rules": {
-                "description": "Rules for this group.",
+              "gpuIsolationGroups": {
+                "description": "GPU Isolation Groups are used to isolate GPU traffic over the network, GPUs in different GPU isolation groups will not be able to communicate with each other.  If all GPUs across all stripes need to be able to communicate with each other, create a single GPUIsolationGroup selecting all GPU facing interfaces.",
                 "items": {
                   "properties": {
-                    "action": {
-                      "default": "ReadWrite",
-                      "description": "Set the action for this entry.",
-                      "enum": [
-                        "Deny",
-                        "ReadWrite",
-                        "Read"
-                      ],
-                      "title": "Action",
-                      "type": "string",
+                    "interfaceSelector": {
+                      "format": "labelselector",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "Interface Selector",
+                      "type": "array",
                       "x-eda-nokia-com": {
+                        "ui-category": "IsolationGroup",
                         "ui-column-span": 2,
-                        "ui-order-priority": 100
+                        "ui-order-priority": 200
                       }
                     },
-                    "match": {
-                      "description": "Set the match for this entry. This is a string to match input against - for example \"interface\" for srl or \"configure port\" for sros.\nRules here should be specified in the target specific format.",
-                      "title": "Match",
+                    "name": {
+                      "description": "Name of the IsolationGroup.",
+                      "title": "Isolation Group",
                       "type": "string",
                       "x-eda-nokia-com": {
                         "ui-column-span": 4,
-                        "ui-order-priority": 300
-                      }
-                    },
-                    "operatingSystem": {
-                      "default": "srl",
-                      "description": "Operating system to match against for this rule.\nOperating system to deploy this rule to.",
-                      "enum": [
-                        "srl",
-                        "sros"
-                      ],
-                      "title": "Operating System",
-                      "type": "string",
-                      "x-eda-nokia-com": {
-                        "ui-column-span": 2,
-                        "ui-order-priority": 200
+                        "ui-order-priority": 100
                       }
                     }
                   },
                   "required": [
-                    "action",
-                    "operatingSystem"
+                    "interfaceSelector",
+                    "name"
                   ],
                   "type": "object"
                 },
-                "title": "Rules",
-                "type": "array"
-              },
-              "services": {
-                "description": "Enabled services for this group",
-                "items": {
-                  "enum": [
-                    "CLI",
-                    "FTP",
-                    "GNMI",
-                    "GNOI",
-                    "GNSI",
-                    "GRIBI",
-                    "Reflection",
-                    "JSON-RPC",
-                    "NETCONF"
-                  ],
-                  "type": "string"
-                },
-                "title": "Services",
+                "title": "GPU Isolation Groups",
                 "type": "array",
                 "x-eda-nokia-com": {
-                  "ui-column-span": 3,
-                  "ui-order-priority": 200,
-                  "ui-single-line-group": "NameServices"
+                  "ui-column-span": 4,
+                  "ui-order-priority": 500
                 }
               },
-              "superuser": {
-                "description": "Make members of this group superusers.",
-                "title": "Superuser",
-                "type": "boolean",
-                "x-eda-nokia-com": {
-                  "ui-column-span": 1,
-                  "ui-order-priority": 300,
-                  "ui-single-line-group": "NameServices"
-                }
-              },
-              "tacacs": {
-                "description": "TACACS configuration.",
+              "rocev2QoS": {
+                "description": "Set of properties to configure the RoCEv2 QoS.",
                 "properties": {
-                  "privilegeLevel": {
-                    "description": "Set the privilege level for this group.",
-                    "maximum": 15,
+                  "ecnMaxDropProbabilityPercent": {
+                    "default": 100,
+                    "description": "If the queue depth is between min and max threshold then this the probability with which packets are dropped or marked.",
+                    "title": "ECN Max Drop Probability Percent",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2
+                    }
+                  },
+                  "ecnSlopeMaxThresholdPercent": {
+                    "default": 80,
+                    "description": "The maximum threshold parameter for a RED-managed queue in percent. When the average queue length exceeds the max value, all packets are dropped (or marked if ECN is enabled). Mutually exclusive with min-threshold and max-threshold.",
+                    "title": "ECN Max Threshold Percent",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "ecnthresholds"
+                    }
+                  },
+                  "ecnSlopeMinThresholdPercent": {
+                    "default": 5,
+                    "description": "The mininum threshold parameter for a RED-managed queue in percent. When the average queue length is less than min, all packets are admitted to the queue. Mutually exclusive with min-threshold and max-threshold.",
+                    "title": "ECN Min Threshold Percent",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "ecnthresholds"
+                    }
+                  },
+                  "pfcDeadlockDetectionTimer": {
+                    "default": 750,
+                    "description": "Number of milliseconds during which outgoing interface is receiving pfc-pause-frames before triggering recovery-timer.",
+                    "title": "PFC Deadlock Detection Timer",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "pfctimers"
+                    }
+                  },
+                  "pfcDeadlockRecoveryTimer": {
+                    "default": 750,
+                    "description": "Number of milliseconds during which the pfc-pause-frames will be ignored.",
+                    "title": "PFC Deadlock Recovery Timer",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "pfctimers"
+                    }
+                  },
+                  "queueMaximumBurstSize": {
+                    "default": 52110640,
+                    "description": "Maximum amount of shared buffer memory available to the queue in bytes.",
+                    "format": "int32",
+                    "maximum": 4294967295,
                     "minimum": 0,
-                    "title": "Privilege Level",
-                    "type": "integer"
+                    "title": "Maximum Burst Size",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2
+                    }
                   }
                 },
-                "title": "TACACS",
-                "type": "object"
+                "required": [
+                  "ecnMaxDropProbabilityPercent",
+                  "ecnSlopeMaxThresholdPercent",
+                  "ecnSlopeMinThresholdPercent",
+                  "pfcDeadlockDetectionTimer",
+                  "pfcDeadlockRecoveryTimer",
+                  "queueMaximumBurstSize"
+                ],
+                "title": "RoCEv2 QoS",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 600
+                }
+              },
+              "stripeConnector": {
+                "description": "StripeConnector is the spine layer interconnecting multiple stripes.",
+                "properties": {
+                  "asnPool": {
+                    "description": "Reference to an IndexAllocationPool pool to use for Autonomous System Number allocations.",
+                    "title": "Autonomous System Pool",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "core.eda.nokia.com",
+                          "resource": "indexallocationpools",
+                          "type": "gvr",
+                          "version": "v1"
+                        }
+                      ],
+                      "ui-category": "UnderlayProtocol",
+                      "ui-column-span": 2,
+                      "ui-order-priority": 250,
+                      "ui-single-line-group": "systemasn2"
+                    }
+                  },
+                  "linkSelector": {
+                    "description": "Selects TopoLinks to include in this AI Fabric, the selected TopoLinks will be used to create ISLs between the stripe connector devices and the leaf devices.",
+                    "format": "labelselector",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Link Selector",
+                    "type": "array",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-order-priority": 400
+                    }
+                  },
+                  "name": {
+                    "description": "The name of the Stripe Connector.",
+                    "title": "Stripe Connector Name",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 4,
+                      "ui-order-priority": 100,
+                      "ui-unique-key": true
+                    }
+                  },
+                  "nodeSelector": {
+                    "description": "Node selector to select the nodes to be used for this stripe connector.",
+                    "format": "labelselector",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Node Selector",
+                    "type": "array",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-order-priority": 300
+                    }
+                  },
+                  "systemPoolIPV4": {
+                    "description": "Reference to an IPAllocationPool used to dynamically allocate an IPv4 address to system/lo0 interfaces for the stripe connector devices.  If not specified, the system will use the default IPAllocationPool.",
+                    "title": "IPv4 Pool - System IP",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "core.eda.nokia.com",
+                          "resource": "ipallocationpools",
+                          "type": "gvr",
+                          "version": "v1"
+                        }
+                      ],
+                      "ui-category": "IPPools",
+                      "ui-column-span": 2,
+                      "ui-order-priority": 200,
+                      "ui-single-line-group": "systemasn2"
+                    }
+                  }
+                },
+                "required": [
+                  "linkSelector",
+                  "name",
+                  "nodeSelector"
+                ],
+                "title": "Stripe Connector",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 400
+                }
+              },
+              "stripes": {
+                "description": "A list of stripes, stripes contain a set of nodes (rails).",
+                "items": {
+                  "properties": {
+                    "asnPool": {
+                      "description": "Optional reference to an IndexAllocationPool pool to use for Autonomous System Number allocations.  If left blank, ASN allocation will be done from the ASNAllocationRange.",
+                      "title": "Autonomous System Pool",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-auto-completes": [
+                          {
+                            "condition": "true",
+                            "group": "core.eda.nokia.com",
+                            "resource": "indexallocationpools",
+                            "type": "gvr",
+                            "version": "v1"
+                          }
+                        ],
+                        "ui-column-span": 2,
+                        "ui-order-priority": 250,
+                        "ui-single-line-group": "systemasn3"
+                      }
+                    },
+                    "gpuVlan": {
+                      "description": "The VLAN used on interfaces facing the GPU servers.",
+                      "title": "GPU VLAN",
+                      "type": "integer",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 400
+                      }
+                    },
+                    "name": {
+                      "description": "The name of the Stripe.",
+                      "title": "Stripe Name",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 4,
+                        "ui-order-priority": 100,
+                        "ui-single-line-group": "stripename"
+                      }
+                    },
+                    "nodeSelector": {
+                      "description": "Node selector to select the nodes to be used for this stripe.",
+                      "format": "labelselector",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "Node Selector",
+                      "type": "array",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 300
+                      }
+                    },
+                    "stripeID": {
+                      "description": "Unique ID for a stripe",
+                      "title": "Stripe ID",
+                      "type": "integer",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 150,
+                        "ui-single-line-group": "stripename"
+                      }
+                    },
+                    "systemPoolIPV4": {
+                      "description": "Optional reference to an IPAllocationPool used to dynamically allocate an IPv4 address to system/lo0 interfaces. If left blank, system IP allocation will be done from the SystemIPV4Subnet.",
+                      "title": "IPv4 Pool - System IP",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-auto-completes": [
+                          {
+                            "condition": "true",
+                            "group": "core.eda.nokia.com",
+                            "resource": "ipallocationpools",
+                            "type": "gvr",
+                            "version": "v1"
+                          }
+                        ],
+                        "ui-category": "IPPools",
+                        "ui-column-span": 2,
+                        "ui-order-priority": 200,
+                        "ui-single-line-group": "systemasn3"
+                      }
+                    }
+                  },
+                  "required": [
+                    "gpuVlan",
+                    "name",
+                    "nodeSelector",
+                    "stripeID"
+                  ],
+                  "type": "object"
+                },
+                "title": "Stripes",
+                "type": "array",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 300
+                }
+              },
+              "systemPoolIPV4": {
+                "description": "Reference to an IPAllocationPool used to dynamically allocate an IPv4 address to system/lo0 interfaces.  If specified under the Leaf/Spine/Superspine/Borderleaf those will take precedence.",
+                "title": "IPv4 Pool - System IP",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-auto-completes": [
+                    {
+                      "condition": "true",
+                      "group": "core.eda.nokia.com",
+                      "resource": "ipallocationpools",
+                      "type": "gvr",
+                      "version": "v1"
+                    }
+                  ],
+                  "ui-category": "IPPools",
+                  "ui-column-span": 2,
+                  "ui-order-priority": 100,
+                  "ui-single-line-group": "systemasn"
+                }
               }
             },
             "required": [
-              "services"
+              "gpuIsolationGroups",
+              "rocev2QoS",
+              "stripes"
             ],
             "title": "Specification",
             "type": "object",
@@ -389,14 +634,110 @@
             }
           },
           "status": {
-            "description": "Deployment status of this NodeGroup.",
+            "description": "BackendStatus defines the observed state of Backend",
             "properties": {
-              "nodes": {
-                "description": "List of TopoNodes group has been deployed to.",
-                "items": {
-                  "type": "string"
+              "health": {
+                "description": "Indicates the health score of the Fabric.  The health score of the Fabric is determined by the aggregate health score of the resources emited by the Fabric such as ISL, DefaultRouteReflectors etc.",
+                "title": "Health",
+                "type": "integer",
+                "x-eda-nokia-com": {
+                  "ui-visible-if": "false"
+                }
+              },
+              "healthScoreReason": {
+                "description": "Indicates the reason for the health score.",
+                "title": "Health Score Reason",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-visible-if": "false"
+                }
+              },
+              "lastChange": {
+                "description": "The time when the state of the resource last changed.",
+                "format": "date",
+                "title": "Last Change",
+                "type": "string"
+              },
+              "operationalState": {
+                "description": "Operational state of the Fabric.  The operational state of the fabric is determined by monitoring the operational state of the following resources (if applicable): DefaultRouters, ISLs.",
+                "title": "Operational State",
+                "type": "string"
+              },
+              "stripeConnector": {
+                "description": "Stripe connector in the Backend.",
+                "properties": {
+                  "name": {
+                    "description": "The name of the Stripe Connector.",
+                    "title": "Stripe Connector Name",
+                    "type": "string"
+                  },
+                  "stripeConnectorNodes": {
+                    "description": "List of stripe connector nodes in the Stripe.",
+                    "items": {
+                      "properties": {
+                        "node": {
+                          "description": "Name of the TopoNode.",
+                          "title": "Node",
+                          "type": "string"
+                        },
+                        "operatingSystem": {
+                          "description": "Operating system running on the node.",
+                          "title": "Operating System",
+                          "type": "string"
+                        },
+                        "operatingSystemVersion": {
+                          "description": "Operating system version running on the node.",
+                          "title": "Operating System Version",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "title": "Leaf Nodes",
+                    "type": "array"
+                  }
                 },
-                "title": "Nodes",
+                "title": "Stripe Connector",
+                "type": "object"
+              },
+              "stripes": {
+                "description": "List of stripes in the Backend.",
+                "items": {
+                  "properties": {
+                    "leafNodes": {
+                      "description": "List of leaf nodes in the Stripe.",
+                      "items": {
+                        "properties": {
+                          "node": {
+                            "description": "Name of the TopoNode.",
+                            "title": "Node",
+                            "type": "string"
+                          },
+                          "operatingSystem": {
+                            "description": "Operating system running on the node.",
+                            "title": "Operating System",
+                            "type": "string"
+                          },
+                          "operatingSystemVersion": {
+                            "description": "Operating system version running on the node.",
+                            "title": "Operating System Version",
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "title": "Leaf Nodes",
+                      "type": "array"
+                    },
+                    "name": {
+                      "description": "The name of the Stripe.",
+                      "title": "Stripe Name",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "title": "Stripes",
                 "type": "array"
               }
             },
@@ -404,8 +745,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
-              "ui-order-priority": 20,
-              "ui-visible-if": "false"
+              "ui-order-priority": 20
             }
           }
         },
@@ -417,15 +757,15 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroupList": {
-        "description": "NodeGroupList is a list of nodegroups",
+      "com.nokia.eda.aifabrics.v1alpha1.BackendList": {
+        "description": "BackendList is a list of backends",
         "properties": {
           "apiVersion": {
             "type": "string"
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+              "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend"
             },
             "type": "array"
           },
@@ -439,7 +779,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResourceEntry": {
+      "com.nokia.eda.aifabrics.v1alpha1.Backend_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "type": "string",
@@ -485,13 +825,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResources": {
+      "com.nokia.eda.aifabrics.v1alpha1.Backend_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup_metadata": {
+      "com.nokia.eda.aifabrics.v1alpha1.Backend_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -513,8 +853,8 @@
               "ui-auto-completes": [
                 {
                   "condition": "true",
-                  "group": "aaa.eda.nokia.com",
-                  "kind": "NodeGroup",
+                  "group": "aifabrics.eda.nokia.com",
+                  "kind": "Backend",
                   "type": "label",
                   "version": "v1alpha1"
                 }
@@ -567,15 +907,15 @@
     }
   },
   "info": {
-    "title": "AAA Application APIs.",
+    "title": "AIFabrics Application APIs.",
     "version": "v1alpha1"
   },
   "openapi": "3.0.1",
   "paths": {
-    "/apps/aaa.eda.nokia.com": {
+    "/apps/aifabrics.eda.nokia.com": {
       "get": {
-        "description": "list versions available from aaa.eda.nokia.com",
-        "operationId": "getVersionAaaEdaNokiaCom",
+        "description": "list versions available from aifabrics.eda.nokia.com",
+        "operationId": "getVersionAifabricsEdaNokiaCom",
         "responses": {
           "200": {
             "content": {
@@ -603,10 +943,10 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1": {
+    "/apps/aifabrics.eda.nokia.com/v1alpha1": {
       "get": {
-        "description": "list resources available from aaa.eda.nokia.com/v1alpha1",
-        "operationId": "getResourcesAaaEdaNokiaComV1alpha1",
+        "description": "list resources available from aifabrics.eda.nokia.com/v1alpha1",
+        "operationId": "getResourcesAifabricsEdaNokiaComV1alpha1",
         "responses": {
           "200": {
             "content": {
@@ -634,10 +974,10 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/_ui/{pathname}": {
+    "/apps/aifabrics.eda.nokia.com/v1alpha1/_ui/{pathname}": {
       "get": {
-        "description": "get UI specification for aaa.eda.nokia.com v1alpha1",
-        "operationId": "uiAaaEdaNokiaComV1alpha1",
+        "description": "get UI specification for aifabrics.eda.nokia.com v1alpha1",
+        "operationId": "uiAifabricsEdaNokiaComV1alpha1",
         "parameters": [
           {
             "description": "pathname to the UI specification to retrieve",
@@ -676,9 +1016,66 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups": {
+    "/apps/aifabrics.eda.nokia.com/v1alpha1/backends": {
+      "get": {
+        "description": "list backends",
+        "operationId": "listAifabricsEdaNokiaComV1alpha1Backends",
+        "parameters": [
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.BackendList"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/aifabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/backends": {
       "delete": {
-        "operationId": "deleteAllAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "operationId": "deleteAllAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -703,7 +1100,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroupList"
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.BackendList"
                 }
               }
             },
@@ -720,14 +1117,14 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Delete all instances of NodeGroup in the specified namespace.",
+        "summary": "Delete all instances of Backend in the specified namespace.",
         "tags": [
           "apps"
         ]
       },
       "get": {
-        "description": "list nodegroups in namespace",
-        "operationId": "listAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "list backends in namespace",
+        "operationId": "listAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "description": "the namespace scope from which to retrieve the result",
@@ -768,7 +1165,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroupList"
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.BackendList"
                 }
               }
             },
@@ -790,8 +1187,8 @@
         ]
       },
       "post": {
-        "description": "create a NodeGroup",
-        "operationId": "createAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "create a Backend",
+        "operationId": "createAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "in": "path",
@@ -806,7 +1203,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend"
               }
             }
           },
@@ -817,7 +1214,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend"
                 }
               }
             },
@@ -839,9 +1236,9 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups/_deleted": {
+    "/apps/aifabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/backends/_deleted": {
       "get": {
-        "operationId": "getDeletedAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "operationId": "getDeletedAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "description": "the namespace scope from which to retrieve the result",
@@ -858,7 +1255,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend_DeletedResources"
                 }
               }
             },
@@ -875,16 +1272,16 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Get information about the instances of NodeGroup that have been deleted that existed in the specified namespace.",
+        "summary": "Get information about the instances of Backend that have been deleted that existed in the specified namespace.",
         "tags": [
           "apps"
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups/{name}": {
+    "/apps/aifabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/backends/{name}": {
       "delete": {
-        "description": "delete the specified NodeGroup",
-        "operationId": "deleteAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "delete the specified Backend",
+        "operationId": "deleteAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -896,7 +1293,7 @@
             }
           },
           {
-            "description": "name of the NodeGroup to delete",
+            "description": "name of the Backend to delete",
             "in": "path",
             "name": "name",
             "required": true,
@@ -932,8 +1329,8 @@
         ]
       },
       "get": {
-        "description": "read the specified NodeGroup.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "read the specified Backend.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
+        "operationId": "readAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "description": "the namespace scope from which to retrieve the result",
@@ -945,7 +1342,7 @@
             }
           },
           {
-            "description": "name of the NodeGroup to retrieve",
+            "description": "name of the Backend to retrieve",
             "in": "path",
             "name": "name",
             "required": true,
@@ -991,7 +1388,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend"
                 }
               }
             },
@@ -1013,8 +1410,8 @@
         ]
       },
       "patch": {
-        "description": "patch a NodeGroup",
-        "operationId": "patchAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "patch a Backend",
+        "operationId": "patchAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "in": "path",
@@ -1048,7 +1445,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend"
                 }
               }
             },
@@ -1070,8 +1467,8 @@
         ]
       },
       "put": {
-        "description": "replace a NodeGroup",
-        "operationId": "replaceAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "replace a Backend",
+        "operationId": "replaceAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
             "in": "path",
@@ -1094,7 +1491,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend"
               }
             }
           },
@@ -1105,7 +1502,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.aifabrics.v1alpha1.Backend"
                 }
               }
             },
@@ -1127,12 +1524,12 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups/{name}/_revs": {
+    "/apps/aifabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/backends/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "operationId": "getHistoryAifabricsEdaNokiaComV1alpha1NamespaceBackends",
         "parameters": [
           {
-            "description": "name of the NodeGroup to retrieve",
+            "description": "name of the Backend to retrieve",
             "in": "path",
             "name": "name",
             "required": true,
@@ -1197,64 +1594,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Get revision history for the specified namespaced NodeGroup.",
-        "tags": [
-          "apps"
-        ]
-      }
-    },
-    "/apps/aaa.eda.nokia.com/v1alpha1/nodegroups": {
-      "get": {
-        "description": "list nodegroups",
-        "operationId": "listAaaEdaNokiaComV1alpha1Nodegroups",
-        "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "client information for streaming request",
-            "in": "query",
-            "name": "eventclient",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "stream information for streaming request",
-            "in": "query",
-            "name": "stream",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroupList"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
+        "summary": "Get revision history for the specified namespaced Backend.",
         "tags": [
           "apps"
         ]

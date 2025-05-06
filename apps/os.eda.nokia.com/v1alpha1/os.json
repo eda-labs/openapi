@@ -245,142 +245,156 @@
       "UIResult": {
         "type": "string"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup": {
-        "description": "NodeGroup is the Schema for the nodegroups API",
+      "com.nokia.eda.os.v1alpha1.DeployImage": {
+        "description": "DeployImage is the Schema for the deployimages API",
         "properties": {
           "apiVersion": {
-            "default": "aaa.eda.nokia.com/v1alpha1",
+            "default": "os.eda.nokia.com/v1alpha1",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-visible-if": "false"
             }
           },
           "kind": {
-            "default": "NodeGroup",
+            "default": "DeployImage",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage_metadata"
           },
           "spec": {
-            "description": "NodeGroup is a representation of a group on a node, including the services it has access to, any RBAC, and TACACS configuration.\nNodeGroups are deployed to nodes by NodeUser or other permission-consuming resources.",
+            "description": "DeployImageSpec defines the desired state of DeployImage",
             "properties": {
-              "groupName": {
-                "description": "Set the local name for this group. If not provided, the resource name will be used.",
-                "title": "Group Name",
-                "type": "string",
-                "x-eda-nokia-com": {
-                  "ui-column-span": 2,
-                  "ui-order-priority": 100,
-                  "ui-single-line-group": "NameServices"
-                }
-              },
-              "rules": {
-                "description": "Rules for this group.",
+              "canaries": {
                 "items": {
-                  "properties": {
-                    "action": {
-                      "default": "ReadWrite",
-                      "description": "Set the action for this entry.",
-                      "enum": [
-                        "Deny",
-                        "ReadWrite",
-                        "Read"
-                      ],
-                      "title": "Action",
-                      "type": "string",
-                      "x-eda-nokia-com": {
-                        "ui-column-span": 2,
-                        "ui-order-priority": 100
-                      }
-                    },
-                    "match": {
-                      "description": "Set the match for this entry. This is a string to match input against - for example \"interface\" for srl or \"configure port\" for sros.\nRules here should be specified in the target specific format.",
-                      "title": "Match",
-                      "type": "string",
-                      "x-eda-nokia-com": {
-                        "ui-column-span": 4,
-                        "ui-order-priority": 300
-                      }
-                    },
-                    "operatingSystem": {
-                      "default": "srl",
-                      "description": "Operating system to match against for this rule.\nOperating system to deploy this rule to.",
-                      "enum": [
-                        "srl",
-                        "sros"
-                      ],
-                      "title": "Operating System",
-                      "type": "string",
-                      "x-eda-nokia-com": {
-                        "ui-column-span": 2,
-                        "ui-order-priority": 200
-                      }
-                    }
-                  },
-                  "required": [
-                    "action",
-                    "operatingSystem"
-                  ],
-                  "type": "object"
-                },
-                "title": "Rules",
-                "type": "array"
-              },
-              "services": {
-                "description": "Enabled services for this group",
-                "items": {
-                  "enum": [
-                    "CLI",
-                    "FTP",
-                    "GNMI",
-                    "GNOI",
-                    "GNSI",
-                    "GRIBI",
-                    "Reflection",
-                    "JSON-RPC",
-                    "NETCONF"
-                  ],
                   "type": "string"
                 },
-                "title": "Services",
-                "type": "array",
-                "x-eda-nokia-com": {
-                  "ui-column-span": 3,
-                  "ui-order-priority": 200,
-                  "ui-single-line-group": "NameServices"
-                }
+                "title": "canaries",
+                "type": "array"
               },
-              "superuser": {
-                "description": "Make members of this group superusers.",
-                "title": "Superuser",
-                "type": "boolean",
-                "x-eda-nokia-com": {
-                  "ui-column-span": 1,
-                  "ui-order-priority": 300,
-                  "ui-single-line-group": "NameServices"
-                }
-              },
-              "tacacs": {
-                "description": "TACACS configuration.",
+              "checks": {
                 "properties": {
-                  "privilegeLevel": {
-                    "description": "Set the privilege level for this group.",
-                    "maximum": 15,
-                    "minimum": 0,
-                    "title": "Privilege Level",
-                    "type": "integer"
+                  "checks": {
+                    "description": "Checks to run before (pre) and after (post) any image changes",
+                    "enum": [
+                      "Interface",
+                      "DefaultBGP",
+                      "PingISL",
+                      "PingSystem"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "checks",
+                    "type": "array"
+                  },
+                  "force": {
+                    "description": "Do not prompt for user input, even if checks fail",
+                    "type": "boolean"
+                  },
+                  "skip": {
+                    "description": "Do not run any checks",
+                    "type": "boolean"
                   }
                 },
-                "title": "TACACS",
+                "required": [
+                  "checks",
+                  "force",
+                  "skip"
+                ],
+                "title": "checks",
                 "type": "object"
+              },
+              "drains": {
+                "properties": {
+                  "interfaceDisableSelectors": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "InterfaceDisableSelectors",
+                    "type": "array"
+                  },
+                  "minimumWaitTime": {
+                    "title": "minimumWaitTime",
+                    "type": "integer"
+                  },
+                  "skip": {
+                    "description": "Do not run any drains",
+                    "title": "skip",
+                    "type": "boolean"
+                  }
+                },
+                "title": "drains",
+                "type": "object"
+              },
+              "nodeProfile": {
+                "title": "nodeProfile",
+                "type": "string"
+              },
+              "nodeSelector": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "nodeSelector",
+                "type": "array"
+              },
+              "nodes": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "nodes",
+                "type": "array"
+              },
+              "prompt": {
+                "enum": [
+                  "AfterPreChecks",
+                  "AfterPostChecks"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "title": "prompt",
+                "type": "array"
+              },
+              "tranches": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "title": "name",
+                      "type": "string"
+                    },
+                    "nodeSelector": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "nodeSelector",
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "title": "tranches",
+                "type": "array"
+              },
+              "type": {
+                "enum": [
+                  "node",
+                  "nodeselector",
+                  "tranche"
+                ],
+                "title": "type",
+                "type": "string"
+              },
+              "version": {
+                "title": "version",
+                "type": "string"
               }
             },
             "required": [
-              "services"
+              "type"
             ],
             "title": "Specification",
             "type": "object",
@@ -389,23 +403,24 @@
             }
           },
           "status": {
-            "description": "Deployment status of this NodeGroup.",
+            "description": "DeployImageStatus defines the observed state of DeployImage",
             "properties": {
-              "nodes": {
-                "description": "List of TopoNodes group has been deployed to.",
-                "items": {
-                  "type": "string"
-                },
-                "title": "Nodes",
-                "type": "array"
+              "id": {
+                "description": "Id",
+                "title": "ID",
+                "type": "integer"
+              },
+              "result": {
+                "description": "Aggregate result of the Flow",
+                "title": "Result",
+                "type": "string"
               }
             },
             "readOnly": true,
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
-              "ui-order-priority": 20,
-              "ui-visible-if": "false"
+              "ui-order-priority": 20
             }
           }
         },
@@ -417,15 +432,15 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroupList": {
-        "description": "NodeGroupList is a list of nodegroups",
+      "com.nokia.eda.os.v1alpha1.DeployImageList": {
+        "description": "DeployImageList is a list of deployimages",
         "properties": {
           "apiVersion": {
             "type": "string"
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+              "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage"
             },
             "type": "array"
           },
@@ -439,7 +454,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResourceEntry": {
+      "com.nokia.eda.os.v1alpha1.DeployImage_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "type": "string",
@@ -485,13 +500,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResources": {
+      "com.nokia.eda.os.v1alpha1.DeployImage_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.aaa.v1alpha1.NodeGroup_metadata": {
+      "com.nokia.eda.os.v1alpha1.DeployImage_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -513,8 +528,8 @@
               "ui-auto-completes": [
                 {
                   "condition": "true",
-                  "group": "aaa.eda.nokia.com",
-                  "kind": "NodeGroup",
+                  "group": "os.eda.nokia.com",
+                  "kind": "DeployImage",
                   "type": "label",
                   "version": "v1alpha1"
                 }
@@ -567,15 +582,15 @@
     }
   },
   "info": {
-    "title": "AAA Application APIs.",
+    "title": "Operating System Application APIs.",
     "version": "v1alpha1"
   },
   "openapi": "3.0.1",
   "paths": {
-    "/apps/aaa.eda.nokia.com": {
+    "/apps/os.eda.nokia.com": {
       "get": {
-        "description": "list versions available from aaa.eda.nokia.com",
-        "operationId": "getVersionAaaEdaNokiaCom",
+        "description": "list versions available from os.eda.nokia.com",
+        "operationId": "getVersionOsEdaNokiaCom",
         "responses": {
           "200": {
             "content": {
@@ -603,10 +618,10 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1": {
+    "/apps/os.eda.nokia.com/v1alpha1": {
       "get": {
-        "description": "list resources available from aaa.eda.nokia.com/v1alpha1",
-        "operationId": "getResourcesAaaEdaNokiaComV1alpha1",
+        "description": "list resources available from os.eda.nokia.com/v1alpha1",
+        "operationId": "getResourcesOsEdaNokiaComV1alpha1",
         "responses": {
           "200": {
             "content": {
@@ -634,10 +649,10 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/_ui/{pathname}": {
+    "/apps/os.eda.nokia.com/v1alpha1/_ui/{pathname}": {
       "get": {
-        "description": "get UI specification for aaa.eda.nokia.com v1alpha1",
-        "operationId": "uiAaaEdaNokiaComV1alpha1",
+        "description": "get UI specification for os.eda.nokia.com v1alpha1",
+        "operationId": "uiOsEdaNokiaComV1alpha1",
         "parameters": [
           {
             "description": "pathname to the UI specification to retrieve",
@@ -676,9 +691,66 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups": {
+    "/apps/os.eda.nokia.com/v1alpha1/deployimages": {
+      "get": {
+        "description": "list deployimages",
+        "operationId": "listOsEdaNokiaComV1alpha1Deployimages",
+        "parameters": [
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImageList"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/os.eda.nokia.com/v1alpha1/namespaces/{namespace}/deployimages": {
       "delete": {
-        "operationId": "deleteAllAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "operationId": "deleteAllOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -703,7 +775,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroupList"
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImageList"
                 }
               }
             },
@@ -720,14 +792,14 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Delete all instances of NodeGroup in the specified namespace.",
+        "summary": "Delete all instances of DeployImage in the specified namespace.",
         "tags": [
           "apps"
         ]
       },
       "get": {
-        "description": "list nodegroups in namespace",
-        "operationId": "listAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "list deployimages in namespace",
+        "operationId": "listOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "description": "the namespace scope from which to retrieve the result",
@@ -768,7 +840,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroupList"
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImageList"
                 }
               }
             },
@@ -790,8 +862,8 @@
         ]
       },
       "post": {
-        "description": "create a NodeGroup",
-        "operationId": "createAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "create a DeployImage",
+        "operationId": "createOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "in": "path",
@@ -806,7 +878,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage"
               }
             }
           },
@@ -817,7 +889,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage"
                 }
               }
             },
@@ -839,9 +911,9 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups/_deleted": {
+    "/apps/os.eda.nokia.com/v1alpha1/namespaces/{namespace}/deployimages/_deleted": {
       "get": {
-        "operationId": "getDeletedAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "operationId": "getDeletedOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "description": "the namespace scope from which to retrieve the result",
@@ -858,7 +930,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage_DeletedResources"
                 }
               }
             },
@@ -875,16 +947,16 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Get information about the instances of NodeGroup that have been deleted that existed in the specified namespace.",
+        "summary": "Get information about the instances of DeployImage that have been deleted that existed in the specified namespace.",
         "tags": [
           "apps"
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups/{name}": {
+    "/apps/os.eda.nokia.com/v1alpha1/namespaces/{namespace}/deployimages/{name}": {
       "delete": {
-        "description": "delete the specified NodeGroup",
-        "operationId": "deleteAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "delete the specified DeployImage",
+        "operationId": "deleteOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -896,7 +968,7 @@
             }
           },
           {
-            "description": "name of the NodeGroup to delete",
+            "description": "name of the DeployImage to delete",
             "in": "path",
             "name": "name",
             "required": true,
@@ -932,8 +1004,8 @@
         ]
       },
       "get": {
-        "description": "read the specified NodeGroup.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "read the specified DeployImage.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
+        "operationId": "readOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "description": "the namespace scope from which to retrieve the result",
@@ -945,7 +1017,7 @@
             }
           },
           {
-            "description": "name of the NodeGroup to retrieve",
+            "description": "name of the DeployImage to retrieve",
             "in": "path",
             "name": "name",
             "required": true,
@@ -991,7 +1063,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage"
                 }
               }
             },
@@ -1013,8 +1085,8 @@
         ]
       },
       "patch": {
-        "description": "patch a NodeGroup",
-        "operationId": "patchAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "patch a DeployImage",
+        "operationId": "patchOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "in": "path",
@@ -1048,7 +1120,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage"
                 }
               }
             },
@@ -1070,8 +1142,8 @@
         ]
       },
       "put": {
-        "description": "replace a NodeGroup",
-        "operationId": "replaceAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "description": "replace a DeployImage",
+        "operationId": "replaceOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
             "in": "path",
@@ -1094,7 +1166,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage"
               }
             }
           },
@@ -1105,7 +1177,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroup"
+                  "$ref": "#/components/schemas/com.nokia.eda.os.v1alpha1.DeployImage"
                 }
               }
             },
@@ -1127,12 +1199,12 @@
         ]
       }
     },
-    "/apps/aaa.eda.nokia.com/v1alpha1/namespaces/{namespace}/nodegroups/{name}/_revs": {
+    "/apps/os.eda.nokia.com/v1alpha1/namespaces/{namespace}/deployimages/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryAaaEdaNokiaComV1alpha1NamespaceNodegroups",
+        "operationId": "getHistoryOsEdaNokiaComV1alpha1NamespaceDeployimages",
         "parameters": [
           {
-            "description": "name of the NodeGroup to retrieve",
+            "description": "name of the DeployImage to retrieve",
             "in": "path",
             "name": "name",
             "required": true,
@@ -1197,64 +1269,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Get revision history for the specified namespaced NodeGroup.",
-        "tags": [
-          "apps"
-        ]
-      }
-    },
-    "/apps/aaa.eda.nokia.com/v1alpha1/nodegroups": {
-      "get": {
-        "description": "list nodegroups",
-        "operationId": "listAaaEdaNokiaComV1alpha1Nodegroups",
-        "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "client information for streaming request",
-            "in": "query",
-            "name": "eventclient",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "stream information for streaming request",
-            "in": "query",
-            "name": "stream",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.aaa.v1alpha1.NodeGroupList"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
+        "summary": "Get revision history for the specified namespaced DeployImage.",
         "tags": [
           "apps"
         ]

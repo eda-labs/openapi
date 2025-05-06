@@ -35,33 +35,6 @@
         },
         "type": "object"
       },
-      "DeletedResourceEntry": {
-        "properties": {
-          "commitTime": {
-            "type": "string"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "transactionId": {
-            "format": "uint64",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "DeletedResources": {
-        "items": {
-          "$ref": "#/components/schemas/DeletedResourceEntry"
-        },
-        "type": "array"
-      },
       "ErrorIndex": {
         "properties": {
           "index": {
@@ -96,9 +69,7 @@
             "type": "string"
           },
           "dictionary": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
@@ -136,67 +107,35 @@
         ],
         "type": "object"
       },
-      "Metadata": {
+      "K8SPatchOp": {
         "properties": {
-          "annotations": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-order-priority": 40,
-              "ui-title": "Annotations",
-              "ui-title-key": "annotations"
-            }
+          "from": {
+            "type": "string"
           },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-auto-completes": [
-                {
-                  "condition": "true",
-                  "group": "system.eda.nokia.com",
-                  "kind": "Monitor",
-                  "type": "label",
-                  "version": "v1alpha1"
-                }
-              ],
-              "ui-order-priority": 30,
-              "ui-title": "Labels",
-              "ui-title-key": "labels"
-            }
+          "op": {
+            "type": "string"
           },
-          "name": {
-            "maxLength": 253,
-            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 10,
-              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
-              "ui-title": "Name",
-              "ui-title-key": "name"
-            }
+          "path": {
+            "type": "string"
           },
-          "namespace": {
-            "readOnly": true,
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 20,
-              "ui-title": "Namespace",
-              "ui-title-key": "namespace"
-            }
+          "value": {
+            "type": "object"
+          },
+          "x-permissive": {
+            "type": "boolean"
           }
         },
         "required": [
-          "name"
+          "op",
+          "path"
         ],
-        "title": "Metadata",
         "type": "object"
+      },
+      "Patch": {
+        "items": {
+          "$ref": "#/components/schemas/K8SPatchOp"
+        },
+        "type": "array"
       },
       "Resource": {
         "properties": {
@@ -205,6 +144,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "namespaced": {
+            "type": "boolean"
           },
           "readOnly": {
             "type": "boolean"
@@ -321,7 +263,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.Monitor_metadata"
           },
           "spec": {
             "description": "MonitorSpec defines the desired state of Monitor",
@@ -598,7 +540,15 @@
                 "title": "Nodes",
                 "type": "array",
                 "x-eda-nokia-com": {
-                  "ui-auto-complete-gvk": "core.eda.nokia.com/v1/toponodes",
+                  "ui-auto-completes": [
+                    {
+                      "condition": "true",
+                      "group": "core.eda.nokia.com",
+                      "resource": "toponodes",
+                      "type": "gvr",
+                      "version": "v1"
+                    }
+                  ],
                   "ui-category": "Targets",
                   "ui-column-span": 2,
                   "ui-order-priority": 200,
@@ -614,7 +564,8 @@
                   "condition": "(spec.nodeSelector !== undefined && Array.isArray(spec.nodeSelector) && spec.nodeSelector.length > 0) || (spec.nodes !== undefined && Array.isArray(spec.nodes) && spec.nodes.length > 0)",
                   "errorMsg": "Node or Node Selector must be populated"
                 }
-              ]
+              ],
+              "ui-order-priority": 30
             }
           },
           "status": {
@@ -631,7 +582,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -660,7 +614,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorAggregateState_metadata"
           },
           "spec": {
             "description": "MonitorAggregateStateSpec defines the desired state of MonitorAggregateState",
@@ -675,13 +629,19 @@
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "MonitorAggregateStateStatus defines the observed state of MonitorAggregateState",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -713,6 +673,124 @@
           "kind"
         ],
         "type": "object"
+      },
+      "com.nokia.eda.system.v1alpha1.MonitorAggregateState_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.system.v1alpha1.MonitorAggregateState_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorAggregateState_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.system.v1alpha1.MonitorAggregateState_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "system.eda.nokia.com",
+                  "kind": "MonitorAggregateState",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
       },
       "com.nokia.eda.system.v1alpha1.MonitorList": {
         "description": "MonitorList is a list of monitors",
@@ -754,7 +832,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorState_metadata"
           },
           "spec": {
             "description": "MonitorStateSpec defines the desired state of MonitorState",
@@ -1034,7 +1112,15 @@
                     "title": "Nodes",
                     "type": "array",
                     "x-eda-nokia-com": {
-                      "ui-auto-complete-gvk": "core.eda.nokia.com/v1/toponodes",
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "core.eda.nokia.com",
+                          "resource": "toponodes",
+                          "type": "gvr",
+                          "version": "v1"
+                        }
+                      ],
                       "ui-category": "Targets",
                       "ui-column-span": 2,
                       "ui-order-priority": 200,
@@ -1064,13 +1150,19 @@
               "version"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "MonitorStateStatus defines the observed state of MonitorState",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -1102,11 +1194,254 @@
           "kind"
         ],
         "type": "object"
+      },
+      "com.nokia.eda.system.v1alpha1.MonitorState_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.system.v1alpha1.MonitorState_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorState_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.system.v1alpha1.MonitorState_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "system.eda.nokia.com",
+                  "kind": "MonitorState",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
+      "com.nokia.eda.system.v1alpha1.Monitor_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.system.v1alpha1.Monitor_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.Monitor_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.system.v1alpha1.Monitor_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "system.eda.nokia.com",
+                  "kind": "Monitor",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
       }
     }
   },
   "info": {
-    "title": "api for system.eda.nokia.com/v1alpha1.",
+    "title": "System Application APIs.",
     "version": "v1alpha1"
   },
   "openapi": "3.0.1",
@@ -1568,7 +1903,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorAggregateState_DeletedResources"
                 }
               }
             },
@@ -1696,6 +2031,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorAggregateState"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a MonitorAggregateState",
+        "operationId": "patchSystemEdaNokiaComV1alpha1NamespaceMonitoraggregatestates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -2038,7 +2430,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.Monitor_DeletedResources"
                 }
               }
             },
@@ -2166,6 +2558,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.Monitor"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a Monitor",
+        "operationId": "patchSystemEdaNokiaComV1alpha1NamespaceMonitors",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -2508,7 +2957,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorState_DeletedResources"
                 }
               }
             },
@@ -2636,6 +3085,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.system.v1alpha1.MonitorState"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a MonitorState",
+        "operationId": "patchSystemEdaNokiaComV1alpha1NamespaceMonitorstates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -2796,5 +3302,10 @@
         ]
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

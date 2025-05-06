@@ -35,33 +35,6 @@
         },
         "type": "object"
       },
-      "DeletedResourceEntry": {
-        "properties": {
-          "commitTime": {
-            "type": "string"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "transactionId": {
-            "format": "uint64",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "DeletedResources": {
-        "items": {
-          "$ref": "#/components/schemas/DeletedResourceEntry"
-        },
-        "type": "array"
-      },
       "ErrorIndex": {
         "properties": {
           "index": {
@@ -96,9 +69,7 @@
             "type": "string"
           },
           "dictionary": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
@@ -136,67 +107,35 @@
         ],
         "type": "object"
       },
-      "Metadata": {
+      "K8SPatchOp": {
         "properties": {
-          "annotations": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-order-priority": 40,
-              "ui-title": "Annotations",
-              "ui-title-key": "annotations"
-            }
+          "from": {
+            "type": "string"
           },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-auto-completes": [
-                {
-                  "condition": "true",
-                  "group": "appstore.eda.nokia.com",
-                  "kind": "Registry",
-                  "type": "label",
-                  "version": "v1"
-                }
-              ],
-              "ui-order-priority": 30,
-              "ui-title": "Labels",
-              "ui-title-key": "labels"
-            }
+          "op": {
+            "type": "string"
           },
-          "name": {
-            "maxLength": 253,
-            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 10,
-              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
-              "ui-title": "Name",
-              "ui-title-key": "name"
-            }
+          "path": {
+            "type": "string"
           },
-          "namespace": {
-            "readOnly": true,
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 20,
-              "ui-title": "Namespace",
-              "ui-title-key": "namespace"
-            }
+          "value": {
+            "type": "object"
+          },
+          "x-permissive": {
+            "type": "boolean"
           }
         },
         "required": [
-          "name"
+          "op",
+          "path"
         ],
-        "title": "Metadata",
         "type": "object"
+      },
+      "Patch": {
+        "items": {
+          "$ref": "#/components/schemas/K8SPatchOp"
+        },
+        "type": "array"
       },
       "Resource": {
         "properties": {
@@ -205,6 +144,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "namespaced": {
+            "type": "boolean"
           },
           "readOnly": {
             "type": "boolean"
@@ -321,25 +263,32 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Catalog_metadata"
           },
           "spec": {
-            "description": "CatalogSpec defines the desired state of Catalog",
+            "description": "CatalogSpec defines the desired state of a Catalog.",
             "properties": {
               "authSecretRef": {
-                "description": "AuthSecretRef defines how to authenticate with the remote catalog",
+                "description": "AuthSecretRef is the authentication secret reference, used for authentication.\nMust be in the same namespace as the catalog.",
                 "title": "Authentication Secret Reference",
                 "type": "string"
               },
               "description": {
-                "description": "Description (small) about this catalog need to check max length",
+                "description": "Description is an optional short description of the catalog.",
                 "maxLength": 70,
                 "title": "Description",
                 "type": "string"
               },
+              "refreshInterval": {
+                "default": 180,
+                "description": "RefreshInterval tells the controller how often it should check the remote catalog for new updates, in seconds.\nDefault is 180 seconds. Minimum is 30 seconds for production environments; 10 seconds for test environments.",
+                "format": "int32",
+                "title": "Refresh Interval",
+                "type": "integer"
+              },
               "remoteType": {
                 "default": "git",
-                "description": "RemoteType type of the remote at the moment we only support git",
+                "description": "RemoteType type of the catalog, only 'git' is supported at the moment.",
                 "enum": [
                   "git"
                 ],
@@ -347,43 +296,56 @@
                 "type": "string"
               },
               "remoteURL": {
-                "description": "RemoteURL is the url where we can find the catalog (ex git repo URL)",
+                "description": "RemoteURL is the HTTP(S) remote URL of the catalog. Supported URI schemes: 'https://' and 'http://'.\nDefault is HTTPS if no scheme is given.",
                 "title": "Remote URL",
                 "type": "string"
               },
               "skipTLSVerify": {
                 "default": false,
+                "description": "SkipTLSVerify skips the validity check for the server's certificate. This will make HTTPS connections insecure.",
                 "title": "Skip TLS Verify",
                 "type": "boolean"
               },
               "title": {
-                "description": "Title is the UI visible name of this catalog",
+                "description": "Title is an UI-friendly name for the catalog.",
                 "maxLength": 50,
                 "title": "Title",
                 "type": "string"
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
-            "description": "CatalogStatus defines the observed state of Catalog",
+            "description": "CatalogStatus defines the observed state of a Catalog.",
             "properties": {
               "error": {
-                "description": "conditions []\nError last encountered for this catalog.",
+                "description": "Error denotes the last error that was encountered by the controller.",
                 "title": "Error",
+                "type": "string"
+              },
+              "lastRefreshTime": {
+                "description": "LastRefreshTime is the last attempt to refresh the catalog cache by the controller.",
+                "format": "date-time",
+                "title": "Last Refresh Time",
                 "type": "string"
               },
               "operational": {
                 "default": false,
-                "description": "Indicates if the catalog remote is operational.",
+                "description": "Operational reports whether the catalog remote is operational.",
                 "title": "Operational",
                 "type": "boolean"
               }
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -416,6 +378,106 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.appstore.v1.Catalog_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.appstore.v1.Catalog_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Catalog_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.appstore.v1.Catalog_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "appstore.eda.nokia.com",
+                  "kind": "Catalog",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.appstore.v1.Registry": {
         "description": "Registry is the Schema for the registries API",
         "properties": {
@@ -434,23 +496,23 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Registry_metadata"
           },
           "spec": {
-            "description": "RegistrySpec defines the desired state of Registry",
+            "description": "RegistrySpec defines the desired state of a Registry",
             "properties": {
               "authSecretRef": {
-                "description": "AuthSecretRef defines how to authenticate with the remote registry",
+                "description": "AuthSecretRef is the authentication secret reference, used for authentication.\nMust be in the same namespace as the catalog.",
                 "title": "Authentication Secret Reference",
                 "type": "string"
               },
               "mirror": {
-                "description": "Mirror is the mirror URL for the registry",
+                "description": "Mirror registry of the original remote registry.\nApp store will use the mirror instead of the original registry that is referenced by a catalog.",
                 "title": "Mirror",
                 "type": "string"
               },
               "remoteURL": {
-                "description": "RemoteURL is the url where we can find the registry",
+                "description": "RemoteURL is the remote URL of the registry. Supported URI schemes: 'https://' and 'http://'.\n\tDefault is HTTPS if no scheme is given.",
                 "title": "Remote URL",
                 "type": "string"
               },
@@ -461,7 +523,7 @@
                 "type": "boolean"
               },
               "title": {
-                "description": "Title is the UI visible name of this registry",
+                "description": "Title is an UI-friendly name for the catalog.",
                 "maxLength": 50,
                 "title": "Title",
                 "type": "string"
@@ -471,19 +533,22 @@
               "remoteURL"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "RegistryStatus defines the observed state of Registry",
             "properties": {
               "error": {
-                "description": "Error last encountered for this registry.",
+                "description": "Error denotes the last error that was encountered by the controller.",
                 "title": "Error",
                 "type": "string"
               },
               "reachable": {
                 "default": false,
-                "description": "Indicates if the registry is reachable.",
+                "description": "Reachable indicates if the registry is reachable.",
                 "title": "Reachable",
                 "type": "boolean"
               }
@@ -493,7 +558,10 @@
               "error"
             ],
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -525,11 +593,118 @@
           "kind"
         ],
         "type": "object"
+      },
+      "com.nokia.eda.appstore.v1.Registry_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.appstore.v1.Registry_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Registry_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.appstore.v1.Registry_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "appstore.eda.nokia.com",
+                  "kind": "Registry",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
       }
     }
   },
   "info": {
-    "title": "api for appstore.eda.nokia.com/v1.",
+    "title": "App Store Application APIs.",
     "version": "v1"
   },
   "openapi": "3.0.1",
@@ -641,7 +816,7 @@
     "/apps/appstore.eda.nokia.com/v1/catalogs": {
       "delete": {
         "description": "Delete all instances of Catalog.  If Catalog is a namespaced resource, all instances in all namespaces will\nbe deleted, and this is restricted to users with the system-administrator role.\nIf a non-namespaced Catalog, it deletes all instances of that non-namespaced resource.",
-        "operationId": "deleteAllGVR",
+        "operationId": "deleteAllAppstoreEdaNokiaComV1Catalogs",
         "parameters": [
           {
             "description": "a label selector string to filter the set of CRs deleted based on CR labels",
@@ -781,7 +956,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Catalog_DeletedResources"
                 }
               }
             },
@@ -891,6 +1066,55 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Catalog"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a non-namespaced Catalog",
+        "operationId": "patchAppstoreEdaNokiaComV1Catalogs",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -1037,7 +1261,7 @@
     "/apps/appstore.eda.nokia.com/v1/registries": {
       "delete": {
         "description": "Delete all instances of Registry.  If Registry is a namespaced resource, all instances in all namespaces will\nbe deleted, and this is restricted to users with the system-administrator role.\nIf a non-namespaced Registry, it deletes all instances of that non-namespaced resource.",
-        "operationId": "deleteAllGVR",
+        "operationId": "deleteAllAppstoreEdaNokiaComV1Registries",
         "parameters": [
           {
             "description": "a label selector string to filter the set of CRs deleted based on CR labels",
@@ -1177,7 +1401,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Registry_DeletedResources"
                 }
               }
             },
@@ -1287,6 +1511,55 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.Registry"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a non-namespaced Registry",
+        "operationId": "patchAppstoreEdaNokiaComV1Registries",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -1430,5 +1703,10 @@
         ]
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

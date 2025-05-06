@@ -35,33 +35,6 @@
         },
         "type": "object"
       },
-      "DeletedResourceEntry": {
-        "properties": {
-          "commitTime": {
-            "type": "string"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "transactionId": {
-            "format": "uint64",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "DeletedResources": {
-        "items": {
-          "$ref": "#/components/schemas/DeletedResourceEntry"
-        },
-        "type": "array"
-      },
       "ErrorIndex": {
         "properties": {
           "index": {
@@ -96,9 +69,7 @@
             "type": "string"
           },
           "dictionary": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
@@ -136,67 +107,35 @@
         ],
         "type": "object"
       },
-      "Metadata": {
+      "K8SPatchOp": {
         "properties": {
-          "annotations": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-order-priority": 40,
-              "ui-title": "Annotations",
-              "ui-title-key": "annotations"
-            }
+          "from": {
+            "type": "string"
           },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-auto-completes": [
-                {
-                  "condition": "true",
-                  "group": "core.eda.nokia.com",
-                  "kind": "HttpProxy",
-                  "type": "label",
-                  "version": "v1"
-                }
-              ],
-              "ui-order-priority": 30,
-              "ui-title": "Labels",
-              "ui-title-key": "labels"
-            }
+          "op": {
+            "type": "string"
           },
-          "name": {
-            "maxLength": 253,
-            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 10,
-              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
-              "ui-title": "Name",
-              "ui-title-key": "name"
-            }
+          "path": {
+            "type": "string"
           },
-          "namespace": {
-            "readOnly": true,
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 20,
-              "ui-title": "Namespace",
-              "ui-title-key": "namespace"
-            }
+          "value": {
+            "type": "object"
+          },
+          "x-permissive": {
+            "type": "boolean"
           }
         },
         "required": [
-          "name"
+          "op",
+          "path"
         ],
-        "title": "Metadata",
         "type": "object"
+      },
+      "Patch": {
+        "items": {
+          "$ref": "#/components/schemas/K8SPatchOp"
+        },
+        "type": "array"
       },
       "Resource": {
         "properties": {
@@ -205,6 +144,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "namespaced": {
+            "type": "boolean"
           },
           "readOnly": {
             "type": "boolean"
@@ -321,7 +263,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.ClusterRole_metadata"
           },
           "spec": {
             "description": "ClusterRole defines a set of permissions to access EDA resources.\nClusterRoles and users are bound via groups, selecting a set of users and a set of ClusterRoles to bind.",
@@ -442,13 +384,19 @@
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "RoleStatus defines the observed state of Role",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -481,6 +429,106 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.ClusterRole_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.ClusterRole_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.ClusterRole_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.ClusterRole_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "ClusterRole",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.Deviation": {
         "description": "Deviation is the Schema for the deviations API",
         "properties": {
@@ -499,7 +547,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.Deviation_metadata"
           },
           "spec": {
             "description": "Deviations are used to represent differences between the intended and actual state of a target.\nThey indicate the intended state - or the computed configuration EDA expects, and compare this to the actual or running state, or the configuration retrieved from the target.\nDeviations are most often generated by out-of-band changes to a target by an external system or user, and\ncan be accepted or rejected. Rejecting a Deviation will result in the intended configuration being re-applied, undoing the out-of-band change.\nDeviations are raised per table, meaning a single change on a target may result in more than one Deviation.",
@@ -605,7 +653,10 @@
               "path"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "DeviationStatus defines the observed state of Deviation",
@@ -613,6 +664,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -643,7 +695,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.DeviationAction_metadata"
           },
           "spec": {
             "description": "DeviationAction allows manual and API-driven actions to be performed on Deviation resources.\nThey are the only means to which and end user can accept or reject deviations, as Deviation resources themselves are read only.",
@@ -719,7 +771,10 @@
               "nodeEndpoint"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "DeviationActionStatus defines the observed state of DeviationAction",
@@ -741,7 +796,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -774,6 +832,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.DeviationAction_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.DeviationAction_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.DeviationAction_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.DeviationAction_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "DeviationAction",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.DeviationList": {
         "description": "DeviationList is a list of deviations",
         "properties": {
@@ -796,6 +972,72 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.Deviation_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "Deviation",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.EdgeInterface": {
         "description": "EdgeInterface is the Schema for the edgeinterfaces API",
         "properties": {
@@ -814,7 +1056,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.EdgeInterface_metadata"
           },
           "spec": {
             "description": "EdgeInterfaceSpec defines the desired state of EdgeInterface",
@@ -909,13 +1151,19 @@
               "interfaceResource"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "EdgeInterfaceStatus defines the observed state of EdgeInterface",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -948,6 +1196,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.EdgeInterface_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.EdgeInterface_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.EdgeInterface_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.EdgeInterface_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "EdgeInterface",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.HttpProxy": {
         "description": "HttpProxy is the Schema for the httpproxies API",
         "properties": {
@@ -966,7 +1332,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.HttpProxy_metadata"
           },
           "spec": {
             "description": "HttpProxySpec defines the desired state of HttpProxy",
@@ -991,7 +1357,10 @@
               "rootUrl"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "HttpProxyStatus defines the observed state of HttpProxy",
@@ -999,6 +1368,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -1033,6 +1403,106 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.HttpProxy_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.HttpProxy_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.HttpProxy_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.HttpProxy_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "HttpProxy",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.IPAllocationPool": {
         "description": "IPAllocationPool is the Schema for the ipallocationpools API",
         "properties": {
@@ -1051,11 +1521,19 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPAllocationPool_metadata"
           },
           "spec": {
             "description": "IPAllocationPool is a generic IP allocation pool supporting allocation of IPv4 and/or IPv6 addresses from a set of segments.\nIt is different from IPInSubnetAllocationPool in that it returns a single unzoned IP address, i.e. an IP address without a subnet. For example a 10.1.1.0/24 segment could return 10.1.1.1.\nConsult application documentation to know which pool type to use for a given use case.",
             "properties": {
+              "publishAllocations": {
+                "description": "If true, allocations in segments will be published to EDB, available to query via EQL and trigger state applications off of.",
+                "title": "Publish Allocations",
+                "type": "boolean",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2
+                }
+              },
               "segments": {
                 "description": "List of segments containing IPv4 or IPv6 addresses to allocate.",
                 "items": {
@@ -1154,8 +1632,14 @@
                 "type": "array"
               }
             },
+            "required": [
+              "segments"
+            ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "IPAllocationPoolStatus defines the observed state of IPAllocationPool",
@@ -1163,6 +1647,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -1197,6 +1682,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.IPAllocationPool_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.IPAllocationPool_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPAllocationPool_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.IPAllocationPool_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "IPAllocationPool",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.IPInSubnetAllocationPool": {
         "description": "IPInSubnetAllocationPool is the Schema for the ipinsubnetallocationpools API",
         "properties": {
@@ -1215,11 +1818,19 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPInSubnetAllocationPool_metadata"
           },
           "spec": {
             "description": "IPInSubnetAllocationPool is a generic IP allocation pool supporting allocation of IPv4 and/or IPv6 addresses from a set of segments.\nIt is different from IPAllocationPool in that it returns a single zoned IP address, i.e. an IP address with a subnet. For example a 10.1.1.0/24 segment could return 10.1.1.1/24.\nConsult application documentation to know which pool type to use for a given use case.",
             "properties": {
+              "publishAllocations": {
+                "description": "If true, allocations in segments will be published to EDB, available to query via EQL and trigger state applications off of.",
+                "title": "Publish Allocations",
+                "type": "boolean",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2
+                }
+              },
               "segments": {
                 "description": "List of segments containing IPv4 or IPv6 addresses to allocate.",
                 "items": {
@@ -1318,8 +1929,14 @@
                 "type": "array"
               }
             },
+            "required": [
+              "segments"
+            ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "IPInSubnetAllocationPoolStatus defines the observed state of IPInSubnetAllocationPool",
@@ -1327,6 +1944,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -1361,6 +1979,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.IPInSubnetAllocationPool_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.IPInSubnetAllocationPool_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPInSubnetAllocationPool_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.IPInSubnetAllocationPool_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "IPInSubnetAllocationPool",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.IndexAllocationPool": {
         "description": "IndexAllocationPool is the Schema for the indexallocationpools API",
         "properties": {
@@ -1379,11 +2115,19 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.IndexAllocationPool_metadata"
           },
           "spec": {
             "description": "IndexAllocationPool is a generic allocation pool supporting allocation of indexes from a set of segments.\nIt supports allocating things like VLANs, subinterface indexes, autonomous system numbers, or any other integer-based index.",
             "properties": {
+              "publishAllocations": {
+                "description": "If true, allocations in segments will be published to EDB, available to query via EQL and trigger state applications off of.",
+                "title": "Publish Allocations",
+                "type": "boolean",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2
+                }
+              },
               "segments": {
                 "description": "List of segments containing indexes to allocate.",
                 "items": {
@@ -1504,7 +2248,10 @@
               "segments"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "IndexAllocationPoolStatus defines the observed state of IndexAllocationPool",
@@ -1512,6 +2259,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -1546,6 +2294,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.IndexAllocationPool_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.IndexAllocationPool_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.IndexAllocationPool_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.IndexAllocationPool_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "IndexAllocationPool",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.License": {
         "description": "License is the Schema for the licenses API",
         "properties": {
@@ -1564,7 +2430,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.License_metadata"
           },
           "spec": {
             "description": "A License represents an application license providing functionality within EDA. A license providing the \"base\" feature must be provided/valid for transactions to be processed.",
@@ -1593,7 +2459,10 @@
               "data"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "Status information for this license.",
@@ -1666,7 +2535,10 @@
               "valid"
             ],
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -1699,6 +2571,62 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.License_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "License",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.Namespace": {
         "description": "Namespace is the Schema for the namespaces API",
         "properties": {
@@ -1717,7 +2645,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.Namespace_metadata"
           },
           "spec": {
             "description": "A Namespace is a logical partition within the cluster that provides a mechanism for isolating resources.\nNamespaces allow for resource segmentation, enabling multiple teams or applications to share the same cluster without conflict.",
@@ -1729,7 +2657,10 @@
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "NamespaceStatus defines the observed state of Namespace",
@@ -1737,6 +2668,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -1771,6 +2703,106 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.Namespace_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.Namespace_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.Namespace_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.Namespace_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "Namespace",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.NodeProfile": {
         "description": "NodeProfile is the Schema for the nodeprofiles API",
         "properties": {
@@ -1789,7 +2821,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeProfile_metadata"
           },
           "spec": {
             "description": "NodeProfileSpec defines the desired state of NodeProfile",
@@ -2187,6 +3219,16 @@
                   "ui-order-priority": 2400
                 }
               },
+              "llmDb": {
+                "description": "URL containing LLDB  to use when interacting with LLM-DB and OpenAI for query autocompletion, e.g. http://eda-asvr/llmdb/ce-llm-db-srlinux-24.7.1.tar.gz.",
+                "title": "LLMDB",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 3,
+                  "ui-order-priority": 300,
+                  "ui-single-line-group": "LLMDB"
+                }
+              },
               "nodeUser": {
                 "description": "Reference to a NodeUser to use for authentication to TopoNodes referencing this NodeProfile.",
                 "title": "Node User",
@@ -2231,7 +3273,8 @@
                 "description": "Sets the operating system of this NodeProfile, e.g. srl.",
                 "enum": [
                   "srl",
-                  "sros"
+                  "sros",
+                  "nxos"
                 ],
                 "title": "Operating System",
                 "type": "string",
@@ -2322,13 +3365,17 @@
               "yang"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "readOnly": true,
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -2363,6 +3410,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.NodeProfile_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.NodeProfile_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeProfile_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.NodeProfile_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "NodeProfile",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.NodeUser": {
         "description": "NodeUser is the Schema for the nodeusers API",
         "properties": {
@@ -2381,7 +3546,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeUser_metadata"
           },
           "spec": {
             "description": "The NodeUser resource represents a user that can be deployed to a set of TopoNodes. It supports managing the user's password, SSH keys, and group bindings.\nAdditionally a NodeUser is referenced by a NodeProfile to indicate how NPP should connect to TopoNodes.",
@@ -2494,7 +3659,10 @@
               "password"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "Deployment status of this NodeUser.",
@@ -2525,7 +3693,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -2558,6 +3729,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.NodeUser_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.NodeUser_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeUser_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.NodeUser_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "NodeUser",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.Role": {
         "description": "Role is the Schema for the roles API",
         "properties": {
@@ -2576,7 +3865,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.Role_metadata"
           },
           "spec": {
             "description": "RoleSpec defines the desired state of Role",
@@ -2697,13 +3986,19 @@
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "RoleStatus defines the observed state of Role",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -2736,6 +4031,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.Role_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.Role_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.Role_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.Role_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "Role",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.SubnetAllocationPool": {
         "description": "SubnetAllocationPool is the Schema for the subnetallocationpools API",
         "properties": {
@@ -2754,11 +4167,19 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.SubnetAllocationPool_metadata"
           },
           "spec": {
             "description": "SubnetAllocationPool is a generic subnet allocation pool supporting allocation of IPv4 and/or IPv6 child subnets from a list of parent subnet segments.\nIt allocates a subnet of the configured length from the provided parent subnet.\nFor example a pool could return 10.1.0.8/29 when a segment is defined as subnet 10.1.0.0/16 with subnet length 29.\nConsult application documentation to know which pool type to use for a given use case.",
             "properties": {
+              "publishAllocations": {
+                "description": "If true, allocations in segments will be published to EDB, available to query via EQL and trigger state applications off of.",
+                "title": "Publish Allocations",
+                "type": "boolean",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2
+                }
+              },
               "segments": {
                 "description": "List of segments containing subnets to allocate.",
                 "items": {
@@ -2871,8 +4292,14 @@
                 "type": "array"
               }
             },
+            "required": [
+              "segments"
+            ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "SubnetAllocationPoolStatus defines the observed state of SubnetAllocationPool",
@@ -2880,6 +4307,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -2914,6 +4342,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.SubnetAllocationPool_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.SubnetAllocationPool_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.SubnetAllocationPool_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.SubnetAllocationPool_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "SubnetAllocationPool",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.TopoBreakout": {
         "description": "TopoBreakout is the Schema for the topobreakouts API",
         "properties": {
@@ -2932,7 +4478,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoBreakout_metadata"
           },
           "spec": {
             "description": "TopoBreakoutSpec defines the desired state of TopoBreakout",
@@ -2949,7 +4495,7 @@
                 "items": {
                   "type": "string"
                 },
-                "title": "Nomalized Parent Interface",
+                "title": "Normalized Parent Interface",
                 "type": "array"
               },
               "node": {
@@ -2982,13 +4528,19 @@
               "speed"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "TopoBreakoutStatus defines the observed state of TopoBreakout",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -3021,6 +4573,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.TopoBreakout_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.TopoBreakout_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoBreakout_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.TopoBreakout_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "TopoBreakout",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.TopoLink": {
         "description": "TopoLink is the Schema for the topolinks API",
         "properties": {
@@ -3039,7 +4709,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoLink_metadata"
           },
           "spec": {
             "description": "TopoLink represents a logical link between two TopoNodes. It may include more than one physical link, being used to represent a LAG or multihomed link.\nTo create a point to point link with a single interface on both sides use a single link property.\nTo create a point to point link with a LAG configured on both side, use two links with matching nodes.\nA multihomed LAG is created by using two or more links where the A side and/or B side can be different.\nCreating a link with only A specified will create an edge interface.",
@@ -3214,7 +4884,10 @@
               "links"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "TopoLinkStatus defines the observed state of TopoLink",
@@ -3262,6 +4935,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -3296,6 +4970,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.TopoLink_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.TopoLink_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoLink_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.TopoLink_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "TopoLink",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.TopoNode": {
         "description": "TopoNode is the Schema for the toponodes API",
         "properties": {
@@ -3314,7 +5106,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoNode_metadata"
           },
           "spec": {
             "description": "A managed network element is represented via a TopoNode resource, describing characteristics of a specific element in the topology.",
@@ -3329,7 +5121,10 @@
                         "lineCard",
                         "fabric",
                         "mda",
-                        "connector"
+                        "connector",
+                        "xiom",
+                        "powerShelf",
+                        "powerModule"
                       ],
                       "title": "Kind",
                       "type": "string",
@@ -3451,7 +5246,8 @@
                 "description": "Operating system running on this TopoNode, e.g. srl.",
                 "enum": [
                   "srl",
-                  "sros"
+                  "sros",
+                  "nxos"
                 ],
                 "title": "Operating System",
                 "type": "string",
@@ -3560,7 +5356,10 @@
               "version"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "TopoNodeStatus defines the observed state of TopoNode",
@@ -3576,7 +5375,7 @@
                 }
               },
               "node-state": {
-                "description": "The current state of the connection between NPP and the node.",
+                "description": "The current state of the connection between NPP and the node.\n\"TryingToConnect\"\n   NPP is attempting to connect and establish connectivity to the node\n\"WaitingForInitialCfg\"\n   NPP is connected to the node but waiting for intial config to push\n\"Committing\"\n\t  NPP is in progress of commiting\n\"RetryingCommit\"\n   NPP lost sync to node and is re-pushing current config\n\"Synced\"\n   NPP is in fully synced state\n\"Standby\"\n   NPP is running in standby mode. This state is only used on standby clusters with georedundancy.\n\"NoIpAddress\"\n   NPP is running but there is no IP address for node. This only happen in sim setups when\n   CX has not created the simulated node, or the simulated pod failed to launch due to image error.",
                 "title": "Node",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -3592,6 +5391,16 @@
                 "x-eda-nokia-com": {
                   "ui-column-span": 2,
                   "ui-order-priority": 2100,
+                  "ui-single-line-group": "NPP"
+                }
+              },
+              "npp-pod": {
+                "description": "NPP pod name",
+                "title": "NPP Pod",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 2080,
                   "ui-single-line-group": "NPP"
                 }
               },
@@ -3646,7 +5455,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -3679,6 +5491,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.TopoNode_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.TopoNode_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoNode_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.TopoNode_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "TopoNode",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.UdpProxy": {
         "description": "UdpProxy is the Schema for the udpproxies API",
         "properties": {
@@ -3697,7 +5627,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.UdpProxy_metadata"
           },
           "spec": {
             "description": "UdpProxySpec defines the desired state of UdpProxy",
@@ -3743,7 +5673,10 @@
               "proxyPort"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "UdpProxyStatus defines the observed state of UdpProxy",
@@ -3751,6 +5684,7 @@
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
+              "ui-order-priority": 20,
               "ui-visible-if": "false"
             }
           }
@@ -3785,6 +5719,106 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.core.v1.UdpProxy_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.UdpProxy_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.UdpProxy_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.UdpProxy_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "UdpProxy",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.core.v1.WorkflowDefinition": {
         "description": "WorkflowDefinition is the Schema for the workflowdefinitions API",
         "properties": {
@@ -3803,11 +5837,33 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.WorkflowDefinition_metadata"
           },
           "spec": {
             "description": "WorkflowDefinitionSpec defines the desired state of FlowDefinition",
             "properties": {
+              "flowDefinitionResource": {
+                "description": "the resource type to be used for this flow, can only be set if Schema is not set",
+                "properties": {
+                  "group": {
+                    "title": "Group",
+                    "type": "string"
+                  },
+                  "kind": {
+                    "title": "Kind",
+                    "type": "string"
+                  },
+                  "version": {
+                    "title": "Version",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "version"
+                ],
+                "type": "object"
+              },
               "flowDefinitionSchema": {
                 "description": "the schema for the flow, can only be set if Resource is not set",
                 "properties": {
@@ -3856,13 +5912,19 @@
               "image"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "WorkflowDefinitionStatus defines the observed state of FlowDefinition",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -3894,11 +5956,118 @@
           "kind"
         ],
         "type": "object"
+      },
+      "com.nokia.eda.core.v1.WorkflowDefinition_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.WorkflowDefinition_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.core.v1.WorkflowDefinition_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.core.v1.WorkflowDefinition_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "WorkflowDefinition",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
       }
     }
   },
   "info": {
-    "title": "api for core.eda.nokia.com/v1.",
+    "title": "Core Application APIs.",
     "version": "v1"
   },
   "openapi": "3.0.1",
@@ -4010,7 +6179,7 @@
     "/apps/core.eda.nokia.com/v1/clusterroles": {
       "delete": {
         "description": "Delete all instances of ClusterRole.  If ClusterRole is a namespaced resource, all instances in all namespaces will\nbe deleted, and this is restricted to users with the system-administrator role.\nIf a non-namespaced ClusterRole, it deletes all instances of that non-namespaced resource.",
-        "operationId": "deleteAllGVR",
+        "operationId": "deleteAllCoreEdaNokiaComV1Clusterroles",
         "parameters": [
           {
             "description": "a label selector string to filter the set of CRs deleted based on CR labels",
@@ -4150,7 +6319,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.ClusterRole_DeletedResources"
                 }
               }
             },
@@ -4260,6 +6429,55 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.ClusterRole"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a non-namespaced ClusterRole",
+        "operationId": "patchCoreEdaNokiaComV1Clusterroles",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -4577,7 +6795,7 @@
     "/apps/core.eda.nokia.com/v1/httpproxies": {
       "delete": {
         "description": "Delete all instances of HttpProxy.  If HttpProxy is a namespaced resource, all instances in all namespaces will\nbe deleted, and this is restricted to users with the system-administrator role.\nIf a non-namespaced HttpProxy, it deletes all instances of that non-namespaced resource.",
-        "operationId": "deleteAllGVR",
+        "operationId": "deleteAllCoreEdaNokiaComV1Httpproxies",
         "parameters": [
           {
             "description": "a label selector string to filter the set of CRs deleted based on CR labels",
@@ -4717,7 +6935,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.HttpProxy_DeletedResources"
                 }
               }
             },
@@ -4827,6 +7045,55 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.HttpProxy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a non-namespaced HttpProxy",
+        "operationId": "patchCoreEdaNokiaComV1Httpproxies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -5198,37 +7465,6 @@
         ]
       }
     },
-    "/apps/core.eda.nokia.com/v1/licenses/_deleted": {
-      "get": {
-        "operationId": "getDeletedCoreEdaNokiaComV1Licenses",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
-                }
-              }
-            },
-            "description": "Returns list of deleted resource entries"
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Get information about the instances of License that have been deleted.",
-        "tags": [
-          "apps"
-        ]
-      }
-    },
     "/apps/core.eda.nokia.com/v1/licenses/{name}": {
       "get": {
         "description": "read the specified non-namespaced License.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
@@ -5373,7 +7609,7 @@
     "/apps/core.eda.nokia.com/v1/namespaces": {
       "delete": {
         "description": "Delete all instances of Namespace.  If Namespace is a namespaced resource, all instances in all namespaces will\nbe deleted, and this is restricted to users with the system-administrator role.\nIf a non-namespaced Namespace, it deletes all instances of that non-namespaced resource.",
-        "operationId": "deleteAllGVR",
+        "operationId": "deleteAllCoreEdaNokiaComV1Namespaces",
         "parameters": [
           {
             "description": "a label selector string to filter the set of CRs deleted based on CR labels",
@@ -5513,7 +7749,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.Namespace_DeletedResources"
                 }
               }
             },
@@ -5718,7 +7954,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.DeviationAction_DeletedResources"
                 }
               }
             },
@@ -5846,6 +8082,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.DeviationAction"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a DeviationAction",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceDeviationactions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -6067,48 +8360,6 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "tags": [
-          "apps"
-        ]
-      }
-    },
-    "/apps/core.eda.nokia.com/v1/namespaces/{namespace}/deviations/_deleted": {
-      "get": {
-        "operationId": "getDeletedCoreEdaNokiaComV1NamespaceDeviations",
-        "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
-                }
-              }
-            },
-            "description": "Returns list of deleted resource entries"
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Get information about the instances of Deviation that have been deleted that existed in the specified namespace.",
         "tags": [
           "apps"
         ]
@@ -6455,7 +8706,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.EdgeInterface_DeletedResources"
                 }
               }
             },
@@ -6583,6 +8834,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.EdgeInterface"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a EdgeInterface",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceEdgeinterfaces",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -6925,7 +9233,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.IndexAllocationPool_DeletedResources"
                 }
               }
             },
@@ -7053,6 +9361,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.IndexAllocationPool"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a IndexAllocationPool",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceIndexallocationpools",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -7395,7 +9760,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPAllocationPool_DeletedResources"
                 }
               }
             },
@@ -7523,6 +9888,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPAllocationPool"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a IPAllocationPool",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceIpallocationpools",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -7865,7 +10287,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPInSubnetAllocationPool_DeletedResources"
                 }
               }
             },
@@ -7993,6 +10415,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.IPInSubnetAllocationPool"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a IPInSubnetAllocationPool",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceIpinsubnetallocationpools",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -8335,7 +10814,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeProfile_DeletedResources"
                 }
               }
             },
@@ -8463,6 +10942,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeProfile"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a NodeProfile",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceNodeprofiles",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -8805,7 +11341,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeUser_DeletedResources"
                 }
               }
             },
@@ -8933,6 +11469,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.NodeUser"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a NodeUser",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceNodeusers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -9275,7 +11868,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.Role_DeletedResources"
                 }
               }
             },
@@ -9403,6 +11996,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.Role"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a Role",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceRoles",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -9745,7 +12395,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.SubnetAllocationPool_DeletedResources"
                 }
               }
             },
@@ -9873,6 +12523,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.SubnetAllocationPool"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a SubnetAllocationPool",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceSubnetallocationpools",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -10215,7 +12922,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoBreakout_DeletedResources"
                 }
               }
             },
@@ -10343,6 +13050,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoBreakout"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a TopoBreakout",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceTopobreakouts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -10685,7 +13449,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoLink_DeletedResources"
                 }
               }
             },
@@ -10813,6 +13577,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoLink"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a TopoLink",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceTopolinks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -11155,7 +13976,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoNode_DeletedResources"
                 }
               }
             },
@@ -11283,6 +14104,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.TopoNode"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a TopoNode",
+        "operationId": "patchCoreEdaNokiaComV1NamespaceToponodes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -11530,6 +14408,55 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.Namespace"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a non-namespaced Namespace",
+        "operationId": "patchCoreEdaNokiaComV1Namespaces",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -12075,7 +15002,7 @@
     "/apps/core.eda.nokia.com/v1/udpproxies": {
       "delete": {
         "description": "Delete all instances of UdpProxy.  If UdpProxy is a namespaced resource, all instances in all namespaces will\nbe deleted, and this is restricted to users with the system-administrator role.\nIf a non-namespaced UdpProxy, it deletes all instances of that non-namespaced resource.",
-        "operationId": "deleteAllGVR",
+        "operationId": "deleteAllCoreEdaNokiaComV1Udpproxies",
         "parameters": [
           {
             "description": "a label selector string to filter the set of CRs deleted based on CR labels",
@@ -12215,7 +15142,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.UdpProxy_DeletedResources"
                 }
               }
             },
@@ -12325,6 +15252,55 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.UdpProxy"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a non-namespaced UdpProxy",
+        "operationId": "patchCoreEdaNokiaComV1Udpproxies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -12471,7 +15447,7 @@
     "/apps/core.eda.nokia.com/v1/workflowdefinitions": {
       "delete": {
         "description": "Delete all instances of WorkflowDefinition.  If WorkflowDefinition is a namespaced resource, all instances in all namespaces will\nbe deleted, and this is restricted to users with the system-administrator role.\nIf a non-namespaced WorkflowDefinition, it deletes all instances of that non-namespaced resource.",
-        "operationId": "deleteAllGVR",
+        "operationId": "deleteAllCoreEdaNokiaComV1Workflowdefinitions",
         "parameters": [
           {
             "description": "a label selector string to filter the set of CRs deleted based on CR labels",
@@ -12611,7 +15587,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.WorkflowDefinition_DeletedResources"
                 }
               }
             },
@@ -12721,6 +15697,55 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.WorkflowDefinition"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a non-namespaced WorkflowDefinition",
+        "operationId": "patchCoreEdaNokiaComV1Workflowdefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -12864,5 +15889,10 @@
         ]
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

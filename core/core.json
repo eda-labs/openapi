@@ -5,6 +5,11 @@
     "title": "API-server openapi functions",
     "version": "0.0.1"
   },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "paths": {
     "/core/about/activity": {
       "get": {
@@ -12,11 +17,11 @@
         "operationId": "activityGet",
         "responses": {
           "204": {
-            "description": "no data is returned for this response type."
+            "description": "Response when cluster is active. There is no body."
           },
           "503": {
             "content": {},
-            "description": ""
+            "description": "Response when cluster is standby. There is no body."
           },
           "default": {
             "content": {
@@ -26,13 +31,13 @@
                 }
               }
             },
-            "description": "Details of an error in response to an API REST request."
+            "description": "Response for errors."
           }
         },
+        "security": [],
         "summary": "Gets the cluster activity status.",
         "tags": [
-          "core",
-          "activity"
+          "coreAbout"
         ]
       }
     },
@@ -72,9 +77,9 @@
             "description": "The response for a GET health request when non-healthy."
           }
         },
+        "security": [],
         "tags": [
-          "core",
-          "health"
+          "coreAbout"
         ]
       }
     },
@@ -105,8 +110,56 @@
         },
         "summary": "Returns version information for the EDA cluster.",
         "tags": [
-          "core",
-          "version"
+          "coreAbout"
+        ]
+      }
+    },
+    "/core/access/v1/namespaces": {
+      "get": {
+        "description": "Gets the list of namespaces the current user can access. If the current user is able to access the\n'All Namespaces' option that will be indicated in the response.",
+        "operationId": "accessGetNamespaces",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamespaceGetResponse"
+                }
+              }
+            },
+            "description": "The response for a successful non-streaming GET namespaces request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "ErrorResponse"
+          }
+        },
+        "tags": [
+          "coreAccess"
         ]
       }
     },
@@ -148,8 +201,7 @@
         },
         "summary": "Get the user federation providers configured in EDA.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "post": {
@@ -190,8 +242,7 @@
         },
         "summary": "Create an EDA user federation provider.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -227,8 +278,7 @@
         },
         "summary": "Delete an EDA user federation provider.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "get": {
@@ -269,8 +319,7 @@
         },
         "summary": "Get the EDA user federation provider specified by the uuid in the request URL.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "put": {
@@ -322,8 +371,43 @@
         },
         "summary": "Update an EDA user federation provider.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
+        ]
+      }
+    },
+    "/core/admin/federationprovidertest": {
+      "post": {
+        "description": "This endpoint instructs the keycloak server to test a federation provider\non behalf of the requesting user.",
+        "operationId": "adminTestProvider",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthProviderTestParams"
+              }
+            }
+          },
+          "description": "The definition of the test parameters",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Test connection and authentication for an EDA federation provider.",
+        "tags": [
+          "coreAdmin"
         ]
       }
     },
@@ -373,8 +457,7 @@
         },
         "summary": "Returns all EDA user-groups.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "post": {
@@ -415,8 +498,7 @@
         },
         "summary": "Creates a new EDA user group.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -452,8 +534,7 @@
         },
         "summary": "Deletes an EDA user group.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "get": {
@@ -510,8 +591,7 @@
         },
         "summary": "Returns a single EDA user-group.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "put": {
@@ -563,8 +643,7 @@
         },
         "summary": "Updates an EDA user group",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -614,8 +693,7 @@
         },
         "summary": "Remove roles from an EDA user group.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "get": {
@@ -656,8 +734,7 @@
         },
         "summary": "Returns the roles assigned to an EDA user-group.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "post": {
@@ -705,8 +782,7 @@
         },
         "summary": "Assign roles to an EDA user group.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "put": {
@@ -754,8 +830,7 @@
         },
         "summary": "Replace the roles of an EDA user group.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -814,9 +889,7 @@
         },
         "summary": "Get/stream the EDA roles in the specified namespace.",
         "tags": [
-          "core",
-          "admin",
-          "namespaceUrlAAA"
+          "coreAdmin"
         ]
       },
       "post": {
@@ -868,9 +941,7 @@
         },
         "summary": "Create an EDA namespaced role in the specified namespace.",
         "tags": [
-          "core",
-          "admin",
-          "namespaceUrlAAA"
+          "coreAdmin"
         ]
       }
     },
@@ -915,9 +986,7 @@
         },
         "summary": "Delete an EDA namespaced role.",
         "tags": [
-          "core",
-          "admin",
-          "namespaceUrlAAA"
+          "coreAdmin"
         ]
       },
       "get": {
@@ -983,9 +1052,7 @@
         },
         "summary": "Get/stream a single namespaced EDA role.",
         "tags": [
-          "core",
-          "admin",
-          "namespaceUrlAAA"
+          "coreAdmin"
         ]
       },
       "put": {
@@ -1046,21 +1113,19 @@
         },
         "summary": "Update an EDA namespaced role with new content.",
         "tags": [
-          "core",
-          "admin",
-          "namespaceUrlAAA"
+          "coreAdmin"
         ]
       }
     },
     "/core/admin/passwordpolicy": {
       "get": {
-        "description": "Returns the parameters for the currently configured EDA password policy.\nIf a \"default=true\" query parameter is passed, the default password policy definition\nis returned.",
+        "description": "Returns the parameters for the currently configured EDA password policy.\nIf a \"get-default=true\" query parameter is passed, the default password policy definition\nis returned.",
         "operationId": "adminGetPasswordPolicy",
         "parameters": [
           {
             "description": "if set to true, the default password policy definition is returned, rather than the current password policy.",
             "in": "query",
-            "name": "default",
+            "name": "get-default",
             "schema": {
               "type": "boolean"
             }
@@ -1090,8 +1155,7 @@
         },
         "summary": "Gets the current EDA password policy parameters.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "put": {
@@ -1124,8 +1188,7 @@
         },
         "summary": "Sets the EDA password policy parameters.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -1175,9 +1238,7 @@
         },
         "summary": "Get/stream the EDA cluster roles.",
         "tags": [
-          "core",
-          "admin",
-          "urlAAA"
+          "coreAdmin"
         ]
       },
       "post": {
@@ -1218,9 +1279,7 @@
         },
         "summary": "Create an EDA cluster role.",
         "tags": [
-          "core",
-          "admin",
-          "urlAAA"
+          "coreAdmin"
         ]
       }
     },
@@ -1256,9 +1315,7 @@
         },
         "summary": "Delete an EDA cluster role.",
         "tags": [
-          "core",
-          "admin",
-          "urlAAA"
+          "coreAdmin"
         ]
       },
       "get": {
@@ -1315,9 +1372,7 @@
         },
         "summary": "Get/stream a single EDA cluster role.",
         "tags": [
-          "core",
-          "admin",
-          "urlAAA"
+          "coreAdmin"
         ]
       },
       "put": {
@@ -1369,9 +1424,7 @@
         },
         "summary": "Update an EDA cluster role with new content.",
         "tags": [
-          "core",
-          "admin",
-          "urlAAA"
+          "coreAdmin"
         ]
       }
     },
@@ -1420,13 +1473,12 @@
           }
         },
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "post": {
         "description": "Note that group membership is not changed (the \"groups\" data in the user\ndefinition is ignored).  The groups of a user must be modified via the\ncore/admin/users/{uuid}/groups REST endpoint or by modifying the group definitions\nusing group REST endpoints.",
-        "operationId": "adminPostUser",
+        "operationId": "adminCreateUser",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1462,8 +1514,7 @@
         },
         "summary": "Creates an EDA user with the JSON information in the request body.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -1498,8 +1549,7 @@
         },
         "summary": "Deletes the user identified by userid/UUID in the request path.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "get": {
@@ -1539,13 +1589,12 @@
         },
         "summary": "Returns a single EDA user specified by the userid (UUID) parameter in the path.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "put": {
         "description": "Note that the userid/UUID and name cannot be modified.\nNote also that group membership is not changed (the \"groups\" data in the user\ndefinition is ignored).  The groups of a user must be modified via the\ncore/admin/users/{uuid}/groups REST endpoint or by modifying the group definitions\nusing group REST endpoints.",
-        "operationId": "adminPutUser",
+        "operationId": "adminModifyUser",
         "parameters": [
           {
             "description": "The UUID or userid of the user whose user record should be replaced.",
@@ -1592,8 +1641,7 @@
         },
         "summary": "Replaces the attributes of an EDA user with the JSON information in the request body.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -1642,8 +1690,7 @@
         },
         "summary": "Invokes the specified email action for the specified user.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -1689,8 +1736,7 @@
         },
         "summary": "Removes the specified user from the groups specified by the group UUIDs in the request body.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "post": {
@@ -1734,8 +1780,7 @@
         },
         "summary": "Adds the specified user to the groups specified by the group UUIDs in the request body.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       },
       "put": {
@@ -1779,8 +1824,7 @@
           }
         },
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -1826,8 +1870,7 @@
         },
         "summary": "Sets/updates/replaces the password of the specified user.",
         "tags": [
-          "core",
-          "admin"
+          "coreAdmin"
         ]
       }
     },
@@ -1865,9 +1908,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "nsUrlAAA"
+          "coreAlarms"
         ]
       },
       "get": {
@@ -1920,9 +1961,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "urlAAA"
+          "coreAlarms"
         ]
       },
       "put": {
@@ -1942,6 +1981,16 @@
                 "unsuppress"
               ],
               "type": "string"
+            }
+          },
+          {
+            "description": "The duration (in milliseconds) for the specified acknowledge or suppress action.",
+            "in": "query",
+            "name": "duration",
+            "schema": {
+              "format": "int64",
+              "minimum": 1,
+              "type": "integer"
             }
           }
         ],
@@ -1975,8 +2024,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms"
+          "coreAlarms"
         ]
       }
     },
@@ -2011,9 +2059,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "urlAAA"
+          "coreAlarms"
         ]
       },
       "get": {
@@ -2073,9 +2119,7 @@
         },
         "summary": "Gets a single non-namespaced alarm, as specified by the alarm-name parameter.",
         "tags": [
-          "core",
-          "alarms",
-          "urlAAA"
+          "coreAlarms"
         ]
       },
       "put": {
@@ -2095,6 +2139,16 @@
                 "unsuppress"
               ],
               "type": "string"
+            }
+          },
+          {
+            "description": "The duration (in milliseconds) for the specified acknowledge or suppress action.",
+            "in": "query",
+            "name": "duration",
+            "schema": {
+              "format": "int64",
+              "minimum": 1,
+              "type": "integer"
             }
           },
           {
@@ -2123,9 +2177,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "urlAAA"
+          "coreAlarms"
         ]
       }
     },
@@ -2190,8 +2242,7 @@
         },
         "summary": "Gets the history of the specified non-namespaced alarm.  This API supports streaming,",
         "tags": [
-          "core",
-          "alarms"
+          "coreAlarms"
         ]
       }
     },
@@ -2265,8 +2316,7 @@
         },
         "summary": "Gets the history of the specified alarm in a namespace.  This API supports streaming,",
         "tags": [
-          "core",
-          "alarms"
+          "coreAlarms"
         ]
       }
     },
@@ -2315,9 +2365,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "namespaceUrlAAA"
+          "coreAlarms"
         ]
       },
       "get": {
@@ -2387,9 +2435,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "namespaceUrlAAA"
+          "coreAlarms"
         ]
       },
       "put": {
@@ -2418,6 +2464,16 @@
                 "unsuppress"
               ],
               "type": "string"
+            }
+          },
+          {
+            "description": "The duration (in milliseconds) for the specified acknowledge or suppress action.",
+            "in": "query",
+            "name": "duration",
+            "schema": {
+              "format": "int64",
+              "minimum": 1,
+              "type": "integer"
             }
           }
         ],
@@ -2451,8 +2507,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms"
+          "coreAlarms"
         ]
       }
     },
@@ -2496,9 +2551,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "namespaceUrlAAA"
+          "coreAlarms"
         ]
       },
       "get": {
@@ -2575,9 +2628,7 @@
         },
         "summary": "Gets a single namespaced alarm, as specified by the nsName and alarm-name parameters.",
         "tags": [
-          "core",
-          "alarms",
-          "namespaceUrlAAA"
+          "coreAlarms"
         ]
       },
       "put": {
@@ -2597,6 +2648,16 @@
                 "unsuppress"
               ],
               "type": "string"
+            }
+          },
+          {
+            "description": "The duration (in milliseconds) for the specified acknowledge or suppress action.",
+            "in": "query",
+            "name": "duration",
+            "schema": {
+              "format": "int64",
+              "minimum": 1,
+              "type": "integer"
             }
           },
           {
@@ -2634,9 +2695,7 @@
           }
         },
         "tags": [
-          "core",
-          "alarms",
-          "namespaceUrlAAA"
+          "coreAlarms"
         ]
       }
     },
@@ -2655,7 +2714,7 @@
             }
           },
           {
-            "description": "Flag for the request to wait until the transaction is complete before returning",
+            "description": "Flag for the request to wait until the transaction is complete before returning.  By default it returns the current state.",
             "in": "query",
             "name": "waitForComplete",
             "schema": {
@@ -2663,7 +2722,7 @@
             }
           },
           {
-            "description": "Flag to tell the request to fail if the transaction has errors",
+            "description": "Flag to tell the request to fail if the transaction has errors.  By default it will not fail.",
             "in": "query",
             "name": "failOnErrors",
             "schema": {
@@ -2695,9 +2754,7 @@
         },
         "summary": "Gets the details of a posted transaction for any user.",
         "tags": [
-          "core",
-          "transaction",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
@@ -2793,9 +2850,7 @@
         },
         "summary": "Gets the diff view of the configuration records in a posted transaction for any user, or the diff view of a node configuration.",
         "tags": [
-          "core",
-          "transaction",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
@@ -2839,7 +2894,7 @@
                 }
               }
             },
-            "description": "The response for a successful GET transaction-summary-result request."
+            "description": "The response for a successful GET transaction-result-summary-list request."
           },
           "default": {
             "content": {
@@ -2853,10 +2908,7 @@
           }
         },
         "tags": [
-          "core",
-          "transaction",
-          "stream",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
@@ -2915,10 +2967,7 @@
           }
         },
         "tags": [
-          "core",
-          "transaction",
-          "stream",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
@@ -2960,9 +3009,7 @@
         },
         "summary": "Gets a list of suggested key/values for labels.",
         "tags": [
-          "core",
-          "autocomplete",
-          "urlAAA"
+          "coreAutocomplete"
         ]
       }
     },
@@ -3013,9 +3060,7 @@
         },
         "summary": "Gets the node config of a node.",
         "tags": [
-          "core",
-          "nodeconfig",
-          "namespaceUrlAAA"
+          "coreNodeconfig"
         ]
       }
     },
@@ -3084,8 +3129,7 @@
         },
         "summary": "Initiate a streaming query request using the EDA query language.",
         "tags": [
-          "core",
-          "query"
+          "coreQuery"
         ]
       }
     },
@@ -3154,8 +3198,7 @@
         },
         "summary": "Initiate a streaming query request using the EDA query language.",
         "tags": [
-          "core",
-          "query"
+          "coreQuery"
         ]
       }
     },
@@ -3207,8 +3250,7 @@
         },
         "summary": "Request auto-completion for the specified EDA query-language string.",
         "tags": [
-          "core",
-          "query"
+          "coreQuery"
         ]
       }
     },
@@ -3277,8 +3319,7 @@
         },
         "summary": "Initiate a streaming query request using the 'natural' query language.",
         "tags": [
-          "core",
-          "query"
+          "coreQuery"
         ]
       }
     },
@@ -3327,9 +3368,7 @@
           }
         },
         "tags": [
-          "core",
-          "topology",
-          "stream"
+          "coreTopology"
         ]
       }
     },
@@ -3387,9 +3426,7 @@
           }
         },
         "tags": [
-          "core",
-          "topology",
-          "stream"
+          "coreTopology"
         ]
       }
     },
@@ -3447,9 +3484,7 @@
           }
         },
         "tags": [
-          "core",
-          "topology",
-          "stream"
+          "coreTopology"
         ]
       }
     },
@@ -3516,9 +3551,7 @@
           }
         },
         "tags": [
-          "core",
-          "topology",
-          "stream"
+          "coreTopology"
         ]
       }
     },
@@ -3587,26 +3620,13 @@
           }
         },
         "tags": [
-          "core",
-          "topology",
-          "stream"
+          "coreTopology"
         ]
       }
     },
     "/core/transaction/v1": {
       "post": {
-        "operationId": "transPostTransaction",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Transaction"
-              }
-            }
-          },
-          "description": "Details of the transaction",
-          "required": true
-        },
+        "operationId": "transPostTransactionV1",
         "responses": {
           "200": {
             "content": {
@@ -3631,9 +3651,7 @@
         },
         "summary": "Runs a transaction.",
         "tags": [
-          "core",
-          "transaction",
-          "authAAA"
+          "coreTransaction"
         ]
       }
     },
@@ -3652,7 +3670,7 @@
             }
           },
           {
-            "description": "Flag for the request to wait until the transaction is complete before returning",
+            "description": "Flag for the request to wait until the transaction is complete before returning.  By default it returns the current state.",
             "in": "query",
             "name": "waitForComplete",
             "schema": {
@@ -3660,7 +3678,7 @@
             }
           },
           {
-            "description": "Flag to tell the request to fail if the transaction has errors",
+            "description": "Flag to tell the request to fail if the transaction has errors.  By default it will not fail.",
             "in": "query",
             "name": "failOnErrors",
             "schema": {
@@ -3692,9 +3710,7 @@
         },
         "summary": "Gets the details of a posted transaction for a user.",
         "tags": [
-          "core",
-          "transaction",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
@@ -3790,13 +3806,256 @@
         },
         "summary": "Gets the diff view of the configuration records in a posted transaction for the user, or the diff view of a node configuration.",
         "tags": [
-          "core",
-          "transaction",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
     "/core/transaction/v1/restore/{transactionId}": {
+      "post": {
+        "operationId": "transRestoreTransactionV1",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction being reverted or restored.",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionId"
+                }
+              }
+            },
+            "description": "The identifier for the transaction ID used to restore to the state of the specified transaction."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Restores the configuration of the system to the state at the time of the transaction identified by the specified transaction id.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v1/resultsummary": {
+      "get": {
+        "description": "Gets summarized results of transactions run by the user.  These results can be streamed back to the requestor if\nthe appropriate streaming parameters are supplied.",
+        "operationId": "transGetSummaryResultV1",
+        "parameters": [
+          {
+            "description": "Maximum number of transaction results to return",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionSummaryResults"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-result-summary-list request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v1/revert/{transactionId}": {
+      "post": {
+        "operationId": "transRevertTransactionV1",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction being reverted or restored.",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionId"
+                }
+              }
+            },
+            "description": "The identifier for the transaction ID used to revert the transaction."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Reverts the transaction identified by the transaction id.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v1/state/{transactionId}": {
+      "get": {
+        "description": "Gets the state of a posted transaction.  State changes for the transaction can be streamed back to the\nrequestor if the appropriate streaming parameters are supplied.",
+        "operationId": "transGetStateForUser",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction whose state is being requested",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionState"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-state request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v2": {
+      "post": {
+        "operationId": "transPostTransaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "description": "Details of the transaction",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionId"
+                }
+              }
+            },
+            "description": "The response for a successful POST transaction request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Runs a transaction.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v2/restore/{transactionId}": {
       "post": {
         "operationId": "transRestoreTransaction",
         "parameters": [
@@ -3835,24 +4094,283 @@
         },
         "summary": "Restores the configuration of the system to the state at the time of the transaction identified by the specified transaction id.",
         "tags": [
-          "core",
-          "transaction",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
-    "/core/transaction/v1/resultsummary": {
+    "/core/transaction/v2/result/diffs/nodecfg/{transactionId}": {
       "get": {
-        "description": "Gets summarized results of transactions run by the user.  These results can be streamed back to the requestor if\nthe appropriate streaming parameters are supplied.",
-        "operationId": "transGetSummaryResult",
+        "operationId": "transGetNodeConfigDiff",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction whose resource diff is being requested",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Name of the node for the configuration diff being requested",
+            "in": "query",
+            "name": "node",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Namespace of the node for the configuration diff being requested.",
+            "in": "query",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResultObject"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-diffs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the diff view of a node configuration change from a transaction.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v2/result/diffs/resource/{transactionId}": {
+      "get": {
+        "operationId": "transGetResourceDiff",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction whose resource diff is being requested",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Group information for the resource diff being requested.  Group is required but can be empty for non-EDA resources",
+            "in": "query",
+            "name": "group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Version information for the resource diff being requested.  Version is required",
+            "in": "query",
+            "name": "version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "kind information for the resource diff being requested.  Kind is required",
+            "in": "query",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Name information for the resource diff being requested.  Name is required",
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Namespace information for the resource diff being requested.  Namespace is\nrequired if the resource is namespaced or is a non-EDA resource",
+            "in": "query",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResultObject"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-diffs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets the diff view of a resource change from a posted transaction.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v2/result/execution/{transactionId}": {
+      "get": {
+        "operationId": "transGetResultExecution",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction whose details are being requested",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Flag for the request to wait until the transaction is complete before returning.  By default it returns the current state.",
+            "in": "query",
+            "name": "waitForComplete",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Flag to tell the request to fail if the transaction has errors.  By default it will not fail.",
+            "in": "query",
+            "name": "failOnErrors",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionExecutionResult"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-result-execution request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets the details of a posted transaction.  This does not include the input resources, which can be retrieved using the transGetResultInputResources operation.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v2/result/inputresources/{transactionId}": {
+      "get": {
+        "description": "If the user does not have read access to any resources, these resources will not be included in the list, and in this\ncase the the limitedAccess field in the response will be set to true.",
+        "operationId": "transGetResultInputResources",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction whose list of input resources is being requested",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResultInputResources"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-result-inputresources request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets the input resources of a posted transaction.  This list is filtered by the access rights of the requesting user.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v2/result/summary": {
+      "get": {
+        "description": "Gets summarized results of transactions for all users.  These results can be streamed back to the requestor if\nthe appropriate streaming parameters are supplied.",
+        "operationId": "transGetSummaryResultList",
         "parameters": [
           {
             "description": "Maximum number of transaction results to return",
             "in": "query",
             "name": "size",
+            "required": true,
             "schema": {
               "format": "uint64",
               "type": "integer"
+            }
+          },
+          {
+            "description": "When provided, the liast of transactions is limited to those initiated by the specified user.",
+            "in": "query",
+            "name": "username",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -3881,7 +4399,7 @@
                 }
               }
             },
-            "description": "The response for a successful GET transaction-summary-result request."
+            "description": "The response for a successful GET transaction-result-summary-list request."
           },
           "default": {
             "content": {
@@ -3895,14 +4413,54 @@
           }
         },
         "tags": [
-          "core",
-          "transaction",
-          "stream",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
-    "/core/transaction/v1/revert/{transactionId}": {
+    "/core/transaction/v2/result/summary/{transactionId}": {
+      "get": {
+        "operationId": "transGetSummaryResult",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction whose state is being requested",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionSummaryResult"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-result-summary request.\nThis request returns the summary for a single, specified transaction."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets summarized results of a single transaction.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
+    "/core/transaction/v2/revert/{transactionId}": {
       "post": {
         "operationId": "transRevertTransaction",
         "parameters": [
@@ -3941,15 +4499,13 @@
         },
         "summary": "Reverts the transaction identified by the transaction id.",
         "tags": [
-          "core",
-          "transaction",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
-    "/core/transaction/v1/state/{transactionId}": {
+    "/core/transaction/v2/state/{transactionId}": {
       "get": {
-        "description": "Gets the state of a posted transaction.  State changes for the transaction can be streamed back to the\nrequestor if the appropriate streaming parameters are supplied.",
+        "description": "Gets the state of a posted transaction.  State changes for the transaction\ncan be streamed back to the requestor if the appropriate streaming parameters are supplied.",
         "operationId": "transGetState",
         "parameters": [
           {
@@ -4002,21 +4558,21 @@
           }
         },
         "tags": [
-          "core",
-          "transaction",
-          "stream",
-          "urlAAA"
+          "coreTransaction"
         ]
       }
     },
-    "/core/transaction/v1/validate": {
+    "/core/transaction/v2/validate": {
       "post": {
         "operationId": "transValidateTransaction",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TransactionCr"
+                "items": {
+                  "$ref": "#/components/schemas/TransactionCr"
+                },
+                "type": "array"
               }
             }
           },
@@ -4038,11 +4594,9 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Validates a CR to check that it is properly formed before later adding it to a transaction.",
+        "summary": "Validates a list of CRs to check that they are properly formed before later adding them to a transaction.",
         "tags": [
-          "core",
-          "transaction",
-          "authAAA"
+          "coreTransaction"
         ]
       }
     },
@@ -4077,9 +4631,7 @@
           }
         },
         "tags": [
-          "core",
-          "uss",
-          "authAAA"
+          "coreUss"
         ]
       },
       "get": {
@@ -4143,9 +4695,7 @@
           }
         },
         "tags": [
-          "core",
-          "uss",
-          "authAAA"
+          "coreUss"
         ]
       }
     },
@@ -4180,9 +4730,7 @@
           }
         },
         "tags": [
-          "core",
-          "uss",
-          "authAAA"
+          "coreUss"
         ]
       },
       "get": {
@@ -4246,9 +4794,7 @@
           }
         },
         "tags": [
-          "core",
-          "uss",
-          "authAAA"
+          "coreUss"
         ]
       },
       "post": {
@@ -4300,9 +4846,7 @@
           }
         },
         "tags": [
-          "core",
-          "uss",
-          "authAAA"
+          "coreUss"
         ]
       },
       "put": {
@@ -4354,9 +4898,387 @@
           }
         },
         "tags": [
-          "core",
-          "uss",
-          "authAAA"
+          "coreUss"
+        ]
+      }
+    },
+    "/core/user-storage/v2/files": {
+      "delete": {
+        "description": "Deletes the user-storage files whose paths are in the JSON string array in the body\nof the request.  There is never partial success.  Either all the deletes succeed,\nor none of them occur.  i.e. if an error response comes back, no files were\ndeleted.",
+        "operationId": "ussDeleteFiles",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "description": "paths for the files being deleted",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Deletes a number of user-storage files as specified in the JSON body of the request.",
+        "tags": [
+          "coreUss"
+        ]
+      }
+    },
+    "/core/user-storage/v2/shared/directory": {
+      "delete": {
+        "description": "delete a user-storage directory (and its contents) from the shared region",
+        "operationId": "ussDeleteSharedDirectory",
+        "parameters": [
+          {
+            "description": "path for the file/directory being manipulated",
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreUss"
+        ]
+      },
+      "get": {
+        "description": "gets the content of a user-storage directory from the shared region",
+        "operationId": "ussGetSharedDirectory",
+        "parameters": [
+          {
+            "description": "path for the file/directory being manipulated",
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "if true, file content will be base64-encoded before being returned",
+            "in": "query",
+            "name": "base64-encode",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserStorageOutDirContent"
+                }
+              }
+            },
+            "description": "The response for a successful GET directory user-storage request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreUss"
+        ]
+      }
+    },
+    "/core/user-storage/v2/shared/file": {
+      "delete": {
+        "description": "deletes a user-storage file from the shared region",
+        "operationId": "ussDeleteSharedFile",
+        "parameters": [
+          {
+            "description": "path for the file/directory being manipulated",
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreUss"
+        ]
+      },
+      "get": {
+        "description": "returns the content of a single user-storage file from the shared region",
+        "operationId": "ussGetSharedFile",
+        "parameters": [
+          {
+            "description": "path for the file/directory being manipulated",
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "if true, file content will be base64-encoded before being returned",
+            "in": "query",
+            "name": "base64-encode",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserStorageOutFileContent"
+                }
+              }
+            },
+            "description": "The response for a successful GET file user-storage request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreUss"
+        ]
+      },
+      "post": {
+        "description": "Creates/writes the content of a user-storage file to the shared region",
+        "operationId": "ussPostSharedFile",
+        "parameters": [
+          {
+            "description": "path for the file whose contents should be written",
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "true if the content was base64-encoded before being sent.",
+            "in": "query",
+            "name": "base64-encoded",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserStorageInFileContent"
+              }
+            }
+          },
+          "description": "content for the file",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreUss"
+        ]
+      },
+      "put": {
+        "description": "Creates a user-storage file to the shared region",
+        "operationId": "ussPutSharedFile",
+        "parameters": [
+          {
+            "description": "path for the file whose contents should be written",
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "true if the content was base64-encoded before being sent.",
+            "in": "query",
+            "name": "base64-encoded",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserStorageInFileContent"
+              }
+            }
+          },
+          "description": "content for the file",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "coreUss"
+        ]
+      }
+    },
+    "/core/user-storage/v2/shared/files": {
+      "delete": {
+        "description": "Deletes the user-storage files whose paths are in the JSON string array in the body\nof the request.  There is never partial success.  Either all the deletes succeed,\nor none of them occur.  i.e. if an error response comes back, no files were\ndeleted.",
+        "operationId": "ussDeleteSharedFiles",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "description": "paths for the files being deleted",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Deletes a number of user-storage files from the shared region as specified in the JSON\nbody of the request.",
+        "tags": [
+          "coreUss"
         ]
       }
     },
@@ -4398,8 +5320,49 @@
         },
         "summary": "Runs a workflow.",
         "tags": [
-          "core",
-          "workflow"
+          "coreWorkflow"
+        ]
+      }
+    },
+    "/core/workflow/v1/{nsName}/list": {
+      "get": {
+        "operationId": "getNamespaceWorkflowList",
+        "parameters": [
+          {
+            "description": "The namespace for the requested workflow list",
+            "in": "path",
+            "name": "nsName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowListResult"
+                }
+              }
+            },
+            "description": "The response for a successful GET flowlist request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets the list of posted workflows in the specified namespace.",
+        "tags": [
+          "coreWorkflow"
         ]
       }
     },
@@ -4458,8 +5421,38 @@
         },
         "summary": "Gets the detailed results of a posted workflow.",
         "tags": [
-          "core",
-          "workflow"
+          "coreWorkflow"
+        ]
+      }
+    },
+    "/core/workflow/v1/list": {
+      "get": {
+        "operationId": "getWorkflowList",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowListResult"
+                }
+              }
+            },
+            "description": "The response for a successful GET flowlist request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets the list of posted workflows for all namespaces.",
+        "tags": [
+          "coreWorkflow"
         ]
       }
     },
@@ -4518,9 +5511,49 @@
           }
         },
         "tags": [
-          "core",
-          "workflow",
-          "stream"
+          "coreWorkflow"
+        ]
+      }
+    },
+    "/core/workflow/v1/workflow/{workflowId}": {
+      "get": {
+        "operationId": "getWorkflow",
+        "parameters": [
+          {
+            "description": "The id for the requested workflow",
+            "in": "path",
+            "name": "workflowId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowGetResponse"
+                }
+              }
+            },
+            "description": "The response for a successful GET workflow request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets the details of the workflow.",
+        "tags": [
+          "coreWorkflow"
         ]
       }
     }
@@ -4533,6 +5566,10 @@
           "acknowledged": {
             "description": "An indication if the alarm has been acknowledged.",
             "type": "boolean"
+          },
+          "acknowledgedUntil": {
+            "description": "Indicates the end time of the acknowledgement.",
+            "type": "string"
           },
           "cleared": {
             "description": "An indication if the alarm has been cleared.",
@@ -4566,6 +5603,10 @@
             "description": "The last time that the alarm was changed; as provided by the raiser of the alarm.",
             "type": "string"
           },
+          "lastSuppressed": {
+            "description": "the time this alarm was last suppressed.",
+            "type": "string"
+          },
           "name": {
             "description": "The unique name for the alarm, e.g. InterfaceDown-spine-1-1-ethernet-1-1.",
             "type": "string"
@@ -4579,9 +5620,12 @@
             "format": "int64",
             "type": "integer"
           },
-          "parentAlarm": {
-            "description": "a name of another alarm that is a parent of this alarm. This is used to\nfilter out alarms that are not a root cause.",
-            "type": "string"
+          "parentAlarms": {
+            "description": "The names of other alarms that is are parents of this alarm. This is used to\nfilter out alarms that are not a root cause.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "probableCause": {
             "description": "the probable cause for raising the alarm. This field is optional, and\nshould also be a description indicating the primary probable cause of the\nalarm, which may be enriched with relevant information from this specific\nalarm instance. The complete alarm below contains an example.",
@@ -4599,9 +5643,9 @@
             "description": "Severity of the alarm",
             "enum": [
               "warning",
-              " minor",
-              " major",
-              " critical"
+              "minor",
+              "major",
+              "critical"
             ],
             "type": "string"
           },
@@ -4622,7 +5666,7 @@
             "type": "boolean"
           },
           "suppressedUntil": {
-            "description": "Indicates the time at which an active instance of the alarm will be raised again.",
+            "description": "Indicates the end time of the suppression.",
             "type": "string"
           },
           "type": {
@@ -4666,11 +5710,13 @@
           "digits": {
             "description": "Minimum number of digits required in a password. Can be zero.",
             "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "forceExpiredPasswordChange": {
             "description": "The maximum number of days until a password change is enforced.\nA value of zero means no change is required.",
             "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "hashingAlgorithm": {
@@ -4686,26 +5732,31 @@
           "length": {
             "description": "Minimum password length.  This must be at least 1.",
             "format": "int64",
+            "minimum": 1,
             "type": "integer"
           },
           "lowerCase": {
             "description": "Minimum number of lower case characters required in a password. Can be zero.",
             "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "maxFailureWaitSeconds": {
             "description": "The number of seconds before the users access will be restored, after too many authentication failures.",
-            "format": "int32",
+            "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "maxLoginFailure": {
             "description": "The number of login/authentication failures before a lockout policy takes effect. Zero means no enforcement.",
             "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "passwordHistory": {
             "description": "The number of passwords remembered to enforce no re-use of passwords. Zero means no re-use enforcement.",
             "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "permanentLockout": {
@@ -4714,17 +5765,20 @@
           },
           "resetTimeSeconds": {
             "description": "When lockout is not permanent, the count of authentication failures for a user will be reset\nthis many seconds after the last authentication failure.",
-            "format": "int32",
+            "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "specialChars": {
             "description": "Minimum number of special characters required in a password. Can be zero.",
             "format": "int64",
+            "minimum": 0,
             "type": "integer"
           },
           "upperCase": {
             "description": "Minimum number of upper case characters required in a password. Can be zero.",
             "format": "int64",
+            "minimum": 0,
             "type": "integer"
           }
         },
@@ -4733,51 +5787,240 @@
       "AuthProvider": {
         "properties": {
           "auth": {
-            "$ref": "#/components/schemas/ProviderAuth"
+            "$ref": "#/components/schemas/AuthProvider_auth"
           },
           "enabled": {
             "description": "If true, checking/syncing this LDAP provider is enabled.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 30,
+              "ui-title": "Enabled",
+              "ui-title-key": "enabled"
+            }
           },
           "groupSupport": {
-            "$ref": "#/components/schemas/GroupProviderConfig"
+            "$ref": "#/components/schemas/AuthProvider_groupSupport"
           },
           "idAttribute": {
             "description": "Name of the LDAP attribute, which is used as a unique object identifier (UUID) for objects in LDAP.",
-            "type": "string"
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 120,
+              "ui-title": "ID Attribute",
+              "ui-title-key": "uuid_ldap_attribute"
+            }
           },
           "import": {
             "description": "If true, the LDAP information will be imported into the EDA (Keycloak) database.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 30,
+              "ui-title": "Import Users",
+              "ui-title-key": "import_users"
+            }
           },
           "name": {
             "description": "The name to give to the LDAP provider; must be unique.",
-            "type": "string"
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
           },
           "pagination": {
             "description": "Set to true if the LDAP server supports pagination.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 160,
+              "ui-title": "Pagination",
+              "ui-title-key": "pagination"
+            }
           },
           "periodicSync": {
             "description": "If true, periodic synchronization of new changed or newly created LDAP users to Keycloak will occur.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 170,
+              "ui-single-line-group": "periodic_sync",
+              "ui-title": "Periodic Sync",
+              "ui-title-key": "periodic_sync"
+            }
           },
           "periodicSyncSecs": {
             "description": "If periodic sync is enabled, this is the period in seconds that synchronization will occur.",
             "format": "int64",
-            "type": "integer"
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 180,
+              "ui-single-line-group": "periodic_sync",
+              "ui-title": "Periodic Sync Time",
+              "ui-title-key": "periodic_sync_time",
+              "ui-visible-if": "periodicSync === true"
+            }
           },
           "rdnLDAPAttribute": {
             "description": "Name of the LDAP attribute, which is used as RDN (top attribute) of typical user DN. Usually it's the same as the Username LDAP attribute, however it is not required.",
-            "type": "string"
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 110,
+              "ui-title": "RDN LDAP Attribute",
+              "ui-title-key": "rdn_ldap_attribute"
+            }
           },
           "readOnly": {
-            "description": "If true, changes made to LDAP-mapped attribute via EDA will be synced back to the LDAP server.  Otherwise, changes are not made in LDAP.",
-            "type": "boolean"
+            "default": true,
+            "description": "If false, changes made to LDAP-mapped attribute via EDA will be synced back to the LDAP server.  Otherwise, changes are not made in LDAP.",
+            "readOnly": true,
+            "type": "boolean",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 190,
+              "ui-title": "Read Only",
+              "ui-title-key": "read_only"
+            }
           },
           "scope": {
             "description": "Must be \"One Level\" or \"Subtree\".  If \"One Level\", the search applies only for users in the DNs specified by User DNs. If \"Subtree\", the search applies to the whole subtree.",
+            "enum": [
+              "One Level",
+              "Subtree"
+            ],
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 150,
+              "ui-title": "Scope",
+              "ui-title-key": "searchScope"
+            }
+          },
+          "timeout": {
+            "description": "LDAP connection timeout in milliseconds",
+            "format": "int64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 100,
+              "ui-title": "Timeout",
+              "ui-title-key": "timeout"
+            }
+          },
+          "tls": {
+            "description": "If true, encrypts the connection to LDAP using STARTTLS",
+            "type": "boolean",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 50,
+              "ui-title": "Use TLS",
+              "ui-title-key": "use_tls"
+            }
+          },
+          "type": {
+            "description": "The type of provider.  Currently only \"ldap\" is supported.",
+            "enum": [
+              "ldap"
+            ],
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-column-span": 2,
+              "ui-order-priority": 60,
+              "ui-title": "Bind Type",
+              "ui-title-key": "bind_type"
+            }
+          },
+          "url": {
+            "description": "Connection URL to your LDAP server",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Connection URL",
+              "ui-title-key": "connection_url"
+            }
+          },
+          "userDN": {
+            "description": "Full DN of LDAP tree where your users are. This DN is the parent of LDAP users.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 80,
+              "ui-title": "User DN",
+              "ui-title-key": "user_dn"
+            }
+          },
+          "userObjectClasses": {
+            "description": "All values of LDAP objectClass attribute for users in LDAP, divided by commas. (e.g. inetOrgPerson, organizationalPerson).",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 130,
+              "ui-title": "User Object Classes",
+              "ui-title-key": "user_object_classes"
+            }
+          },
+          "userSearchFilter": {
+            "description": "Additional LDAP filter for filtering searched users. Leave this empty if you don't need an additional filter. Make sure that it starts with '(' and ends with ')'.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 140,
+              "ui-title": "User Search Filter",
+              "ui-title-key": "user_search_filter"
+            }
+          },
+          "usernameAttribute": {
+            "description": "Name of the LDAP attribute, which is mapped as EDA username. For many LDAP server vendors it can be 'uid'.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 90,
+              "ui-title": "Username LDAP Attribute",
+              "ui-title-key": "username_ldap_attribute"
+            }
+          },
+          "uuid": {
+            "description": "The unique identifier given to the entry when it is created.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "vendor": {
+            "description": "LDAP vendor (provider).",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Vendor",
+              "ui-title-key": "vendor"
+            }
+          }
+        },
+        "required": [
+          "idAttribute",
+          "name",
+          "rdnLDAPAttribute",
+          "readOnly",
+          "type",
+          "url",
+          "userDN",
+          "userObjectClasses",
+          "usernameAttribute",
+          "vendor"
+        ],
+        "type": "object"
+      },
+      "AuthProviderTestParams": {
+        "properties": {
+          "action": {
+            "description": "The test action to take.",
+            "enum": [
+              "connection",
+              "authentication"
+            ],
             "type": "string"
+          },
+          "auth": {
+            "$ref": "#/components/schemas/ProviderAuth"
           },
           "timeout": {
             "description": "LDAP connection timeout in milliseconds",
@@ -4790,30 +6033,6 @@
           },
           "url": {
             "description": "Connection URL to your LDAP server",
-            "type": "string"
-          },
-          "userDN": {
-            "description": "Full DN of LDAP tree where your users are. This DN is the parent of LDAP users.",
-            "type": "string"
-          },
-          "userObjectClasses": {
-            "example": "'inetOrgPerson, organizationalPerson'.",
-            "type": "string"
-          },
-          "userSearchFilter": {
-            "description": "Additional LDAP filter for filtering searched users. Leave this empty if you don't need an additional filter. Make sure that it starts with '(' and ends with ')'.",
-            "type": "string"
-          },
-          "usernameAttribute": {
-            "description": "Name of the LDAP attribute, which is mapped as EDA username. For many LDAP server vendors it can be 'uid'.",
-            "type": "string"
-          },
-          "uuid": {
-            "description": "The unique identifier given to the entry when it is created.",
-            "type": "string"
-          },
-          "vendor": {
-            "description": "LDAP vendor (provider).",
             "type": "string"
           }
         },
@@ -4845,18 +6064,21 @@
             }
           },
           "resourceRules": {
+            "description": "Rules for access to resources.",
             "items": {
               "$ref": "#/components/schemas/ResourceRule"
             },
             "type": "array"
           },
           "tableRules": {
+            "description": "Rules for access to EDB tables, including via EQL.",
             "items": {
               "$ref": "#/components/schemas/TableRule"
             },
             "type": "array"
           },
           "urlRules": {
+            "description": "Rules for access to APIServer routes.",
             "items": {
               "$ref": "#/components/schemas/UrlRule"
             },
@@ -4933,6 +6155,10 @@
               "$ref": "#/components/schemas/AuthRole"
             },
             "type": "array"
+          },
+          "isFederated": {
+            "description": "if true, indicates that the group was imported from a federated LDAP server",
+            "type": "boolean"
           },
           "name": {
             "type": "string"
@@ -5031,9 +6257,7 @@
             "type": "string"
           },
           "dictionary": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
@@ -5071,6 +6295,161 @@
         ],
         "type": "object"
       },
+      "FlowGetResponse": {
+        "properties": {
+          "error": {
+            "description": "If no error is present, the flow completed successfully",
+            "type": "string"
+          },
+          "id": {
+            "description": "The id of the workflow",
+            "format": "int64",
+            "type": "integer"
+          },
+          "jsonResult": {
+            "description": "A JSON representation of the result",
+            "type": "string"
+          },
+          "log": {
+            "description": "Log output from the flow",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the workflow",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace in which the flow ran",
+            "type": "string"
+          },
+          "parentId": {
+            "description": "The id of the parent workflow, if any",
+            "format": "int64",
+            "type": "integer"
+          },
+          "stages": {
+            "description": "The list of stages of the workflow",
+            "items": {
+              "$ref": "#/components/schemas/FlowStage"
+            },
+            "type": "array"
+          },
+          "state": {
+            "enum": [
+              "waitingToStart",
+              "running",
+              "waitingForInput",
+              "terminated",
+              "failed",
+              "completed",
+              "subflowWaitingForInput"
+            ],
+            "type": "string"
+          },
+          "subflowsWaitingForInput": {
+            "description": "The ids of any subflows that are waiting for user input",
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "The type of workflow",
+            "type": "string"
+          },
+          "waitForInputPrompt": {
+            "description": "Set if the state is waiting for input",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FlowListEntry": {
+        "properties": {
+          "id": {
+            "description": "The id of the workflow",
+            "format": "int64",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the workflow",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace in which the workflow ran",
+            "type": "string"
+          },
+          "parentId": {
+            "description": "The id of the parent workflow, if any",
+            "format": "int64",
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "waitingToStart",
+              "running",
+              "waitingForInput",
+              "terminated",
+              "failed",
+              "completed",
+              "subflowWaitingForInput"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of workflow",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FlowListResult": {
+        "description": "A list of flows",
+        "properties": {
+          "flows": {
+            "items": {
+              "$ref": "#/components/schemas/FlowListEntry"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "FlowStage": {
+        "description": "Describes the stage of a workflow",
+        "properties": {
+          "completed": {
+            "description": "True if the stage has completed",
+            "type": "boolean"
+          },
+          "hadError": {
+            "description": "True if the stage is complete and there was an error",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the flow stage",
+            "type": "string"
+          },
+          "skipped": {
+            "description": "True if the stage was skipped",
+            "type": "boolean"
+          },
+          "started": {
+            "description": "True if the stage has started",
+            "type": "boolean"
+          },
+          "subFlowIds": {
+            "description": "The ids of flows triggered by the stage",
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "GetLabelCompletionRequest": {
         "properties": {
           "gvk": {
@@ -5091,7 +6470,6 @@
           }
         },
         "required": [
-          "gvk",
           "value"
         ],
         "type": "object"
@@ -5102,47 +6480,6 @@
         },
         "title": "A list of user group identifiers (uuid values).",
         "type": "array"
-      },
-      "GroupProviderConfig": {
-        "properties": {
-          "NameLDAPAttribute": {
-            "description": "The LDAP group name attribute",
-            "type": "string"
-          },
-          "filter": {
-            "description": "Further for filtering when retrieving LDAP groups. Ensure starts and ends with parentheses if using.",
-            "type": "string"
-          },
-          "groupLDAPDN": {
-            "description": "The LDAP DN where groups are found.",
-            "type": "string"
-          },
-          "memberAttribute": {
-            "description": "The group attribute for a members.  usually \"member\" or \"memberUid\".",
-            "type": "string"
-          },
-          "memberOfAttribute": {
-            "description": "If strategy is \"memberOf\", this is the user attribute for group memberships.",
-            "type": "string"
-          },
-          "membershipAttributeType": {
-            "description": "How users are identified in a group member entry: either DN or UID.",
-            "type": "string"
-          },
-          "membershipUserAttribute": {
-            "description": "Only valid if membershipAttributeType is UID; then it is\nthe user attribute that should match the group member value.",
-            "type": "string"
-          },
-          "objectClasses": {
-            "description": "The LDAP object class or classes es used for groups. If more than one, must be comma separated.",
-            "type": "string"
-          },
-          "retrievalStrategy": {
-            "description": "The strategy for retrieving groups.  \"member\" to get group membership from the group, ObjectNameParam\n\"memberOf\" to get group membership from the user.",
-            "type": "string"
-          }
-        },
-        "type": "object"
       },
       "GroupVersionKind": {
         "properties": {
@@ -5219,6 +6556,30 @@
         "title": "Structure containing a health report for a particular service.",
         "type": "object"
       },
+      "K8SPatchOp": {
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "value": {
+            "type": "object"
+          },
+          "x-permissive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "op",
+          "path"
+        ],
+        "type": "object"
+      },
       "LabelCompletionResponse": {
         "properties": {
           "results": {
@@ -5289,7 +6650,6 @@
             }
           },
           "namespace": {
-            "readOnly": true,
             "type": "string",
             "x-eda-nokia-com": {
               "immutable": true,
@@ -5302,7 +6662,37 @@
         "required": [
           "name"
         ],
-        "title": "Metadata",
+        "type": "object"
+      },
+      "NamespaceData": {
+        "description": "Information about an individual namespace",
+        "properties": {
+          "description": {
+            "description": "The description of the namespace",
+            "type": "string"
+          },
+          "name": {
+            "description": "The namespace name",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "NamespaceGetResponse": {
+        "description": "Body of the non streaming namespace get request",
+        "properties": {
+          "allNamesapces": {
+            "description": "If true, the requestor is considered to have permission to access all namespaces",
+            "type": "boolean"
+          },
+          "namespaces": {
+            "description": "The list of namespaces",
+            "items": {
+              "$ref": "#/components/schemas/NamespaceData"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "NodeConfigResponse": {
@@ -5391,17 +6781,35 @@
         },
         "type": "array"
       },
+      "Patch": {
+        "items": {
+          "$ref": "#/components/schemas/K8SPatchOp"
+        },
+        "type": "array"
+      },
       "ProviderAuth": {
         "properties": {
           "bindCredential": {
             "description": "Credentials to use when binding to an LDAP provider",
-            "type": "string"
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-title": "Bind Credential",
+              "ui-title-key": "bind_credential"
+            }
           },
           "bindDN": {
             "description": "DN to use when binding to an LDAP provider",
-            "type": "string"
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-title": "Bind DN",
+              "ui-title-key": "bind_dn"
+            }
           }
         },
+        "required": [
+          "bindCredential",
+          "bindDN"
+        ],
         "type": "object"
       },
       "QueryCompletion": {
@@ -5431,15 +6839,23 @@
       "ResourceRule": {
         "properties": {
           "apiGroups": {
+            "description": "The API groups for the resources controlled by the rule.\nAn API group consists of an apiGroup and a version, e.g. \"apigroup/version\".\nThe API group can be a wildcard (\"*\"), in which case it will match any API group.\nIn addition, the version can be a wildcard.",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "permissions": {
+            "description": "Permissions for resources specified by the rule.",
+            "enum": [
+              "none",
+              "read",
+              "readWrite"
+            ],
             "type": "string"
           },
           "resources": {
+            "description": "Names for the resources controlled by the rule.\nIt can be a wildcard (\"*\"), in which case it will match any resource\nin the matching API groups.",
             "items": {
               "type": "string"
             },
@@ -5450,6 +6866,7 @@
           "apiGroups",
           "resources"
         ],
+        "title": "A role rule controlling access to a kubernetes resource.",
         "type": "object"
       },
       "StreamResult": {
@@ -5467,11 +6884,20 @@
         "type": "object"
       },
       "TableRule": {
+        "description": "A role rule controlling access to a EDB table.  Note that\nthere is never write access to EDB.",
         "properties": {
           "path": {
+            "description": "EDB path to which this rule applies. It can end in \".*\"\nin which case the final portion of the table path can be anything, if the\nprefix matches. It can end in \".**\" in which case the table path can be\nanything if the prefix matches.",
+            "minLength": 1,
+            "pattern": "^\\\\..*",
             "type": "string"
           },
           "permissions": {
+            "description": "Permissions for the given EDB path.",
+            "enum": [
+              "none",
+              "read"
+            ],
             "type": "string"
           }
         },
@@ -5587,6 +7013,9 @@
           "endpoint_b_details": {
             "$ref": "#/components/schemas/TopoEndpoint"
           },
+          "key": {
+            "type": "string"
+          },
           "labels": {
             "additionalProperties": {
               "type": "string"
@@ -5615,6 +7044,9 @@
           },
           "node": {
             "type": "string"
+          },
+          "node_key": {
+            "type": "string"
           }
         },
         "type": "object"
@@ -5632,6 +7064,9 @@
           },
           "grouping": {
             "$ref": "#/components/schemas/TopoNodeGrouping"
+          },
+          "key": {
+            "type": "string"
           },
           "labels": {
             "additionalProperties": {
@@ -5982,7 +7417,7 @@
           "inputCrs": {
             "description": "List of input CRs from the transaction",
             "items": {
-              "$ref": "#/components/schemas/TransactionInputCr"
+              "$ref": "#/components/schemas/TransactionInputResource"
             },
             "type": "array"
           },
@@ -6011,6 +7446,43 @@
         },
         "type": "object"
       },
+      "TransactionExecutionResult": {
+        "properties": {
+          "changedCrs": {
+            "description": "List of changed CRs as part of the transaction",
+            "items": {
+              "$ref": "#/components/schemas/TransactionNsCrGvkNames"
+            },
+            "type": "array"
+          },
+          "executionSummary": {
+            "description": "Information about time taken during processing",
+            "type": "string"
+          },
+          "generalErrors": {
+            "description": "List of general errors while running the transaction",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "intentsRun": {
+            "description": "List of intents which ran as part of the transaction",
+            "items": {
+              "$ref": "#/components/schemas/TransactionIntentResult"
+            },
+            "type": "array"
+          },
+          "nodesWithConfigChanges": {
+            "description": "List of nodes with configuration changes from the transaction",
+            "items": {
+              "$ref": "#/components/schemas/TransactionNodeResult"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "TransactionId": {
         "properties": {
           "id": {
@@ -6021,7 +7493,7 @@
         },
         "type": "object"
       },
-      "TransactionInputCr": {
+      "TransactionInputResource": {
         "properties": {
           "isDelete": {
             "type": "boolean"
@@ -6099,6 +7571,21 @@
         },
         "type": "object"
       },
+      "TransactionPatch": {
+        "properties": {
+          "patchOps": {
+            "$ref": "#/components/schemas/Patch"
+          },
+          "target": {
+            "$ref": "#/components/schemas/NsCrGvkName"
+          }
+        },
+        "required": [
+          "patchOps",
+          "target"
+        ],
+        "type": "object"
+      },
       "TransactionPoolAllocation": {
         "properties": {
           "key": {
@@ -6112,6 +7599,22 @@
           },
           "value": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TransactionResultInputResources": {
+        "properties": {
+          "inputCrs": {
+            "description": "List of input resources from the transaction",
+            "items": {
+              "$ref": "#/components/schemas/TransactionInputResource"
+            },
+            "type": "array"
+          },
+          "limitedAccess": {
+            "description": "This field is true if the list returned here is not the complete list of input resources in the transaction because the user does not have read-access to some of them",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -6247,6 +7750,9 @@
           "modify": {
             "$ref": "#/components/schemas/TransactionValue"
           },
+          "patch": {
+            "$ref": "#/components/schemas/TransactionPatch"
+          },
           "replace": {
             "$ref": "#/components/schemas/TransactionValue"
           }
@@ -6264,15 +7770,25 @@
       "UrlRule": {
         "properties": {
           "path": {
+            "description": "The API server URL path to which this rule applies. It can end in \"/*\"\nin which case the final portion of the URL path can be anything, if the\nprefix matches. It can end in \"/**\" in which case the URL path can be\nanything if the prefix matches.\",",
+            "minLength": 1,
+            "pattern": "^/.*",
             "type": "string"
           },
           "permissions": {
+            "description": "The permissions for the API server URL for the rule.",
+            "enum": [
+              "none",
+              "read",
+              "readWrite"
+            ],
             "type": "string"
           }
         },
         "required": [
           "path"
         ],
+        "title": "A role rule controlling access to an API server endpoint/route.",
         "type": "object"
       },
       "UserStatus": {
@@ -6280,6 +7796,10 @@
           "failedLoginSinceSuccessfulLogin": {
             "format": "int64",
             "type": "integer"
+          },
+          "isFederatedUser": {
+            "description": "True if the user comes from a federated LDAP server",
+            "type": "boolean"
           },
           "lastFailedLogin": {
             "type": "string"
@@ -6453,6 +7973,151 @@
         },
         "title": "Version information for subsystems and the overall EDA product.",
         "type": "object"
+      },
+      "AuthProvider_auth": {
+        "description": "If present, bind to LDAP server with the given credentials.  Otherwise do not bind.",
+        "properties": {
+          "bindCredential": {
+            "description": "Credentials to use when binding to an LDAP provider",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-title": "Bind Credential",
+              "ui-title-key": "bind_credential"
+            }
+          },
+          "bindDN": {
+            "description": "DN to use when binding to an LDAP provider",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-title": "Bind DN",
+              "ui-title-key": "bind_dn"
+            }
+          }
+        },
+        "required": [
+          "bindCredential",
+          "bindDN"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 70,
+          "ui-presence-toggle": true,
+          "ui-title": "Bind Attributes",
+          "ui-title-key": "bind_attributes"
+        }
+      },
+      "AuthProvider_groupSupport": {
+        "description": "Configuration for group import/sync with LDAP.  If not present, groups will not synchronized with EDA.",
+        "properties": {
+          "NameLDAPAttribute": {
+            "description": "The LDAP group name attribute",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 230,
+              "ui-title": "Name LDAP Attribute",
+              "ui-title-key": "name_ldap_attribute"
+            }
+          },
+          "filter": {
+            "description": "Further for filtering when retrieving LDAP groups. Ensure starts and ends with parentheses if using.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 270,
+              "ui-title": "Filter",
+              "ui-title-key": "filter"
+            }
+          },
+          "groupLDAPDN": {
+            "description": "The LDAP DN where groups are found.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 220,
+              "ui-title": "Group LDAP DN",
+              "ui-title-key": "groups_dn"
+            }
+          },
+          "memberAttribute": {
+            "description": "The group attribute for a members.  Usually \"member\" or \"memberUid\".",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 240,
+              "ui-title": "Member Attribute",
+              "ui-title-key": "member_attribute"
+            }
+          },
+          "memberOfAttribute": {
+            "description": "If retrievalStrategy is \"memberOf\", this is the LDAP user attribute for group memberships.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 290,
+              "ui-title": "Member Of Attribute",
+              "ui-title-key": "member_of_attribute"
+            }
+          },
+          "membershipAttributeType": {
+            "description": "How users are identified in a group member entry: either DN or UID.",
+            "enum": [
+              "DN",
+              "UID"
+            ],
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 250,
+              "ui-title": "Membership Attribute Type",
+              "ui-title-key": "membership_attribute_type"
+            }
+          },
+          "membershipUserAttribute": {
+            "description": "Only required if membershipAttributeType is UID; then it is the user attribute that should match the group member value.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 260,
+              "ui-title": "Membership User Attribute",
+              "ui-title-key": "membership_user_attribute"
+            }
+          },
+          "objectClasses": {
+            "description": "The LDAP object class or classes used for groups. If more than one, they must be comma-separated.",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 210,
+              "ui-title": "Object Classes",
+              "ui-title-key": "object_classes"
+            }
+          },
+          "retrievalStrategy": {
+            "description": "The strategy for retrieving groups.  Should be \"member\" to get group membership from the group, or \"memberOf\" to get group membership from the user.",
+            "enum": [
+              "member",
+              "memberOf"
+            ],
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 280,
+              "ui-title": "Retrieval Strategy",
+              "ui-title-key": "retrieval_strategy"
+            }
+          }
+        },
+        "required": [
+          "NameLDAPAttribute",
+          "groupLDAPDN",
+          "objectClasses"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 200,
+          "ui-presence-toggle": true,
+          "ui-title": "Group Support",
+          "ui-title-key": "group_support"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "scheme": "bearer",
+        "type": "http",
+        "bearerFormat": "JWT"
       }
     }
   }

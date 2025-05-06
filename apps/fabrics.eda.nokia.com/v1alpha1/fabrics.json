@@ -35,33 +35,6 @@
         },
         "type": "object"
       },
-      "DeletedResourceEntry": {
-        "properties": {
-          "commitTime": {
-            "type": "string"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "transactionId": {
-            "format": "uint64",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "DeletedResources": {
-        "items": {
-          "$ref": "#/components/schemas/DeletedResourceEntry"
-        },
-        "type": "array"
-      },
       "ErrorIndex": {
         "properties": {
           "index": {
@@ -96,9 +69,7 @@
             "type": "string"
           },
           "dictionary": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
@@ -136,67 +107,35 @@
         ],
         "type": "object"
       },
-      "Metadata": {
+      "K8SPatchOp": {
         "properties": {
-          "annotations": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-order-priority": 40,
-              "ui-title": "Annotations",
-              "ui-title-key": "annotations"
-            }
+          "from": {
+            "type": "string"
           },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-auto-completes": [
-                {
-                  "condition": "true",
-                  "group": "fabrics.eda.nokia.com",
-                  "kind": "ISL",
-                  "type": "label",
-                  "version": "v1alpha1"
-                }
-              ],
-              "ui-order-priority": 30,
-              "ui-title": "Labels",
-              "ui-title-key": "labels"
-            }
+          "op": {
+            "type": "string"
           },
-          "name": {
-            "maxLength": 253,
-            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 10,
-              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
-              "ui-title": "Name",
-              "ui-title-key": "name"
-            }
+          "path": {
+            "type": "string"
           },
-          "namespace": {
-            "readOnly": true,
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 20,
-              "ui-title": "Namespace",
-              "ui-title-key": "namespace"
-            }
+          "value": {
+            "type": "object"
+          },
+          "x-permissive": {
+            "type": "boolean"
           }
         },
         "required": [
-          "name"
+          "op",
+          "path"
         ],
-        "title": "Metadata",
         "type": "object"
+      },
+      "Patch": {
+        "items": {
+          "$ref": "#/components/schemas/K8SPatchOp"
+        },
+        "type": "array"
       },
       "Resource": {
         "properties": {
@@ -205,6 +144,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "namespaced": {
+            "type": "boolean"
           },
           "readOnly": {
             "type": "boolean"
@@ -321,7 +263,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.Fabric_metadata"
           },
           "spec": {
             "description": "The Fabric defines the desired state of a Fabric resource, enabling the automation and management of data center network fabrics. It includes configurations for IP address allocation pools, network topology roles (Leafs, Spines, SuperSpines, BorderLeafs), inter-switch links, and network protocols (underlay and overlay). The specification allows for detailed control over routing strategies, including ASN allocations for BGP-based protocols, and supports advanced features like BFD.",
@@ -360,6 +302,59 @@
                       "ui-column-span": 2,
                       "ui-order-priority": 1600,
                       "ui-single-line-group": "LeafBoarderLeaf"
+                    }
+                  },
+                  "routeLeaking": {
+                    "description": "Route leaking controlled by routing policies in and out of the DefaultRouters on each node.  If specifided under the Leafs, Spines, SuperSpines, or BorderLeafs those will take precedence.",
+                    "properties": {
+                      "exportPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route exports from the DefaultRouter.",
+                        "title": "Export Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      },
+                      "importPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route imports into the DefaultRouter.",
+                        "title": "Import Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      }
+                    },
+                    "required": [
+                      "exportPolicy",
+                      "importPolicy"
+                    ],
+                    "title": "Route Leaking",
+                    "type": "object",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 4,
+                      "ui-order-priority": 2500
                     }
                   },
                   "systemPoolIPV4": {
@@ -417,7 +412,8 @@
                 "title": "Fabric Selector",
                 "type": "array",
                 "x-eda-nokia-com": {
-                  "ui-column-span": 2
+                  "ui-column-span": 2,
+                  "ui-order-priority": 2000
                 }
               },
               "interSwitchLinks": {
@@ -474,6 +470,53 @@
                       "ui-single-line-group": "ISLIPs"
                     }
                   },
+                  "qos": {
+                    "properties": {
+                      "egressPolicy": {
+                        "title": "Egress Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "qos.eda.nokia.com",
+                              "resource": "egresspolicys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 400,
+                          "ui-single-line-group": "QoS"
+                        }
+                      },
+                      "ingressPolicy": {
+                        "title": "Ingress Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "qos.eda.nokia.com",
+                              "resource": "ingresspolicys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 400,
+                          "ui-single-line-group": "QoS"
+                        }
+                      }
+                    },
+                    "title": "QoS",
+                    "type": "object",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-order-priority": 500,
+                      "ui-single-line-group": "QoS"
+                    }
+                  },
                   "unnumbered": {
                     "description": "Enables unnumbered interfaces on the ISL; for IPv6, only link-local addresses are used unless a PoolIPV6 is also specified.  DefaultInterfaces in the ISL are added to the DefaultBGPPeer dynamic neighbor list when using an eBGP underlay.",
                     "enum": [
@@ -503,7 +546,7 @@
                 "title": "InterSwitchLinks",
                 "type": "object",
                 "x-eda-nokia-com": {
-                  "ui-order-priority": 1600
+                  "ui-order-priority": 1700
                 }
               },
               "leafs": {
@@ -540,6 +583,59 @@
                       "ui-column-span": 2,
                       "ui-order-priority": 400,
                       "ui-single-line-group": "LeafBoarderLeaf"
+                    }
+                  },
+                  "routeLeaking": {
+                    "description": "Route leaking controlled by routing policies in and out of the DefaultRouters on each node.  If specifided under the Leafs, Spines, SuperSpines, or BorderLeafs those will take precedence.",
+                    "properties": {
+                      "exportPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route exports from the DefaultRouter.",
+                        "title": "Export Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      },
+                      "importPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route imports into the DefaultRouter.",
+                        "title": "Import Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      }
+                    },
+                    "required": [
+                      "exportPolicy",
+                      "importPolicy"
+                    ],
+                    "title": "Route Leaking",
+                    "type": "object",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 4,
+                      "ui-order-priority": 2200
                     }
                   },
                   "systemPoolIPV4": {
@@ -637,9 +733,9 @@
                       },
                       "minEchoReceiveInterval": {
                         "default": 1000000,
-                        "description": "The number of packets that must be missed to declare this session as down.",
+                        "description": "The minimum interval between echo packets the local node can receive in microseconds.",
                         "maximum": 100000000,
-                        "minimum": 250000,
+                        "minimum": 0,
                         "title": "Minimum Echo Receive Interval",
                         "type": "integer",
                         "x-eda-nokia-com": {
@@ -873,10 +969,66 @@
                     }
                   }
                 },
+                "required": [
+                  "protocol"
+                ],
                 "title": "Overlay Protocol",
                 "type": "object",
                 "x-eda-nokia-com": {
-                  "ui-order-priority": 2600
+                  "ui-order-priority": 1900
+                }
+              },
+              "routeLeaking": {
+                "description": "Route leaking controlled by routing policies in and out of the DefaulRouters on each node.  If specifided under the Leafs, Spines, SuperSpines, or BorderLeafs those will take precedence.",
+                "properties": {
+                  "exportPolicy": {
+                    "description": "Reference to a Policy resource to use when evaluating route exports from the DefaultRouter.",
+                    "title": "Export Policy",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "routingpolicies.eda.nokia.com",
+                          "resource": "policys",
+                          "type": "gvr",
+                          "version": "v1alpha1"
+                        }
+                      ],
+                      "ui-column-span": 2,
+                      "ui-order-priority": 300,
+                      "ui-single-line-group": "ImportExport"
+                    }
+                  },
+                  "importPolicy": {
+                    "description": "Reference to a Policy resource to use when evaluating route imports into the DefaultRouter.",
+                    "title": "Import Policy",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "routingpolicies.eda.nokia.com",
+                          "resource": "policys",
+                          "type": "gvr",
+                          "version": "v1alpha1"
+                        }
+                      ],
+                      "ui-column-span": 2,
+                      "ui-order-priority": 300,
+                      "ui-single-line-group": "ImportExport"
+                    }
+                  }
+                },
+                "required": [
+                  "exportPolicy",
+                  "importPolicy"
+                ],
+                "title": "Route Leaking",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 2100
                 }
               },
               "spines": {
@@ -898,6 +1050,59 @@
                       "ui-category": "UnderlayProtocol",
                       "ui-column-span": 2,
                       "ui-order-priority": 1100
+                    }
+                  },
+                  "routeLeaking": {
+                    "description": "Route leaking controlled by routing policies in and out of the DefaultRouters on each node.  If specifided under the Leafs, Spines, SuperSpines, or BorderLeafs those will take precedence.",
+                    "properties": {
+                      "exportPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route exports from the DefaultRouter.",
+                        "title": "Export Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      },
+                      "importPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route imports into the DefaultRouter.",
+                        "title": "Import Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      }
+                    },
+                    "required": [
+                      "exportPolicy",
+                      "importPolicy"
+                    ],
+                    "title": "Route Leaking",
+                    "type": "object",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 4,
+                      "ui-order-priority": 2300
                     }
                   },
                   "spineNodeSelector": {
@@ -980,6 +1185,59 @@
                       "ui-category": "UnderlayProtocol",
                       "ui-column-span": 2,
                       "ui-order-priority": 1500
+                    }
+                  },
+                  "routeLeaking": {
+                    "description": "Route leaking controlled by routing policies in and out of the DefaultRouters on each node.  If specifided under the Leafs, Spines, SuperSpines, or BorderLeafs those will take precedence.",
+                    "properties": {
+                      "exportPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route exports from the DefaultRouter.",
+                        "title": "Export Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      },
+                      "importPolicy": {
+                        "description": "Reference to a Policy resource to use when evaluating route imports into the DefaultRouter.",
+                        "title": "Import Policy",
+                        "type": "string",
+                        "x-eda-nokia-com": {
+                          "ui-auto-completes": [
+                            {
+                              "condition": "true",
+                              "group": "routingpolicies.eda.nokia.com",
+                              "resource": "policys",
+                              "type": "gvr",
+                              "version": "v1alpha1"
+                            }
+                          ],
+                          "ui-column-span": 2,
+                          "ui-order-priority": 300,
+                          "ui-single-line-group": "ImportExport"
+                        }
+                      }
+                    },
+                    "required": [
+                      "exportPolicy",
+                      "importPolicy"
+                    ],
+                    "title": "Route Leaking",
+                    "type": "object",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 4,
+                      "ui-order-priority": 2400
                     }
                   },
                   "superSpineNodeSelector": {
@@ -1132,9 +1390,9 @@
                       },
                       "minEchoReceiveInterval": {
                         "default": 1000000,
-                        "description": "The number of packets that must be missed to declare this session as down.",
+                        "description": "The minimum interval between echo packets the local node can receive in microseconds.",
                         "maximum": 100000000,
-                        "minimum": 250000,
+                        "minimum": 0,
                         "title": "Minimum Echo Receive Interval",
                         "type": "integer",
                         "x-eda-nokia-com": {
@@ -1330,15 +1588,15 @@
                 "title": "Underlay Protocol",
                 "type": "object",
                 "x-eda-nokia-com": {
-                  "ui-order-priority": 2000
+                  "ui-order-priority": 1800
                 }
               }
             },
-            "required": [
-              "underlayProtocol"
-            ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "FabricStatus defines the observed state of Fabric",
@@ -1377,18 +1635,12 @@
               "health": {
                 "description": "Indicates the health score of the Fabric.  The health score of the Fabric is determined by the aggregate health score of the resources emited by the Fabric such as ISL, DefaultRouteReflectors etc.",
                 "title": "Health",
-                "type": "integer",
-                "x-eda-nokia-com": {
-                  "ui-visible-if": "false"
-                }
+                "type": "integer"
               },
               "healthScoreReason": {
                 "description": "Indicates the reason for the health score.",
                 "title": "Health Score Reason",
-                "type": "string",
-                "x-eda-nokia-com": {
-                  "ui-visible-if": "false"
-                }
+                "type": "string"
               },
               "lastChange": {
                 "description": "The time when the state of the resource last changed.",
@@ -1497,7 +1749,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -1530,6 +1785,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.fabrics.v1alpha1.Fabric_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.fabrics.v1alpha1.Fabric_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.Fabric_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.fabrics.v1alpha1.Fabric_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "fabrics.eda.nokia.com",
+                  "kind": "Fabric",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.fabrics.v1alpha1.ISL": {
         "description": "ISL is the Schema for the isls API",
         "properties": {
@@ -1548,7 +1921,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.ISL_metadata"
           },
           "spec": {
             "description": "The ISL enables the configuration and management of direct links between Nodes. This resource allows for specifying IPv4 and IPv6 allocation pools, enabling BFD for fast failure detection, and configuring VLAN IDs for the ISL. It also supports BGP peering between the endpoints, with options for setting autonomous systems, AFI/SAFI configurations, and import/export routing policies.",
@@ -1599,9 +1972,9 @@
                   },
                   "minEchoReceiveInterval": {
                     "default": 1000000,
-                    "description": "The number of packets that must be missed to declare this session as down.",
+                    "description": "The minimum interval between echo packets the local node can receive in microseconds.",
                     "maximum": 100000000,
-                    "minimum": 250000,
+                    "minimum": 0,
                     "title": "Minimum Echo Receive Interval",
                     "type": "integer",
                     "x-eda-nokia-com": {
@@ -1725,6 +2098,53 @@
                 "title": "IPv6 Allocation Pool",
                 "type": "string"
               },
+              "qos": {
+                "properties": {
+                  "egressPolicy": {
+                    "title": "Egress Policy",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "qos.eda.nokia.com",
+                          "resource": "egresspolicys",
+                          "type": "gvr",
+                          "version": "v1alpha1"
+                        }
+                      ],
+                      "ui-column-span": 2,
+                      "ui-order-priority": 400,
+                      "ui-single-line-group": "QoS"
+                    }
+                  },
+                  "ingressPolicy": {
+                    "title": "Ingress Policy",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "qos.eda.nokia.com",
+                          "resource": "ingresspolicys",
+                          "type": "gvr",
+                          "version": "v1alpha1"
+                        }
+                      ],
+                      "ui-column-span": 2,
+                      "ui-order-priority": 400,
+                      "ui-single-line-group": "QoS"
+                    }
+                  }
+                },
+                "title": "QoS",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 400,
+                  "ui-single-line-group": "QoS"
+                }
+              },
               "remoteDefaultRouter": {
                 "description": "Reference to the DefautlRouter associated with the remote Interface in which the ISL will be provisioned.",
                 "title": "Remote Default Router",
@@ -1763,7 +2183,10 @@
               "remoteInterface"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "ISLStatus defines the observed state of ISL",
@@ -1852,7 +2275,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -1884,11 +2310,136 @@
           "kind"
         ],
         "type": "object"
+      },
+      "com.nokia.eda.fabrics.v1alpha1.ISL_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.fabrics.v1alpha1.ISL_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.ISL_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.fabrics.v1alpha1.ISL_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "fabrics.eda.nokia.com",
+                  "kind": "ISL",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
       }
     }
   },
   "info": {
-    "title": "api for fabrics.eda.nokia.com/v1alpha1.",
+    "title": "Fabrics Application APIs.",
     "version": "v1alpha1"
   },
   "openapi": "3.0.1",
@@ -2293,7 +2844,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.Fabric_DeletedResources"
                 }
               }
             },
@@ -2421,6 +2972,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.Fabric"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a Fabric",
+        "operationId": "patchFabricsEdaNokiaComV1alpha1NamespaceFabrics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -2763,7 +3371,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.ISL_DeletedResources"
                 }
               }
             },
@@ -2891,6 +3499,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.ISL"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a ISL",
+        "operationId": "patchFabricsEdaNokiaComV1alpha1NamespaceIsls",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -3051,5 +3716,10 @@
         ]
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export EDA_API_URL="https://devbox.panda-cobra.ts.net"
-export EDA_VERSION="v24.12.1"
+export EDA_API_URL="https://eda-api.k8s.orb.local"
+export EDA_VERSION="v25.4.1"
 export KC_KEYCLOAK_URL="${EDA_API_URL}/core/httpproxy/v1/keycloak/"
 export KC_REALM="master"
 export KC_CLIENT_ID="admin-cli"
@@ -30,6 +30,8 @@ KC_CLIENTS=$(curl -sk \
   -X GET "$KC_KEYCLOAK_URL/admin/realms/$EDA_REALM/clients" \
   -H "Authorization: Bearer $KC_ADMIN_ACCESS_TOKEN" \
   -H "Content-Type: application/json")
+
+echo ${KC_CLIENTS}
 
 # Get the `eda` client's ID
 EDA_CLIENT_ID=$(echo "$KC_CLIENTS" | jq -r ".[] | select(.clientId==\"${API_CLIENT_ID}\") | .id")
@@ -78,16 +80,20 @@ echo $EDA_APIS | jq .
 
 echo "$EDA_APIS" | jq -r '.paths | to_entries[] | .key + " " + .value.serverRelativeURL' | while read -r path url; do
     # Create directory structure
-    mkdir -p "${path}"
-    
+    mkdir -p "./${path}"
+
     # Create filename from path
-    filename="$(echo $path | cut -d '/' -f 2 | cut -d '.' -f 1).json"
+    filename="$(echo $path | cut -d '/' -f 3 | cut -d '.' -f 1).json"
+    # if filename is empty, name it core
+    if [ "$filename" == ".json" ]; then
+        filename="core.json"
+    fi
     
     # Fetch the API spec
     echo "Fetching ${EDA_API_URL}${url}"
     curl -sk "${EDA_API_URL}${url}" \
         -H "Authorization: Bearer ${EDA_ACCESS_TOKEN}" \
-        -H 'Content-Type: application/json' | jq . > "${path}/${filename}"
+        -H 'Content-Type: application/json' | jq . > "./${path}/${filename}"
         
     echo "Fetched ${path} to ${path}/${filename}"
 done

@@ -35,33 +35,6 @@
         },
         "type": "object"
       },
-      "DeletedResourceEntry": {
-        "properties": {
-          "commitTime": {
-            "type": "string"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "transactionId": {
-            "format": "uint64",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "DeletedResources": {
-        "items": {
-          "$ref": "#/components/schemas/DeletedResourceEntry"
-        },
-        "type": "array"
-      },
       "ErrorIndex": {
         "properties": {
           "index": {
@@ -96,9 +69,7 @@
             "type": "string"
           },
           "dictionary": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
@@ -136,67 +107,35 @@
         ],
         "type": "object"
       },
-      "Metadata": {
+      "K8SPatchOp": {
         "properties": {
-          "annotations": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-order-priority": 40,
-              "ui-title": "Annotations",
-              "ui-title-key": "annotations"
-            }
+          "from": {
+            "type": "string"
           },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-auto-completes": [
-                {
-                  "condition": "true",
-                  "group": "filters.eda.nokia.com",
-                  "kind": "ControlPlaneFilter",
-                  "type": "label",
-                  "version": "v1alpha1"
-                }
-              ],
-              "ui-order-priority": 30,
-              "ui-title": "Labels",
-              "ui-title-key": "labels"
-            }
+          "op": {
+            "type": "string"
           },
-          "name": {
-            "maxLength": 253,
-            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 10,
-              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
-              "ui-title": "Name",
-              "ui-title-key": "name"
-            }
+          "path": {
+            "type": "string"
           },
-          "namespace": {
-            "readOnly": true,
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 20,
-              "ui-title": "Namespace",
-              "ui-title-key": "namespace"
-            }
+          "value": {
+            "type": "object"
+          },
+          "x-permissive": {
+            "type": "boolean"
           }
         },
         "required": [
-          "name"
+          "op",
+          "path"
         ],
-        "title": "Metadata",
         "type": "object"
+      },
+      "Patch": {
+        "items": {
+          "$ref": "#/components/schemas/K8SPatchOp"
+        },
+        "type": "array"
       },
       "Resource": {
         "properties": {
@@ -205,6 +144,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "namespaced": {
+            "type": "boolean"
           },
           "readOnly": {
             "type": "boolean"
@@ -321,7 +263,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.ControlPlaneFilter_metadata"
           },
           "spec": {
             "description": "ControlPlaneFilter allows for specifying a list of Nodes or Node selectors where the filter should be applied and managing filter entries in order.",
@@ -333,7 +275,7 @@
                     "ipEntry": {
                       "properties": {
                         "action": {
-                          "description": "An action to take, either 'accept', or 'drop'.",
+                          "description": "An action to take, either 'Accept','Drop', or 'RateLimit'.",
                           "enum": [
                             "Drop",
                             "Accept",
@@ -471,7 +413,50 @@
                             "PTP-GENERAL",
                             "QMTP",
                             "QOTD",
-                            "RADIUS"
+                            "RADIUS",
+                            "RADIUS-ACCT",
+                            "REMOTE-MAIL",
+                            "REMOTEFS",
+                            "REMOTECMD",
+                            "RIP",
+                            "RJE",
+                            "RLP",
+                            "RLZDB",
+                            "RMC",
+                            "RMONITOR",
+                            "RPC2PORTMAP",
+                            "RSYNC",
+                            "RTELNET",
+                            "RTSP",
+                            "SGMP",
+                            "SILC",
+                            "SMUX",
+                            "SNA-GW",
+                            "SNMP",
+                            "SNMP-TRAP",
+                            "SNPP",
+                            "SMTP",
+                            "SQL-SVCS",
+                            "SQL",
+                            "SSH",
+                            "SUBMISSION",
+                            "SUNRPC",
+                            "SVCLOC",
+                            "SYSLOG",
+                            "SYSTAT",
+                            "TACACS",
+                            "TALK",
+                            "TCPMUX",
+                            "TCPNETHASPSRV",
+                            "TFTP",
+                            "TIME",
+                            "TIMED",
+                            "UPS",
+                            "XDMCP",
+                            "XNS-CH",
+                            "XNS-MAIL",
+                            "XNS-TIME",
+                            "Z3950"
                           ],
                           "title": "Destination Port Name",
                           "type": "string",
@@ -484,7 +469,7 @@
                         "destinationPortNumber": {
                           "description": "Destination port to match by numerical value.",
                           "maximum": 65535,
-                          "minimum": 1,
+                          "minimum": 0,
                           "title": "Destination Port Number",
                           "type": "integer",
                           "x-eda-nokia-com": {
@@ -576,7 +561,8 @@
                           "type": "array",
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
-                            "ui-order-priority": 800
+                            "ui-order-priority": 800,
+                            "ui-visible-if": "ipEntry.protocolName === \"ICMP\" || ipEntry.protocolName === \"ICMP6\" || ipEntry.protocolNumber === 1 || ipEntry.protocolNumber === 58"
                           }
                         },
                         "icmpTypeName": {
@@ -613,7 +599,8 @@
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
                             "ui-order-priority": 700,
-                            "ui-single-line-group": "ICMPType"
+                            "ui-single-line-group": "ICMPType",
+                            "ui-visible-if": "ipEntry.protocolName === \"ICMP\" || ipEntry.protocolName === \"ICMP6\" || ipEntry.protocolNumber === 1 || ipEntry.protocolNumber === 58"
                           }
                         },
                         "icmpTypeNumber": {
@@ -625,7 +612,8 @@
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
                             "ui-order-priority": 750,
-                            "ui-single-line-group": "ICMPType"
+                            "ui-single-line-group": "ICMPType",
+                            "ui-visible-if": "ipEntry.protocolName === \"ICMP\" || ipEntry.protocolName === \"ICMP6\" || ipEntry.protocolNumber === 1 || ipEntry.protocolNumber === 58"
                           }
                         },
                         "protocolName": {
@@ -866,7 +854,50 @@
                             "PTP-GENERAL",
                             "QMTP",
                             "QOTD",
-                            "RADIUS"
+                            "RADIUS",
+                            "RADIUS-ACCT",
+                            "REMOTE-MAIL",
+                            "REMOTEFS",
+                            "REMOTECMD",
+                            "RIP",
+                            "RJE",
+                            "RLP",
+                            "RLZDB",
+                            "RMC",
+                            "RMONITOR",
+                            "RPC2PORTMAP",
+                            "RSYNC",
+                            "RTELNET",
+                            "RTSP",
+                            "SGMP",
+                            "SILC",
+                            "SMUX",
+                            "SNA-GW",
+                            "SNMP",
+                            "SNMP-TRAP",
+                            "SNPP",
+                            "SMTP",
+                            "SQL-SVCS",
+                            "SQL",
+                            "SSH",
+                            "SUBMISSION",
+                            "SUNRPC",
+                            "SVCLOC",
+                            "SYSLOG",
+                            "SYSTAT",
+                            "TACACS",
+                            "TALK",
+                            "TCPMUX",
+                            "TCPNETHASPSRV",
+                            "TFTP",
+                            "TIME",
+                            "TIMED",
+                            "UPS",
+                            "XDMCP",
+                            "XNS-CH",
+                            "XNS-MAIL",
+                            "XNS-TIME",
+                            "Z3950"
                           ],
                           "title": "Source Port Name",
                           "type": "string",
@@ -879,7 +910,7 @@
                         "sourcePortNumber": {
                           "description": "Source port to match by numerical value.",
                           "maximum": 65535,
-                          "minimum": 1,
+                          "minimum": 0,
                           "title": "Source Port Number",
                           "type": "integer",
                           "x-eda-nokia-com": {
@@ -940,7 +971,8 @@
                           "type": "string",
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
-                            "ui-order-priority": 900
+                            "ui-order-priority": 900,
+                            "ui-visible-if": "ipEntry.protocolName === \"TCP\" || ipEntry.protocolNumber === 6"
                           }
                         }
                       },
@@ -979,6 +1011,18 @@
                           {
                             "condition": "(ipEntry.icmpTypeName === undefined && ipEntry.icmpTypeNumber === null) || (ipEntry.icmpTypeName !== undefined && ipEntry.icmpTypeNumber === null) || (ipEntry.icmpTypeName === undefined && ipEntry.icmpTypeNumber !== null)",
                             "errorMsg": "Either ICMP Type Name or ICMP Type Number must be set, but not both."
+                          },
+                          {
+                            "condition": "!((ipEntry.protocolName === 'ICMP' || ipEntry.protocolNumber === 1) && ipEntry.icmpTypeName !== undefined && ['McastRtrAdv', 'McastRtrSolicit', 'McastRtrTerm', 'MldDone', 'MldQuery', 'MldReport', 'MldV2', 'NeighborAdvertise', 'NeighborSolicit', 'NodeInfoQuery', 'NodeInfoResponse', 'PacketTooBig', 'ParamProblem', 'RouterAdvertise', 'RouterRenumber', 'RouterSolicit'].includes(ipEntry.icmpTypeName))",
+                            "errorMsg": "IPv6 ICMP types cannot be used with IPv4 ICMP protocol"
+                          },
+                          {
+                            "condition": "!((ipEntry.protocolName === 'ICMP6' || ipEntry.protocolNumber === 58) && ipEntry.icmpTypeName !== undefined && !['DestUnreachable', 'EchoReply', 'EchoRequest', 'McastRtrAdv', 'McastRtrSolicit', 'McastRtrTerm', 'MldDone', 'MldQuery', 'MldReport', 'MldV2', 'NeighborAdvertise', 'NeighborSolicit', 'NodeInfoQuery', 'NodeInfoResponse', 'PacketTooBig', 'ParamProblem', 'Redirect', 'RouterAdvertise', 'RouterRenumber', 'RouterSolicit', 'TimeExceeded'].includes(ipEntry.icmpTypeName))",
+                            "errorMsg": "Invalid ICMPv6 type name provided."
+                          },
+                          {
+                            "condition": "!((ipEntry.protocolName === 'ICMP' || ipEntry.protocolNumber === 1) && ipEntry.icmpTypeName !== undefined && !['DestUnreachable', 'Echo', 'EchoReply', 'ParamProblem', 'Redirect', 'RouterAdvertise', 'RouterSolicit', 'SourceQuench', 'TimeExceeded', 'Timestamp', 'TimestampReply'].includes(ipEntry.icmpTypeName))",
+                            "errorMsg": "Invalid ICMPv4 type name provided."
                           }
                         ],
                         "ui-visible-if": "type != \"MAC\" || type == \"Auto\""
@@ -987,7 +1031,7 @@
                     "macEntry": {
                       "properties": {
                         "action": {
-                          "description": "An action to take, either 'accept', or 'drop'.",
+                          "description": "An action to take, either 'Accept','Drop', or 'RateLimit'.",
                           "enum": [
                             "Drop",
                             "Accept",
@@ -1215,6 +1259,7 @@
               },
               "nodeSelector": {
                 "description": "Label selector used to select Toponodes on which to deploy the CPM filter.",
+                "format": "labelselector",
                 "items": {
                   "type": "string"
                 },
@@ -1245,13 +1290,19 @@
               "entries"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "ControlPlaneFilterStatus defines the observed state of ControlPlaneFilter",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -1284,6 +1335,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.filters.v1alpha1.ControlPlaneFilter_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.filters.v1alpha1.ControlPlaneFilter_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.ControlPlaneFilter_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.filters.v1alpha1.ControlPlaneFilter_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "filters.eda.nokia.com",
+                  "kind": "ControlPlaneFilter",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.filters.v1alpha1.Filter": {
         "description": "Filter is the Schema for the filters API",
         "properties": {
@@ -1302,7 +1471,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.Filter_metadata"
           },
           "spec": {
             "description": "Filter allows for the creation and management of ordered filtering rules based on IP or MAC criteria. The resource supports various conditions and actions, enabling fine-grained control over network traffic by specifying rules for source and destination addresses, ports, and protocols.",
@@ -1314,7 +1483,7 @@
                     "ipEntry": {
                       "properties": {
                         "action": {
-                          "description": "An action to take, either 'accept', or 'drop'.",
+                          "description": "An action to take, either 'Accept','Drop', or 'RateLimit'.",
                           "enum": [
                             "Drop",
                             "Accept",
@@ -1452,7 +1621,50 @@
                             "PTP-GENERAL",
                             "QMTP",
                             "QOTD",
-                            "RADIUS"
+                            "RADIUS",
+                            "RADIUS-ACCT",
+                            "REMOTE-MAIL",
+                            "REMOTEFS",
+                            "REMOTECMD",
+                            "RIP",
+                            "RJE",
+                            "RLP",
+                            "RLZDB",
+                            "RMC",
+                            "RMONITOR",
+                            "RPC2PORTMAP",
+                            "RSYNC",
+                            "RTELNET",
+                            "RTSP",
+                            "SGMP",
+                            "SILC",
+                            "SMUX",
+                            "SNA-GW",
+                            "SNMP",
+                            "SNMP-TRAP",
+                            "SNPP",
+                            "SMTP",
+                            "SQL-SVCS",
+                            "SQL",
+                            "SSH",
+                            "SUBMISSION",
+                            "SUNRPC",
+                            "SVCLOC",
+                            "SYSLOG",
+                            "SYSTAT",
+                            "TACACS",
+                            "TALK",
+                            "TCPMUX",
+                            "TCPNETHASPSRV",
+                            "TFTP",
+                            "TIME",
+                            "TIMED",
+                            "UPS",
+                            "XDMCP",
+                            "XNS-CH",
+                            "XNS-MAIL",
+                            "XNS-TIME",
+                            "Z3950"
                           ],
                           "title": "Destination Port Name",
                           "type": "string",
@@ -1465,7 +1677,7 @@
                         "destinationPortNumber": {
                           "description": "Destination port to match by numerical value.",
                           "maximum": 65535,
-                          "minimum": 1,
+                          "minimum": 0,
                           "title": "Destination Port Number",
                           "type": "integer",
                           "x-eda-nokia-com": {
@@ -1557,7 +1769,8 @@
                           "type": "array",
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
-                            "ui-order-priority": 800
+                            "ui-order-priority": 800,
+                            "ui-visible-if": "ipEntry.protocolName === \"ICMP\" || ipEntry.protocolName === \"ICMP6\" || ipEntry.protocolNumber === 1 || ipEntry.protocolNumber === 58"
                           }
                         },
                         "icmpTypeName": {
@@ -1594,7 +1807,8 @@
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
                             "ui-order-priority": 700,
-                            "ui-single-line-group": "ICMPType"
+                            "ui-single-line-group": "ICMPType",
+                            "ui-visible-if": "ipEntry.protocolName === \"ICMP\" || ipEntry.protocolName === \"ICMP6\" || ipEntry.protocolNumber === 1 || ipEntry.protocolNumber === 58"
                           }
                         },
                         "icmpTypeNumber": {
@@ -1606,7 +1820,8 @@
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
                             "ui-order-priority": 750,
-                            "ui-single-line-group": "ICMPType"
+                            "ui-single-line-group": "ICMPType",
+                            "ui-visible-if": "ipEntry.protocolName === \"ICMP\" || ipEntry.protocolName === \"ICMP6\" || ipEntry.protocolNumber === 1 || ipEntry.protocolNumber === 58"
                           }
                         },
                         "protocolName": {
@@ -1847,7 +2062,50 @@
                             "PTP-GENERAL",
                             "QMTP",
                             "QOTD",
-                            "RADIUS"
+                            "RADIUS",
+                            "RADIUS-ACCT",
+                            "REMOTE-MAIL",
+                            "REMOTEFS",
+                            "REMOTECMD",
+                            "RIP",
+                            "RJE",
+                            "RLP",
+                            "RLZDB",
+                            "RMC",
+                            "RMONITOR",
+                            "RPC2PORTMAP",
+                            "RSYNC",
+                            "RTELNET",
+                            "RTSP",
+                            "SGMP",
+                            "SILC",
+                            "SMUX",
+                            "SNA-GW",
+                            "SNMP",
+                            "SNMP-TRAP",
+                            "SNPP",
+                            "SMTP",
+                            "SQL-SVCS",
+                            "SQL",
+                            "SSH",
+                            "SUBMISSION",
+                            "SUNRPC",
+                            "SVCLOC",
+                            "SYSLOG",
+                            "SYSTAT",
+                            "TACACS",
+                            "TALK",
+                            "TCPMUX",
+                            "TCPNETHASPSRV",
+                            "TFTP",
+                            "TIME",
+                            "TIMED",
+                            "UPS",
+                            "XDMCP",
+                            "XNS-CH",
+                            "XNS-MAIL",
+                            "XNS-TIME",
+                            "Z3950"
                           ],
                           "title": "Source Port Name",
                           "type": "string",
@@ -1860,7 +2118,7 @@
                         "sourcePortNumber": {
                           "description": "Source port to match by numerical value.",
                           "maximum": 65535,
-                          "minimum": 1,
+                          "minimum": 0,
                           "title": "Source Port Number",
                           "type": "integer",
                           "x-eda-nokia-com": {
@@ -1921,7 +2179,8 @@
                           "type": "string",
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
-                            "ui-order-priority": 900
+                            "ui-order-priority": 900,
+                            "ui-visible-if": "ipEntry.protocolName === \"TCP\" || ipEntry.protocolNumber === 6"
                           }
                         }
                       },
@@ -1960,6 +2219,18 @@
                           {
                             "condition": "(ipEntry.icmpTypeName === undefined && ipEntry.icmpTypeNumber === null) || (ipEntry.icmpTypeName !== undefined && ipEntry.icmpTypeNumber === null) || (ipEntry.icmpTypeName === undefined && ipEntry.icmpTypeNumber !== null)",
                             "errorMsg": "Either ICMP Type Name or ICMP Type Number must be set, but not both."
+                          },
+                          {
+                            "condition": "!((ipEntry.protocolName === 'ICMP' || ipEntry.protocolNumber === 1) && ipEntry.icmpTypeName !== undefined && ['McastRtrAdv', 'McastRtrSolicit', 'McastRtrTerm', 'MldDone', 'MldQuery', 'MldReport', 'MldV2', 'NeighborAdvertise', 'NeighborSolicit', 'NodeInfoQuery', 'NodeInfoResponse', 'PacketTooBig', 'ParamProblem', 'RouterAdvertise', 'RouterRenumber', 'RouterSolicit'].includes(ipEntry.icmpTypeName))",
+                            "errorMsg": "IPv6 ICMP types cannot be used with IPv4 ICMP protocol"
+                          },
+                          {
+                            "condition": "!((ipEntry.protocolName === 'ICMP6' || ipEntry.protocolNumber === 58) && ipEntry.icmpTypeName !== undefined && !['DestUnreachable', 'EchoReply', 'EchoRequest', 'McastRtrAdv', 'McastRtrSolicit', 'McastRtrTerm', 'MldDone', 'MldQuery', 'MldReport', 'MldV2', 'NeighborAdvertise', 'NeighborSolicit', 'NodeInfoQuery', 'NodeInfoResponse', 'PacketTooBig', 'ParamProblem', 'Redirect', 'RouterAdvertise', 'RouterRenumber', 'RouterSolicit', 'TimeExceeded'].includes(ipEntry.icmpTypeName))",
+                            "errorMsg": "Invalid ICMPv6 type name provided."
+                          },
+                          {
+                            "condition": "!((ipEntry.protocolName === 'ICMP' || ipEntry.protocolNumber === 1) && ipEntry.icmpTypeName !== undefined && !['DestUnreachable', 'Echo', 'EchoReply', 'ParamProblem', 'Redirect', 'RouterAdvertise', 'RouterSolicit', 'SourceQuench', 'TimeExceeded', 'Timestamp', 'TimestampReply'].includes(ipEntry.icmpTypeName))",
+                            "errorMsg": "Invalid ICMPv4 type name provided."
                           }
                         ],
                         "ui-visible-if": "type != \"MAC\" || type == \"Auto\""
@@ -1968,7 +2239,7 @@
                     "macEntry": {
                       "properties": {
                         "action": {
-                          "description": "An action to take, either 'accept', or 'drop'.",
+                          "description": "An action to take, either 'Accept','Drop', or 'RateLimit'.",
                           "enum": [
                             "Drop",
                             "Accept",
@@ -2202,13 +2473,19 @@
               "entries"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "FilterStatus defines the observed state of Filter",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -2240,11 +2517,136 @@
           "kind"
         ],
         "type": "object"
+      },
+      "com.nokia.eda.filters.v1alpha1.Filter_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.filters.v1alpha1.Filter_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.Filter_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.filters.v1alpha1.Filter_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "filters.eda.nokia.com",
+                  "kind": "Filter",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
       }
     }
   },
   "info": {
-    "title": "api for filters.eda.nokia.com/v1alpha1.",
+    "title": "Filters Application APIs.",
     "version": "v1alpha1"
   },
   "openapi": "3.0.1",
@@ -2649,7 +3051,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.ControlPlaneFilter_DeletedResources"
                 }
               }
             },
@@ -2777,6 +3179,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.ControlPlaneFilter"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a ControlPlaneFilter",
+        "operationId": "patchFiltersEdaNokiaComV1alpha1NamespaceControlplanefilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -3119,7 +3578,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.Filter_DeletedResources"
                 }
               }
             },
@@ -3247,6 +3706,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.filters.v1alpha1.Filter"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a Filter",
+        "operationId": "patchFiltersEdaNokiaComV1alpha1NamespaceFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -3407,5 +3923,10 @@
         ]
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

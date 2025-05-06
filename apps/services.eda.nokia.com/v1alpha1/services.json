@@ -35,33 +35,6 @@
         },
         "type": "object"
       },
-      "DeletedResourceEntry": {
-        "properties": {
-          "commitTime": {
-            "type": "string"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "transactionId": {
-            "format": "uint64",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "DeletedResources": {
-        "items": {
-          "$ref": "#/components/schemas/DeletedResourceEntry"
-        },
-        "type": "array"
-      },
       "ErrorIndex": {
         "properties": {
           "index": {
@@ -96,9 +69,7 @@
             "type": "string"
           },
           "dictionary": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
@@ -136,67 +107,35 @@
         ],
         "type": "object"
       },
-      "Metadata": {
+      "K8SPatchOp": {
         "properties": {
-          "annotations": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-order-priority": 40,
-              "ui-title": "Annotations",
-              "ui-title-key": "annotations"
-            }
+          "from": {
+            "type": "string"
           },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "x-eda-nokia-com": {
-              "ui-auto-completes": [
-                {
-                  "condition": "true",
-                  "group": "services.eda.nokia.com",
-                  "kind": "VirtualNetwork",
-                  "type": "label",
-                  "version": "v1alpha1"
-                }
-              ],
-              "ui-order-priority": 30,
-              "ui-title": "Labels",
-              "ui-title-key": "labels"
-            }
+          "op": {
+            "type": "string"
           },
-          "name": {
-            "maxLength": 253,
-            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 10,
-              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
-              "ui-title": "Name",
-              "ui-title-key": "name"
-            }
+          "path": {
+            "type": "string"
           },
-          "namespace": {
-            "readOnly": true,
-            "type": "string",
-            "x-eda-nokia-com": {
-              "immutable": true,
-              "ui-order-priority": 20,
-              "ui-title": "Namespace",
-              "ui-title-key": "namespace"
-            }
+          "value": {
+            "type": "object"
+          },
+          "x-permissive": {
+            "type": "boolean"
           }
         },
         "required": [
-          "name"
+          "op",
+          "path"
         ],
-        "title": "Metadata",
         "type": "object"
+      },
+      "Patch": {
+        "items": {
+          "$ref": "#/components/schemas/K8SPatchOp"
+        },
+        "type": "array"
       },
       "Resource": {
         "properties": {
@@ -205,6 +144,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "namespaced": {
+            "type": "boolean"
           },
           "readOnly": {
             "type": "boolean"
@@ -321,11 +263,21 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeDomain_metadata"
           },
           "spec": {
             "description": "The BridgeDomain enables the configuration and management of Layer 2 virtual networks. It includes settings for VNI, EVI, route targets for import and export, and tunnel index allocation. Additionally, the specification allows for advanced features such as MAC address table limits, aging, Proxy ARP and detection of MAC and IP duplication.",
             "properties": {
+              "description": {
+                "description": "The description of the BridgeDomain.",
+                "title": "Description",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 75,
+                  "ui-single-line-group": "Description"
+                }
+              },
               "evi": {
                 "description": "EVI to use for this BridgeDomain, can be optionally left blank to have it automatically allocated using the EVI Pool.",
                 "maximum": 65535,
@@ -720,7 +672,10 @@
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "BridgeDomainStatus defines the observed state of BridgeDomain",
@@ -805,7 +760,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -838,6 +796,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.services.v1alpha1.BridgeDomain_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.BridgeDomain_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeDomain_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.BridgeDomain_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "BridgeDomain",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.services.v1alpha1.BridgeInterface": {
         "description": "BridgeInterface is the Schema for the bridgeinterfaces API",
         "properties": {
@@ -856,7 +932,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeInterface_metadata"
           },
           "spec": {
             "description": "The BridgeInterface enables the attachment of network interfaces to a Bridge Domain. It includes settings for VLAN ID allocation, interface attachment, and actions on ingress and egress traffic. The specification supports integration with other network resources, such as Bridge Domains and Interfaces, and provides advanced features like MAC Duplication Detection with configurable actions.",
@@ -878,6 +954,16 @@
                   "ui-category": "BridgeInterface",
                   "ui-column-span": 2,
                   "ui-order-priority": 100
+                }
+              },
+              "description": {
+                "description": "The description of the BridgeInterface.",
+                "title": "Description",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 75,
+                  "ui-single-line-group": "Description"
                 }
               },
               "egress": {
@@ -1211,7 +1297,10 @@
               "vlanID"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "properties": {
@@ -1311,7 +1400,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -1344,6 +1436,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.services.v1alpha1.BridgeInterface_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.BridgeInterface_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeInterface_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.BridgeInterface_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "BridgeInterface",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.services.v1alpha1.DHCPRelay": {
         "description": "DHCPRelay is the Schema for the dhcprelays API",
         "properties": {
@@ -1362,7 +1572,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.DHCPRelay_metadata"
           },
           "spec": {
             "description": "The DHCPRelay enables the forwarding of DHCP requests and responses between clients and servers across different networks. This resource allows for the configuration of various DHCP relay sub-options, such as CircuitID, RemoteID, and ClientLinkLayerAddress, to provide detailed client information. It also includes settings for specifying the router to reach the DHCP server, the list of DHCP servers to forward requests to, and selectors for Routed and IRB interfaces where the relay will be configured. Additionally, the GI Address option can be set to derive the Gateway IP address from the selected interface, ensuring correct routing of DHCP messages.",
@@ -1450,13 +1660,19 @@
               "servers"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "DHCPRelayStatus defines the observed state of DHCPRelay",
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -1489,6 +1705,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.services.v1alpha1.DHCPRelay_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.DHCPRelay_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.DHCPRelay_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.DHCPRelay_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "DHCPRelay",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.services.v1alpha1.IRBInterface": {
         "description": "IRBInterface is the Schema for the irbinterfaces API",
         "properties": {
@@ -1507,7 +1841,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.IRBInterface_metadata"
           },
           "spec": {
             "description": "The IRBInterface enables the configuration and management of Layer 3 interfaces associated with a BridgeDomain. This resource allows for the specification of various parameters, including IP MTU, learning of unsolicited ARPs, IPv4 and IPv6 addresses, and unnumbered interface settings. It also supports advanced features such as BFD configuration, Virtual IP discovery, and ARP/ND-related settings like Proxy ARP/ND and EVPN route advertisement.",
@@ -1633,6 +1967,16 @@
                   "ui-column-span": 2,
                   "ui-order-priority": 100,
                   "ui-single-line-group": "BridgedomainRouter"
+                }
+              },
+              "description": {
+                "description": "The description of the IRBInterface.",
+                "title": "Description",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 75,
+                  "ui-single-line-group": "Description"
                 }
               },
               "egress": {
@@ -1933,6 +2277,215 @@
                   "ui-order-priority": 200
                 }
               },
+              "ipv6RouterAdvertisement": {
+                "properties": {
+                  "currentHopLimit": {
+                    "default": 64,
+                    "description": "The current hop limit to advertise in the router advertisement messages.",
+                    "format": "int32",
+                    "maximum": 255,
+                    "minimum": 0,
+                    "title": "Current Hop Limit",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "HopLimitMTU"
+                    }
+                  },
+                  "enabled": {
+                    "default": false,
+                    "description": "Enable or disable IPv6 router advertisements.",
+                    "title": "Enable Router Advertisements",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2
+                    }
+                  },
+                  "ipMTU": {
+                    "description": "The IP MTU to advertise in the router advertisement messages.",
+                    "format": "int32",
+                    "maximum": 9486,
+                    "minimum": 1280,
+                    "title": "IP MTU",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "HopLimitMTU"
+                    }
+                  },
+                  "managedConfigurationFlag": {
+                    "default": false,
+                    "description": "Enable DHCPv6 for address configuration (M-bit).",
+                    "title": "Managed Configuration Flag",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "DHCPConfig"
+                    }
+                  },
+                  "maxAdvertisementInterval": {
+                    "default": 600,
+                    "description": "Maximum time between router advertisements (in seconds).",
+                    "format": "int32",
+                    "maximum": 1800,
+                    "minimum": 4,
+                    "title": "Maximum Advertisement Interval",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "AdvertisementIntervals"
+                    }
+                  },
+                  "minAdvertisementInterval": {
+                    "default": 200,
+                    "description": "Minimum time between router advertisements (in seconds).",
+                    "format": "int32",
+                    "maximum": 1350,
+                    "minimum": 3,
+                    "title": "Minimum Advertisement Interval",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "AdvertisementIntervals"
+                    }
+                  },
+                  "otherConfigurationFlag": {
+                    "default": false,
+                    "description": "Enable DHCPv6 for other configuration (O-bit).",
+                    "title": "Other Configuration Flag",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "DHCPConfig"
+                    }
+                  },
+                  "prefixes": {
+                    "description": "IPv6 prefixes to advertise in router advertisements.",
+                    "items": {
+                      "description": "IPv6Prefix defines the configuration for an IPv6 prefix advertisement.",
+                      "properties": {
+                        "autonomousFlag": {
+                          "default": true,
+                          "description": "When this is set in the prefix information option hosts can use the prefix for stateless address autoconfiguration (SLAAC).",
+                          "title": "Autonomous Flag",
+                          "type": "boolean",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Flags"
+                          }
+                        },
+                        "onLinkFlag": {
+                          "default": true,
+                          "description": "When this is set in the prefix information option hosts can use the prefix for on-link determination.",
+                          "title": "On-Link Flag",
+                          "type": "boolean",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Flags"
+                          }
+                        },
+                        "preferredLifetime": {
+                          "default": 604800,
+                          "description": "The length of time in seconds (relative to the time the packet is sent) that addresses generated from the prefix via stateless address autoconfiguration remain preferred.",
+                          "format": "int32",
+                          "maximum": 4294967295,
+                          "minimum": 0,
+                          "title": "Preferred Lifetime",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Lifetimes"
+                          }
+                        },
+                        "prefix": {
+                          "description": "An IPv6 global unicast address prefix.",
+                          "title": "IPv6 Prefix",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4
+                          }
+                        },
+                        "validLifetime": {
+                          "default": 2592000,
+                          "description": "The length of time in seconds (relative to the time the packet is sent) that the prefix is valid for the purpose of on-link determination.",
+                          "format": "int32",
+                          "maximum": 4294967295,
+                          "minimum": 0,
+                          "title": "Valid Lifetime",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Lifetimes"
+                          }
+                        }
+                      },
+                      "required": [
+                        "prefix"
+                      ],
+                      "type": "object"
+                    },
+                    "title": "Prefixes",
+                    "type": "array",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 4
+                    }
+                  },
+                  "reachableTime": {
+                    "default": 0,
+                    "description": "Time in milliseconds for Neighbor Unreachability Detection.",
+                    "format": "int32",
+                    "maximum": 3600000,
+                    "minimum": 0,
+                    "title": "Reachable Time",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "TimingConfig"
+                    }
+                  },
+                  "retransmitTime": {
+                    "default": 0,
+                    "description": "Time in milliseconds between retransmitted NS messages.",
+                    "format": "int32",
+                    "maximum": 1800000,
+                    "minimum": 0,
+                    "title": "Retransmit Time",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "TimingConfig"
+                    }
+                  },
+                  "routerLifetime": {
+                    "default": 1800,
+                    "description": "Router lifetime in seconds for default gateway.",
+                    "format": "int32",
+                    "maximum": 9000,
+                    "minimum": 0,
+                    "title": "Router Lifetime",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2
+                    }
+                  }
+                },
+                "required": [
+                  "currentHopLimit",
+                  "enabled",
+                  "managedConfigurationFlag",
+                  "maxAdvertisementInterval",
+                  "minAdvertisementInterval",
+                  "otherConfigurationFlag",
+                  "retransmitTime",
+                  "routerLifetime"
+                ],
+                "title": "IPv6 Router Advertisement",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 650
+                }
+              },
               "l3ProxyARPND": {
                 "description": "L3 Proxy ARP and ND configuration.",
                 "properties": {
@@ -2001,7 +2554,7 @@
                 }
               },
               "unnumbered": {
-                "description": "Enables the use of unnumbered interfaces on the IRBInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces.",
+                "description": "Enables the use of unnumbered interfaces on the IRBInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces.(Deprecated, Use IPv6RouterAdvertisement)",
                 "enum": [
                   "IPV6"
                 ],
@@ -2115,7 +2668,10 @@
               "router"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "IRBInterfaceStatus defines the observed state of IRBInterface",
@@ -2246,7 +2802,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -2279,6 +2838,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.services.v1alpha1.IRBInterface_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.IRBInterface_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.IRBInterface_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.IRBInterface_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "IRBInterface",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.services.v1alpha1.RoutedInterface": {
         "description": "RoutedInterface is the Schema for the routedinterfaces API",
         "properties": {
@@ -2297,7 +2974,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.RoutedInterface_metadata"
           },
           "spec": {
             "description": "The RoutedInterface enables the configuration and management of Layer 3 interfaces for routing traffic between different networks. This resource allows for specifying an underlying Interface and Router, configuring VLAN IDs, and setting the IP MTU. It also supports the learning of unsolicited ARPs, defining both IPv4 and IPv6 addresses, and enabling unnumbered interfaces. Advanced features such as BFD configuration, Proxy ARP/ND, and ARP timeout settings are included to ensure robust and efficient routing.",
@@ -2394,6 +3071,16 @@
                 "type": "object",
                 "x-eda-nokia-com": {
                   "ui-order-priority": 700
+                }
+              },
+              "description": {
+                "description": "The description of the RoutedInterface.",
+                "title": "Description",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 75,
+                  "ui-single-line-group": "Description"
                 }
               },
               "egress": {
@@ -2595,6 +3282,215 @@
                   "ui-order-priority": 600
                 }
               },
+              "ipv6RouterAdvertisement": {
+                "properties": {
+                  "currentHopLimit": {
+                    "default": 64,
+                    "description": "The current hop limit to advertise in the router advertisement messages.",
+                    "format": "int32",
+                    "maximum": 255,
+                    "minimum": 0,
+                    "title": "Current Hop Limit",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "HopLimitMTU"
+                    }
+                  },
+                  "enabled": {
+                    "default": false,
+                    "description": "Enable or disable IPv6 router advertisements.",
+                    "title": "Enable Router Advertisements",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2
+                    }
+                  },
+                  "ipMTU": {
+                    "description": "The IP MTU to advertise in the router advertisement messages.",
+                    "format": "int32",
+                    "maximum": 9486,
+                    "minimum": 1280,
+                    "title": "IP MTU",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "HopLimitMTU"
+                    }
+                  },
+                  "managedConfigurationFlag": {
+                    "default": false,
+                    "description": "Enable DHCPv6 for address configuration (M-bit).",
+                    "title": "Managed Configuration Flag",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "DHCPConfig"
+                    }
+                  },
+                  "maxAdvertisementInterval": {
+                    "default": 600,
+                    "description": "Maximum time between router advertisements (in seconds).",
+                    "format": "int32",
+                    "maximum": 1800,
+                    "minimum": 4,
+                    "title": "Maximum Advertisement Interval",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "AdvertisementIntervals"
+                    }
+                  },
+                  "minAdvertisementInterval": {
+                    "default": 200,
+                    "description": "Minimum time between router advertisements (in seconds).",
+                    "format": "int32",
+                    "maximum": 1350,
+                    "minimum": 3,
+                    "title": "Minimum Advertisement Interval",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "AdvertisementIntervals"
+                    }
+                  },
+                  "otherConfigurationFlag": {
+                    "default": false,
+                    "description": "Enable DHCPv6 for other configuration (O-bit).",
+                    "title": "Other Configuration Flag",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "DHCPConfig"
+                    }
+                  },
+                  "prefixes": {
+                    "description": "IPv6 prefixes to advertise in router advertisements.",
+                    "items": {
+                      "description": "IPv6Prefix defines the configuration for an IPv6 prefix advertisement.",
+                      "properties": {
+                        "autonomousFlag": {
+                          "default": true,
+                          "description": "When this is set in the prefix information option hosts can use the prefix for stateless address autoconfiguration (SLAAC).",
+                          "title": "Autonomous Flag",
+                          "type": "boolean",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Flags"
+                          }
+                        },
+                        "onLinkFlag": {
+                          "default": true,
+                          "description": "When this is set in the prefix information option hosts can use the prefix for on-link determination.",
+                          "title": "On-Link Flag",
+                          "type": "boolean",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Flags"
+                          }
+                        },
+                        "preferredLifetime": {
+                          "default": 604800,
+                          "description": "The length of time in seconds (relative to the time the packet is sent) that addresses generated from the prefix via stateless address autoconfiguration remain preferred.",
+                          "format": "int32",
+                          "maximum": 4294967295,
+                          "minimum": 0,
+                          "title": "Preferred Lifetime",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Lifetimes"
+                          }
+                        },
+                        "prefix": {
+                          "description": "An IPv6 global unicast address prefix.",
+                          "title": "IPv6 Prefix",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4
+                          }
+                        },
+                        "validLifetime": {
+                          "default": 2592000,
+                          "description": "The length of time in seconds (relative to the time the packet is sent) that the prefix is valid for the purpose of on-link determination.",
+                          "format": "int32",
+                          "maximum": 4294967295,
+                          "minimum": 0,
+                          "title": "Valid Lifetime",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-single-line-group": "Lifetimes"
+                          }
+                        }
+                      },
+                      "required": [
+                        "prefix"
+                      ],
+                      "type": "object"
+                    },
+                    "title": "Prefixes",
+                    "type": "array",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 4
+                    }
+                  },
+                  "reachableTime": {
+                    "default": 0,
+                    "description": "Time in milliseconds for Neighbor Unreachability Detection.",
+                    "format": "int32",
+                    "maximum": 3600000,
+                    "minimum": 0,
+                    "title": "Reachable Time",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "TimingConfig"
+                    }
+                  },
+                  "retransmitTime": {
+                    "default": 0,
+                    "description": "Time in milliseconds between retransmitted NS messages.",
+                    "format": "int32",
+                    "maximum": 1800000,
+                    "minimum": 0,
+                    "title": "Retransmit Time",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-single-line-group": "TimingConfig"
+                    }
+                  },
+                  "routerLifetime": {
+                    "default": 1800,
+                    "description": "Router lifetime in seconds for default gateway.",
+                    "format": "int32",
+                    "maximum": 9000,
+                    "minimum": 0,
+                    "title": "Router Lifetime",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2
+                    }
+                  }
+                },
+                "required": [
+                  "currentHopLimit",
+                  "enabled",
+                  "managedConfigurationFlag",
+                  "maxAdvertisementInterval",
+                  "minAdvertisementInterval",
+                  "otherConfigurationFlag",
+                  "retransmitTime",
+                  "routerLifetime"
+                ],
+                "title": "IPv6 Router Advertisement",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 650
+                }
+              },
               "l3ProxyARPND": {
                 "description": "L3 Proxy ARP and ND configuration.",
                 "properties": {
@@ -2663,7 +3559,7 @@
                 }
               },
               "unnumbered": {
-                "description": "Enables the use of unnumbered interfaces on the RoutedInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces.",
+                "description": "Enables the use of unnumbered interfaces on the IRBInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces. (Deprecated, Use IPv6RouterAdvertisement)",
                 "enum": [
                   "IPV6"
                 ],
@@ -2671,7 +3567,7 @@
                 "type": "string",
                 "x-eda-nokia-com": {
                   "ui-column-span": 2,
-                  "ui-order-priority": 650,
+                  "ui-order-priority": 550,
                   "ui-single-line-group": "Unnumbered"
                 }
               },
@@ -2713,7 +3609,10 @@
               "router"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "RoutedInterfaceStatus defines the observed state of RoutedInterface",
@@ -2814,7 +3713,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -2847,6 +3749,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.services.v1alpha1.RoutedInterface_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.RoutedInterface_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.RoutedInterface_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.RoutedInterface_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "RoutedInterface",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.services.v1alpha1.Router": {
         "description": "Router is the Schema for the routers API",
         "properties": {
@@ -2865,7 +3885,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.Router_metadata"
           },
           "spec": {
             "description": "The Router enables the configuration and management of routing functions within a network. This resource allows for setting a unique Router ID, configuring VNIs and EVIs with options for automatic allocation, and defining import and export route targets. It also includes advanced configuration options such as BGP settings, including autonomous system numbers, AFI/SAFI options, and route advertisement preferences. Node selectors can be used to constrain the deployment of the router to specific nodes within the network.",
@@ -3172,6 +4192,16 @@
                 "title": "BGP Configuration",
                 "type": "object"
               },
+              "description": {
+                "description": "The description of the Router.",
+                "title": "Description",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 75,
+                  "ui-single-line-group": "Description"
+                }
+              },
               "evi": {
                 "description": "EVI for the Router; leave blank for auto-allocation from EVI pool.",
                 "maximum": 65535,
@@ -3230,6 +4260,74 @@
                   "ui-single-line-group": "ImportExport"
                 }
               },
+              "ipLoadBalancing": {
+                "description": "IPv4 or IPv6 prefix. Active routes in the FIB that exactly match this prefix or that are longer matches of this prefix are provided with resilient-hash programming.",
+                "format": "ip",
+                "properties": {
+                  "prefix": {
+                    "description": "IPv4 or IPv6 prefix. Active routes in the FIB that exactly match this prefix or that are longer matches of this prefix are provided with resilient-hash programming.",
+                    "format": "ip",
+                    "items": {
+                      "properties": {
+                        "hashBucketsPerPath": {
+                          "default": 1,
+                          "description": "The number of times each next-hop is repeated in the fill pattern if there are max-paths ECMP next-hops.",
+                          "format": "number",
+                          "maximum": 32,
+                          "minimum": 1,
+                          "title": "Max Paths",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 600
+                          }
+                        },
+                        "maxECMP": {
+                          "default": 1,
+                          "description": "The maximum number of ECMP next-hops per route associated with the resilient-hash prefix.",
+                          "format": "number",
+                          "maximum": 64,
+                          "minimum": 1,
+                          "title": "Max ECMP",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 700
+                          }
+                        },
+                        "prefix": {
+                          "description": "IPv4 or IPv6 prefix. Active routes in the FIB that exactly match this prefix or that are longer matches of this prefix are provided with resilient-hash programming.",
+                          "format": "ip",
+                          "title": "Prefix",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 500
+                          }
+                        }
+                      },
+                      "required": [
+                        "hashBucketsPerPath",
+                        "maxECMP",
+                        "prefix"
+                      ],
+                      "type": "object"
+                    },
+                    "title": "Prefix",
+                    "type": "array",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 2,
+                      "ui-order-priority": 500
+                    }
+                  }
+                },
+                "title": "Prefix",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 500
+                }
+              },
               "nodeSelector": {
                 "description": "Node selectors for deployment constraints.  If Nodes are selected, the Router will only be deployed on the Nodes selected, if left blank it will be deployed on all Nodes for which there are IRB or RoutedInterfaces referencing this Router.",
                 "format": "labelselector",
@@ -3240,6 +4338,55 @@
                 "type": "array",
                 "x-eda-nokia-com": {
                   "ui-column-span": 2
+                }
+              },
+              "routeLeaking": {
+                "description": "Route leaking controlled by routing policies in and out of the DefaultRouter.",
+                "properties": {
+                  "exportPolicy": {
+                    "description": "Reference to a Policy resource to use when evaluating route exports from the DefaultRouter.",
+                    "title": "Export Policy",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "routingpolicies.eda.nokia.com",
+                          "resource": "policys",
+                          "type": "gvr",
+                          "version": "v1alpha1"
+                        }
+                      ],
+                      "ui-column-span": 2,
+                      "ui-order-priority": 300,
+                      "ui-single-line-group": "ImportExport"
+                    }
+                  },
+                  "importPolicy": {
+                    "description": "Reference to a Policy resource to use when evaluating route imports into the DefaultRouter.",
+                    "title": "Import Policy",
+                    "type": "string",
+                    "x-eda-nokia-com": {
+                      "ui-auto-completes": [
+                        {
+                          "condition": "true",
+                          "group": "routingpolicies.eda.nokia.com",
+                          "resource": "policys",
+                          "type": "gvr",
+                          "version": "v1alpha1"
+                        }
+                      ],
+                      "ui-column-span": 2,
+                      "ui-order-priority": 300,
+                      "ui-single-line-group": "ImportExport"
+                    }
+                  }
+                },
+                "title": "Route Leaking",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 400
                 }
               },
               "routerID": {
@@ -3322,7 +4469,10 @@
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "description": "RouterStatus defines the observed state of Router",
@@ -3419,7 +4569,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -3452,6 +4605,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.services.v1alpha1.Router_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.Router_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.Router_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.Router_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "Router",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.services.v1alpha1.VLAN": {
         "description": "VLAN is the Schema for the vlans API",
         "properties": {
@@ -3470,7 +4741,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VLAN_metadata"
           },
           "spec": {
             "description": "The VLAN enables the configuration and management of VLAN and their association with BridgeDomains. This resource allows for specifying the associated BridgeDomain, selecting interfaces based on label selectors, and configuring VLAN IDs with options for auto-allocation from a VLAN pool. It also supports advanced configurations such as ingress and egress traffic management, and overrides for MAC Duplication Detection actions when enabled in the associated BridgeDomain.",
@@ -3492,6 +4763,16 @@
                   "ui-column-span": 2,
                   "ui-order-priority": 100,
                   "ui-single-line-group": "BridgeDomainInterfaceSelector"
+                }
+              },
+              "description": {
+                "description": "The description of the VLAN.",
+                "title": "Description",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 4,
+                  "ui-order-priority": 75,
+                  "ui-single-line-group": "Description"
                 }
               },
               "egress": {
@@ -3844,7 +5125,10 @@
               "interfaceSelector"
             ],
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "properties": {
@@ -3956,7 +5240,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -3989,6 +5276,124 @@
         ],
         "type": "object"
       },
+      "com.nokia.eda.services.v1alpha1.VLAN_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.VLAN_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VLAN_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.VLAN_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "VLAN",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.services.v1alpha1.VirtualNetwork": {
         "description": "VirtualNetwork is the Schema for the virtualnetworks API",
         "properties": {
@@ -4007,7 +5412,7 @@
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VirtualNetwork_metadata"
           },
           "spec": {
             "description": "VirtualNetworkSpec defines the desired state of VirtualNetwork",
@@ -4027,6 +5432,16 @@
                     "spec": {
                       "description": "Specification of the BridgeDomain",
                       "properties": {
+                        "description": {
+                          "description": "The description of the BridgeDomain.",
+                          "title": "Description",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 75,
+                            "ui-single-line-group": "Description"
+                          }
+                        },
                         "evi": {
                           "description": "EVI to use for this BridgeDomain, can be optionally left blank to have it automatically allocated using the EVI Pool.",
                           "maximum": 65535,
@@ -4465,6 +5880,16 @@
                             "ui-category": "BridgeInterface",
                             "ui-column-span": 2,
                             "ui-order-priority": 100
+                          }
+                        },
+                        "description": {
+                          "description": "The description of the BridgeInterface.",
+                          "title": "Description",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 75,
+                            "ui-single-line-group": "Description"
                           }
                         },
                         "egress": {
@@ -4948,6 +6373,16 @@
                             "ui-single-line-group": "BridgedomainRouter"
                           }
                         },
+                        "description": {
+                          "description": "The description of the IRBInterface.",
+                          "title": "Description",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 75,
+                            "ui-single-line-group": "Description"
+                          }
+                        },
                         "egress": {
                           "description": "Manages actions on traffic at Egress.",
                           "properties": {
@@ -5246,6 +6681,215 @@
                             "ui-order-priority": 200
                           }
                         },
+                        "ipv6RouterAdvertisement": {
+                          "properties": {
+                            "currentHopLimit": {
+                              "default": 64,
+                              "description": "The current hop limit to advertise in the router advertisement messages.",
+                              "format": "int32",
+                              "maximum": 255,
+                              "minimum": 0,
+                              "title": "Current Hop Limit",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "HopLimitMTU"
+                              }
+                            },
+                            "enabled": {
+                              "default": false,
+                              "description": "Enable or disable IPv6 router advertisements.",
+                              "title": "Enable Router Advertisements",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2
+                              }
+                            },
+                            "ipMTU": {
+                              "description": "The IP MTU to advertise in the router advertisement messages.",
+                              "format": "int32",
+                              "maximum": 9486,
+                              "minimum": 1280,
+                              "title": "IP MTU",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "HopLimitMTU"
+                              }
+                            },
+                            "managedConfigurationFlag": {
+                              "default": false,
+                              "description": "Enable DHCPv6 for address configuration (M-bit).",
+                              "title": "Managed Configuration Flag",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "DHCPConfig"
+                              }
+                            },
+                            "maxAdvertisementInterval": {
+                              "default": 600,
+                              "description": "Maximum time between router advertisements (in seconds).",
+                              "format": "int32",
+                              "maximum": 1800,
+                              "minimum": 4,
+                              "title": "Maximum Advertisement Interval",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "AdvertisementIntervals"
+                              }
+                            },
+                            "minAdvertisementInterval": {
+                              "default": 200,
+                              "description": "Minimum time between router advertisements (in seconds).",
+                              "format": "int32",
+                              "maximum": 1350,
+                              "minimum": 3,
+                              "title": "Minimum Advertisement Interval",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "AdvertisementIntervals"
+                              }
+                            },
+                            "otherConfigurationFlag": {
+                              "default": false,
+                              "description": "Enable DHCPv6 for other configuration (O-bit).",
+                              "title": "Other Configuration Flag",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "DHCPConfig"
+                              }
+                            },
+                            "prefixes": {
+                              "description": "IPv6 prefixes to advertise in router advertisements.",
+                              "items": {
+                                "description": "IPv6Prefix defines the configuration for an IPv6 prefix advertisement.",
+                                "properties": {
+                                  "autonomousFlag": {
+                                    "default": true,
+                                    "description": "When this is set in the prefix information option hosts can use the prefix for stateless address autoconfiguration (SLAAC).",
+                                    "title": "Autonomous Flag",
+                                    "type": "boolean",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Flags"
+                                    }
+                                  },
+                                  "onLinkFlag": {
+                                    "default": true,
+                                    "description": "When this is set in the prefix information option hosts can use the prefix for on-link determination.",
+                                    "title": "On-Link Flag",
+                                    "type": "boolean",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Flags"
+                                    }
+                                  },
+                                  "preferredLifetime": {
+                                    "default": 604800,
+                                    "description": "The length of time in seconds (relative to the time the packet is sent) that addresses generated from the prefix via stateless address autoconfiguration remain preferred.",
+                                    "format": "int32",
+                                    "maximum": 4294967295,
+                                    "minimum": 0,
+                                    "title": "Preferred Lifetime",
+                                    "type": "integer",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Lifetimes"
+                                    }
+                                  },
+                                  "prefix": {
+                                    "description": "An IPv6 global unicast address prefix.",
+                                    "title": "IPv6 Prefix",
+                                    "type": "string",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 4
+                                    }
+                                  },
+                                  "validLifetime": {
+                                    "default": 2592000,
+                                    "description": "The length of time in seconds (relative to the time the packet is sent) that the prefix is valid for the purpose of on-link determination.",
+                                    "format": "int32",
+                                    "maximum": 4294967295,
+                                    "minimum": 0,
+                                    "title": "Valid Lifetime",
+                                    "type": "integer",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Lifetimes"
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "prefix"
+                                ],
+                                "type": "object"
+                              },
+                              "title": "Prefixes",
+                              "type": "array",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 4
+                              }
+                            },
+                            "reachableTime": {
+                              "default": 0,
+                              "description": "Time in milliseconds for Neighbor Unreachability Detection.",
+                              "format": "int32",
+                              "maximum": 3600000,
+                              "minimum": 0,
+                              "title": "Reachable Time",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "TimingConfig"
+                              }
+                            },
+                            "retransmitTime": {
+                              "default": 0,
+                              "description": "Time in milliseconds between retransmitted NS messages.",
+                              "format": "int32",
+                              "maximum": 1800000,
+                              "minimum": 0,
+                              "title": "Retransmit Time",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "TimingConfig"
+                              }
+                            },
+                            "routerLifetime": {
+                              "default": 1800,
+                              "description": "Router lifetime in seconds for default gateway.",
+                              "format": "int32",
+                              "maximum": 9000,
+                              "minimum": 0,
+                              "title": "Router Lifetime",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2
+                              }
+                            }
+                          },
+                          "required": [
+                            "currentHopLimit",
+                            "enabled",
+                            "managedConfigurationFlag",
+                            "maxAdvertisementInterval",
+                            "minAdvertisementInterval",
+                            "otherConfigurationFlag",
+                            "retransmitTime",
+                            "routerLifetime"
+                          ],
+                          "title": "IPv6 Router Advertisement",
+                          "type": "object",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 650
+                          }
+                        },
                         "l3ProxyARPND": {
                           "description": "L3 Proxy ARP and ND configuration.",
                           "properties": {
@@ -5314,7 +6958,7 @@
                           }
                         },
                         "unnumbered": {
-                          "description": "Enables the use of unnumbered interfaces on the IRBInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces.",
+                          "description": "Enables the use of unnumbered interfaces on the IRBInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces.(Deprecated, Use IPv6RouterAdvertisement)",
                           "enum": [
                             "IPV6"
                           ],
@@ -6818,6 +8462,25 @@
                                           "bgp": {
                                             "description": "Configuration for BGP-specific policy match criteria.",
                                             "properties": {
+                                              "communitySet": {
+                                                "description": "Match conditions for BGP communities.",
+                                                "title": "BGP Community",
+                                                "type": "string",
+                                                "x-eda-nokia-com": {
+                                                  "ui-auto-completes": [
+                                                    {
+                                                      "condition": "true",
+                                                      "group": "routingpolicies.eda.nokia.com",
+                                                      "resource": "communitysets",
+                                                      "type": "gvr",
+                                                      "version": "v1alpha1"
+                                                    }
+                                                  ],
+                                                  "ui-column-span": 2,
+                                                  "ui-order-priority": 300,
+                                                  "ui-single-line-group": "BGP"
+                                                }
+                                              },
                                               "evpnRouteType": {
                                                 "description": "Match conditions for EVPN route types.",
                                                 "items": {
@@ -7047,7 +8710,7 @@
                               "description": "Group of nexthops for the list of prefixes.",
                               "properties": {
                                 "bfd": {
-                                  "description": "Enables BFD to the next-hops in the group.",
+                                  "description": "Enables BFD to the next-hops in the group. Local and Remote discriminator parameters have been deprecated at this level. Use Nexthop to set these parameters.",
                                   "properties": {
                                     "enabled": {
                                       "default": false,
@@ -7096,7 +8759,8 @@
                                   "type": "object",
                                   "x-eda-nokia-com": {
                                     "ui-column-span": 2,
-                                    "ui-order-priority": 600
+                                    "ui-order-priority": 600,
+                                    "ui-visible-if": "self.blackhole === false || self.blackhole === null"
                                   }
                                 },
                                 "blackhole": {
@@ -7196,8 +8860,9 @@
                                   "title": "Nexthops",
                                   "type": "array",
                                   "x-eda-nokia-com": {
-                                    "ui-column-span": 2,
-                                    "ui-order-priority": 700
+                                    "ui-column-span": 4,
+                                    "ui-order-priority": 700,
+                                    "ui-visible-if": "self.blackhole === false || self.blackhole === null"
                                   }
                                 },
                                 "resolve": {
@@ -7207,13 +8872,10 @@
                                   "type": "boolean",
                                   "x-eda-nokia-com": {
                                     "ui-column-span": 2,
-                                    "ui-order-priority": 500
+                                    "ui-visible-if": "self.blackhole === false || self.blackhole === null"
                                   }
                                 }
                               },
-                              "required": [
-                                "nexthops"
-                              ],
                               "title": "Nexthop Group",
                               "type": "object",
                               "x-eda-nokia-com": {
@@ -7401,6 +9063,16 @@
                           "type": "object",
                           "x-eda-nokia-com": {
                             "ui-order-priority": 700
+                          }
+                        },
+                        "description": {
+                          "description": "The description of the RoutedInterface.",
+                          "title": "Description",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 75,
+                            "ui-single-line-group": "Description"
                           }
                         },
                         "egress": {
@@ -7602,6 +9274,215 @@
                             "ui-order-priority": 600
                           }
                         },
+                        "ipv6RouterAdvertisement": {
+                          "properties": {
+                            "currentHopLimit": {
+                              "default": 64,
+                              "description": "The current hop limit to advertise in the router advertisement messages.",
+                              "format": "int32",
+                              "maximum": 255,
+                              "minimum": 0,
+                              "title": "Current Hop Limit",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "HopLimitMTU"
+                              }
+                            },
+                            "enabled": {
+                              "default": false,
+                              "description": "Enable or disable IPv6 router advertisements.",
+                              "title": "Enable Router Advertisements",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2
+                              }
+                            },
+                            "ipMTU": {
+                              "description": "The IP MTU to advertise in the router advertisement messages.",
+                              "format": "int32",
+                              "maximum": 9486,
+                              "minimum": 1280,
+                              "title": "IP MTU",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "HopLimitMTU"
+                              }
+                            },
+                            "managedConfigurationFlag": {
+                              "default": false,
+                              "description": "Enable DHCPv6 for address configuration (M-bit).",
+                              "title": "Managed Configuration Flag",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "DHCPConfig"
+                              }
+                            },
+                            "maxAdvertisementInterval": {
+                              "default": 600,
+                              "description": "Maximum time between router advertisements (in seconds).",
+                              "format": "int32",
+                              "maximum": 1800,
+                              "minimum": 4,
+                              "title": "Maximum Advertisement Interval",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "AdvertisementIntervals"
+                              }
+                            },
+                            "minAdvertisementInterval": {
+                              "default": 200,
+                              "description": "Minimum time between router advertisements (in seconds).",
+                              "format": "int32",
+                              "maximum": 1350,
+                              "minimum": 3,
+                              "title": "Minimum Advertisement Interval",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "AdvertisementIntervals"
+                              }
+                            },
+                            "otherConfigurationFlag": {
+                              "default": false,
+                              "description": "Enable DHCPv6 for other configuration (O-bit).",
+                              "title": "Other Configuration Flag",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "DHCPConfig"
+                              }
+                            },
+                            "prefixes": {
+                              "description": "IPv6 prefixes to advertise in router advertisements.",
+                              "items": {
+                                "description": "IPv6Prefix defines the configuration for an IPv6 prefix advertisement.",
+                                "properties": {
+                                  "autonomousFlag": {
+                                    "default": true,
+                                    "description": "When this is set in the prefix information option hosts can use the prefix for stateless address autoconfiguration (SLAAC).",
+                                    "title": "Autonomous Flag",
+                                    "type": "boolean",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Flags"
+                                    }
+                                  },
+                                  "onLinkFlag": {
+                                    "default": true,
+                                    "description": "When this is set in the prefix information option hosts can use the prefix for on-link determination.",
+                                    "title": "On-Link Flag",
+                                    "type": "boolean",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Flags"
+                                    }
+                                  },
+                                  "preferredLifetime": {
+                                    "default": 604800,
+                                    "description": "The length of time in seconds (relative to the time the packet is sent) that addresses generated from the prefix via stateless address autoconfiguration remain preferred.",
+                                    "format": "int32",
+                                    "maximum": 4294967295,
+                                    "minimum": 0,
+                                    "title": "Preferred Lifetime",
+                                    "type": "integer",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Lifetimes"
+                                    }
+                                  },
+                                  "prefix": {
+                                    "description": "An IPv6 global unicast address prefix.",
+                                    "title": "IPv6 Prefix",
+                                    "type": "string",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 4
+                                    }
+                                  },
+                                  "validLifetime": {
+                                    "default": 2592000,
+                                    "description": "The length of time in seconds (relative to the time the packet is sent) that the prefix is valid for the purpose of on-link determination.",
+                                    "format": "int32",
+                                    "maximum": 4294967295,
+                                    "minimum": 0,
+                                    "title": "Valid Lifetime",
+                                    "type": "integer",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-single-line-group": "Lifetimes"
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "prefix"
+                                ],
+                                "type": "object"
+                              },
+                              "title": "Prefixes",
+                              "type": "array",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 4
+                              }
+                            },
+                            "reachableTime": {
+                              "default": 0,
+                              "description": "Time in milliseconds for Neighbor Unreachability Detection.",
+                              "format": "int32",
+                              "maximum": 3600000,
+                              "minimum": 0,
+                              "title": "Reachable Time",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "TimingConfig"
+                              }
+                            },
+                            "retransmitTime": {
+                              "default": 0,
+                              "description": "Time in milliseconds between retransmitted NS messages.",
+                              "format": "int32",
+                              "maximum": 1800000,
+                              "minimum": 0,
+                              "title": "Retransmit Time",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-single-line-group": "TimingConfig"
+                              }
+                            },
+                            "routerLifetime": {
+                              "default": 1800,
+                              "description": "Router lifetime in seconds for default gateway.",
+                              "format": "int32",
+                              "maximum": 9000,
+                              "minimum": 0,
+                              "title": "Router Lifetime",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2
+                              }
+                            }
+                          },
+                          "required": [
+                            "currentHopLimit",
+                            "enabled",
+                            "managedConfigurationFlag",
+                            "maxAdvertisementInterval",
+                            "minAdvertisementInterval",
+                            "otherConfigurationFlag",
+                            "retransmitTime",
+                            "routerLifetime"
+                          ],
+                          "title": "IPv6 Router Advertisement",
+                          "type": "object",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 650
+                          }
+                        },
                         "l3ProxyARPND": {
                           "description": "L3 Proxy ARP and ND configuration.",
                           "properties": {
@@ -7670,7 +9551,7 @@
                           }
                         },
                         "unnumbered": {
-                          "description": "Enables the use of unnumbered interfaces on the RoutedInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces.",
+                          "description": "Enables the use of unnumbered interfaces on the IRBInterface.  If IPv6 is specified, no IP address are configured on the sub-interface and only the link local address will be used.  If any IP addresses are specified for either IPv4 or IPv6 that will take precedence and IPs will be assigned to the interfaces. (Deprecated, Use IPv6RouterAdvertisement)",
                           "enum": [
                             "IPV6"
                           ],
@@ -7678,7 +9559,7 @@
                           "type": "string",
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
-                            "ui-order-priority": 650,
+                            "ui-order-priority": 550,
                             "ui-single-line-group": "Unnumbered"
                           }
                         },
@@ -8049,6 +9930,16 @@
                           "title": "BGP Configuration",
                           "type": "object"
                         },
+                        "description": {
+                          "description": "The description of the Router.",
+                          "title": "Description",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 75,
+                            "ui-single-line-group": "Description"
+                          }
+                        },
                         "evi": {
                           "description": "EVI for the Router; leave blank for auto-allocation from EVI pool.",
                           "maximum": 65535,
@@ -8107,6 +9998,74 @@
                             "ui-single-line-group": "ImportExport"
                           }
                         },
+                        "ipLoadBalancing": {
+                          "description": "IPv4 or IPv6 prefix. Active routes in the FIB that exactly match this prefix or that are longer matches of this prefix are provided with resilient-hash programming.",
+                          "format": "ip",
+                          "properties": {
+                            "prefix": {
+                              "description": "IPv4 or IPv6 prefix. Active routes in the FIB that exactly match this prefix or that are longer matches of this prefix are provided with resilient-hash programming.",
+                              "format": "ip",
+                              "items": {
+                                "properties": {
+                                  "hashBucketsPerPath": {
+                                    "default": 1,
+                                    "description": "The number of times each next-hop is repeated in the fill pattern if there are max-paths ECMP next-hops.",
+                                    "format": "number",
+                                    "maximum": 32,
+                                    "minimum": 1,
+                                    "title": "Max Paths",
+                                    "type": "integer",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-order-priority": 600
+                                    }
+                                  },
+                                  "maxECMP": {
+                                    "default": 1,
+                                    "description": "The maximum number of ECMP next-hops per route associated with the resilient-hash prefix.",
+                                    "format": "number",
+                                    "maximum": 64,
+                                    "minimum": 1,
+                                    "title": "Max ECMP",
+                                    "type": "integer",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-order-priority": 700
+                                    }
+                                  },
+                                  "prefix": {
+                                    "description": "IPv4 or IPv6 prefix. Active routes in the FIB that exactly match this prefix or that are longer matches of this prefix are provided with resilient-hash programming.",
+                                    "format": "ip",
+                                    "title": "Prefix",
+                                    "type": "string",
+                                    "x-eda-nokia-com": {
+                                      "ui-column-span": 2,
+                                      "ui-order-priority": 500
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "hashBucketsPerPath",
+                                  "maxECMP",
+                                  "prefix"
+                                ],
+                                "type": "object"
+                              },
+                              "title": "Prefix",
+                              "type": "array",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 2,
+                                "ui-order-priority": 500
+                              }
+                            }
+                          },
+                          "title": "Prefix",
+                          "type": "object",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 500
+                          }
+                        },
                         "nodeSelector": {
                           "description": "Node selectors for deployment constraints.  If Nodes are selected, the Router will only be deployed on the Nodes selected, if left blank it will be deployed on all Nodes for which there are IRB or RoutedInterfaces referencing this Router.",
                           "format": "labelselector",
@@ -8117,6 +10076,55 @@
                           "type": "array",
                           "x-eda-nokia-com": {
                             "ui-column-span": 2
+                          }
+                        },
+                        "routeLeaking": {
+                          "description": "Route leaking controlled by routing policies in and out of the DefaultRouter.",
+                          "properties": {
+                            "exportPolicy": {
+                              "description": "Reference to a Policy resource to use when evaluating route exports from the DefaultRouter.",
+                              "title": "Export Policy",
+                              "type": "string",
+                              "x-eda-nokia-com": {
+                                "ui-auto-completes": [
+                                  {
+                                    "condition": "true",
+                                    "group": "routingpolicies.eda.nokia.com",
+                                    "resource": "policys",
+                                    "type": "gvr",
+                                    "version": "v1alpha1"
+                                  }
+                                ],
+                                "ui-column-span": 2,
+                                "ui-order-priority": 300,
+                                "ui-single-line-group": "ImportExport"
+                              }
+                            },
+                            "importPolicy": {
+                              "description": "Reference to a Policy resource to use when evaluating route imports into the DefaultRouter.",
+                              "title": "Import Policy",
+                              "type": "string",
+                              "x-eda-nokia-com": {
+                                "ui-auto-completes": [
+                                  {
+                                    "condition": "true",
+                                    "group": "routingpolicies.eda.nokia.com",
+                                    "resource": "policys",
+                                    "type": "gvr",
+                                    "version": "v1alpha1"
+                                  }
+                                ],
+                                "ui-column-span": 2,
+                                "ui-order-priority": 300,
+                                "ui-single-line-group": "ImportExport"
+                              }
+                            }
+                          },
+                          "title": "Route Leaking",
+                          "type": "object",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 400
                           }
                         },
                         "routerID": {
@@ -8243,6 +10251,16 @@
                             "ui-column-span": 2,
                             "ui-order-priority": 100,
                             "ui-single-line-group": "BridgeDomainInterfaceSelector"
+                          }
+                        },
+                        "description": {
+                          "description": "The description of the VLAN.",
+                          "title": "Description",
+                          "type": "string",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 4,
+                            "ui-order-priority": 75,
+                            "ui-single-line-group": "Description"
                           }
                         },
                         "egress": {
@@ -8609,7 +10627,10 @@
               }
             },
             "title": "Specification",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
           },
           "status": {
             "properties": {
@@ -8702,7 +10723,10 @@
             },
             "readOnly": true,
             "title": "Status",
-            "type": "object"
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
           }
         },
         "required": [
@@ -8734,11 +10758,136 @@
           "kind"
         ],
         "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.VirtualNetwork_DeletedResourceEntry": {
+        "properties": {
+          "commitTime": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 50,
+              "ui-title": "Commit Time",
+              "ui-title-key": "commitTime"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Commit Hash",
+              "ui-title-key": "commitHash"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 10,
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          },
+          "transactionId": {
+            "format": "uint64",
+            "type": "integer",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30,
+              "ui-title": "Transaction ID",
+              "ui-title-key": "transactionId"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.VirtualNetwork_DeletedResources": {
+        "items": {
+          "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VirtualNetwork_DeletedResourceEntry"
+        },
+        "type": "array"
+      },
+      "com.nokia.eda.services.v1alpha1.VirtualNetwork_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "VirtualNetwork",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
       }
     }
   },
   "info": {
-    "title": "api for services.eda.nokia.com/v1alpha1.",
+    "title": "Services Application APIs.",
     "version": "v1alpha1"
   },
   "openapi": "3.0.1",
@@ -9257,7 +11406,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeDomain_DeletedResources"
                 }
               }
             },
@@ -9385,6 +11534,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeDomain"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a BridgeDomain",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceBridgedomains",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -9727,7 +11933,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeInterface_DeletedResources"
                 }
               }
             },
@@ -9855,6 +12061,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.BridgeInterface"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a BridgeInterface",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceBridgeinterfaces",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -10197,7 +12460,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.DHCPRelay_DeletedResources"
                 }
               }
             },
@@ -10325,6 +12588,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.DHCPRelay"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a DHCPRelay",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceDhcprelays",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -10667,7 +12987,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.IRBInterface_DeletedResources"
                 }
               }
             },
@@ -10795,6 +13115,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.IRBInterface"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a IRBInterface",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceIrbinterfaces",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -11137,7 +13514,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.RoutedInterface_DeletedResources"
                 }
               }
             },
@@ -11265,6 +13642,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.RoutedInterface"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a RoutedInterface",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceRoutedinterfaces",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -11607,7 +14041,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.Router_DeletedResources"
                 }
               }
             },
@@ -11735,6 +14169,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.Router"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a Router",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceRouters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -12077,7 +14568,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VirtualNetwork_DeletedResources"
                 }
               }
             },
@@ -12205,6 +14696,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VirtualNetwork"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a VirtualNetwork",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceVirtualnetworks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -12547,7 +15095,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VLAN_DeletedResources"
                 }
               }
             },
@@ -12675,6 +15223,63 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.VLAN"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "apps"
+        ]
+      },
+      "patch": {
+        "description": "patch a VLAN",
+        "operationId": "patchServicesEdaNokiaComV1alpha1NamespaceVlans",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patch"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -13063,5 +15668,10 @@
         ]
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }
