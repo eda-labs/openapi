@@ -73,6 +73,10 @@
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
+          "domain": {
+            "description": "The \"domain\" for the error.  If empty, it is an EDA\ncore error.  Alternatively it can be an EDA application\n\"apiVersion\" value (e.g. interfaces.eda.nokia.com/v1alpha1)\nindicating that the error is specific to that application.\nThe domain gives the receiver information that they can use\nto help them interpret the \"internal\" error code value, or\nto find an internationalization translation for the message.",
+            "type": "string"
+          },
           "errors": {
             "description": "Collection of errors in cases where more than one exists. This needs to be\nflexible so we can support multiple formats",
             "items": {
@@ -131,6 +135,23 @@
         ],
         "type": "object"
       },
+      "OverlayState": {
+        "properties": {
+          "links": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLink"
+            },
+            "type": "object"
+          },
+          "nodes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNode"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "Patch": {
         "items": {
           "$ref": "#/components/schemas/K8SPatchOp"
@@ -175,6 +196,7 @@
             "type": "string"
           },
           "commitTime": {
+            "format": "date-time",
             "type": "string"
           },
           "hash": {
@@ -206,6 +228,17 @@
               "$ref": "#/components/schemas/Resource"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ResourceTopology": {
+        "properties": {
+          "topology": {
+            "$ref": "#/components/schemas/OverlayState"
+          },
+          "topologyMetadata": {
+            "$ref": "#/components/schemas/Topology"
           }
         },
         "type": "object"
@@ -242,8 +275,324 @@
         },
         "type": "object"
       },
+      "TopoAttrMetadata": {
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "ui_description": {
+            "type": "string"
+          },
+          "ui_description_key": {
+            "type": "string"
+          },
+          "ui_name": {
+            "type": "string"
+          },
+          "ui_name_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoElemMetadata": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoAttrMetadata"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "subtitle_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoLinkEndpoint": {
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          },
+          "node": {
+            "type": "string"
+          },
+          "node_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoNodeGrouping": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "tier": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayEndpoint": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayEndpointState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayEndpointState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLink": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "endpoint_a": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_a_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "endpoint_b": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_b_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLinkState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLinkState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNode": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "grouping": {
+            "$ref": "#/components/schemas/TopoNodeGrouping"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNodeState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNodeState": {
+        "properties": {
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoSchema": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Topology": {
+        "properties": {
+          "endpoints": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "group": {
+            "type": "string"
+          },
+          "grouping": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "links": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nodes": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "ui_description": {
+            "type": "string"
+          },
+          "ui_description_key": {
+            "type": "string"
+          },
+          "ui_name": {
+            "type": "string"
+          },
+          "ui_name_key": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "UIResult": {
         "type": "string"
+      },
+      "WorkflowId": {
+        "properties": {
+          "id": {
+            "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
       },
       "com.nokia.eda.services.v1alpha1.BridgeDomain": {
         "description": "BridgeDomain is the Schema for the bridgedomains API",
@@ -799,6 +1148,7 @@
       "com.nokia.eda.services.v1alpha1.BridgeDomain_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -1439,6 +1789,7 @@
       "com.nokia.eda.services.v1alpha1.BridgeInterface_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -1708,6 +2059,7 @@
       "com.nokia.eda.services.v1alpha1.DHCPRelay_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -1781,6 +2133,160 @@
                   "condition": "true",
                   "group": "services.eda.nokia.com",
                   "kind": "DHCPRelay",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
+      "com.nokia.eda.services.v1alpha1.EdgePing": {
+        "description": "EdgePing is the Schema for the edgepings API",
+        "properties": {
+          "apiVersion": {
+            "default": "services.eda.nokia.com/v1alpha1",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "kind": {
+            "default": "EdgePing",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.EdgePing_metadata"
+          },
+          "spec": {
+            "description": "EdgePingSpec defines the desired state of EdgePing",
+            "properties": {
+              "destination": {
+                "title": "destination",
+                "type": "string"
+              },
+              "interfaceResource": {
+                "title": "interfaceresource",
+                "type": "string"
+              },
+              "pingType": {
+                "enum": [
+                  "gateway",
+                  "edgemesh",
+                  "edge"
+                ],
+                "title": "pingtype",
+                "type": "string"
+              },
+              "virtualNetwork": {
+                "title": "virtualnetwork",
+                "type": "string"
+              },
+              "vlanID": {
+                "title": "vlanid",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "pingType"
+            ],
+            "title": "Specification",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
+          },
+          "status": {
+            "description": "EdgePingStatus defines the observed state of EdgePing",
+            "properties": {
+              "id": {
+                "description": "Id",
+                "title": "ID",
+                "type": "integer"
+              },
+              "result": {
+                "description": "Aggregate result of the Flow",
+                "title": "Result",
+                "type": "string"
+              }
+            },
+            "readOnly": true,
+            "title": "Status",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind",
+          "metadata",
+          "spec"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.services.v1alpha1.EdgePing_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "services.eda.nokia.com",
+                  "kind": "EdgePing",
                   "type": "label",
                   "version": "v1alpha1"
                 }
@@ -1911,10 +2417,10 @@
                     }
                   },
                   "minEchoReceiveInterval": {
-                    "default": 1000000,
+                    "default": 0,
                     "description": "The minimum interval between echo packets the local node can receive.",
                     "maximum": 100000000,
-                    "minimum": 250000,
+                    "minimum": 0,
                     "title": "Minimum Echo Receive Interval",
                     "type": "integer",
                     "x-eda-nokia-com": {
@@ -1937,6 +2443,18 @@
                       "ui-column-span": 1,
                       "ui-order-priority": 400,
                       "ui-single-line-group": "TransmitReceiveInterval",
+                      "ui-visible-if": "self.enabled === true"
+                    }
+                  },
+                  "ttl": {
+                    "description": "Sets custom IP TTL or Hop Limit for multi-hop BFD sessions packets. Not appllicable to single-hop BFD sessions.",
+                    "maximum": 255,
+                    "minimum": 2,
+                    "title": "IP TTL/Hop Limit",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 1,
+                      "ui-order-priority": 9000,
                       "ui-visible-if": "self.enabled === true"
                     }
                   }
@@ -2275,6 +2793,24 @@
                 "x-eda-nokia-com": {
                   "ui-column-span": 2,
                   "ui-order-priority": 200
+                }
+              },
+              "ipv4Parameters": {
+                "properties": {
+                  "directedBroadcast": {
+                    "description": "Allow receiving and forwarding of directed broadcast packets. Enabled when set to true.",
+                    "title": "Directed Broadcast",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 1,
+                      "ui-order-priority": 2000
+                    }
+                  }
+                },
+                "title": "IPv4-specific Parameters",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-order-priority": 1300
                 }
               },
               "ipv6RouterAdvertisement": {
@@ -2841,6 +3377,7 @@
       "com.nokia.eda.services.v1alpha1.IRBInterface_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -3034,10 +3571,10 @@
                     }
                   },
                   "minEchoReceiveInterval": {
-                    "default": 1000000,
+                    "default": 0,
                     "description": "The minimum interval between echo packets the local node can receive.",
                     "maximum": 100000000,
-                    "minimum": 250000,
+                    "minimum": 0,
                     "title": "Minimum Echo Receive Interval",
                     "type": "integer",
                     "x-eda-nokia-com": {
@@ -3060,6 +3597,18 @@
                       "ui-column-span": 1,
                       "ui-order-priority": 400,
                       "ui-single-line-group": "TransmitReceiveInterval",
+                      "ui-visible-if": "self.enabled === true"
+                    }
+                  },
+                  "ttl": {
+                    "description": "Sets custom IP TTL or Hop Limit for multi-hop BFD sessions packets. Not appllicable to single-hop BFD sessions.",
+                    "maximum": 255,
+                    "minimum": 2,
+                    "title": "IP TTL/Hop Limit",
+                    "type": "integer",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 1,
+                      "ui-order-priority": 9000,
                       "ui-visible-if": "self.enabled === true"
                     }
                   }
@@ -3250,6 +3799,24 @@
                 "x-eda-nokia-com": {
                   "ui-column-span": 4,
                   "ui-order-priority": 500
+                }
+              },
+              "ipv4Parameters": {
+                "properties": {
+                  "directedBroadcast": {
+                    "description": "Allow receiving and forwarding of directed broadcast packets. Enabled when set to true.",
+                    "title": "Directed Broadcast",
+                    "type": "boolean",
+                    "x-eda-nokia-com": {
+                      "ui-column-span": 1,
+                      "ui-order-priority": 2000
+                    }
+                  }
+                },
+                "title": "IPv4-specific Parameters",
+                "type": "object",
+                "x-eda-nokia-com": {
+                  "ui-order-priority": 1300
                 }
               },
               "ipv6Addresses": {
@@ -3752,6 +4319,7 @@
       "com.nokia.eda.services.v1alpha1.RoutedInterface_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -4608,6 +5176,7 @@
       "com.nokia.eda.services.v1alpha1.Router_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -5279,6 +5848,7 @@
       "com.nokia.eda.services.v1alpha1.VLAN_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -6315,10 +6885,10 @@
                               }
                             },
                             "minEchoReceiveInterval": {
-                              "default": 1000000,
+                              "default": 0,
                               "description": "The minimum interval between echo packets the local node can receive.",
                               "maximum": 100000000,
-                              "minimum": 250000,
+                              "minimum": 0,
                               "title": "Minimum Echo Receive Interval",
                               "type": "integer",
                               "x-eda-nokia-com": {
@@ -6341,6 +6911,18 @@
                                 "ui-column-span": 1,
                                 "ui-order-priority": 400,
                                 "ui-single-line-group": "TransmitReceiveInterval",
+                                "ui-visible-if": "self.enabled === true"
+                              }
+                            },
+                            "ttl": {
+                              "description": "Sets custom IP TTL or Hop Limit for multi-hop BFD sessions packets. Not appllicable to single-hop BFD sessions.",
+                              "maximum": 255,
+                              "minimum": 2,
+                              "title": "IP TTL/Hop Limit",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 1,
+                                "ui-order-priority": 9000,
                                 "ui-visible-if": "self.enabled === true"
                               }
                             }
@@ -6679,6 +7261,24 @@
                           "x-eda-nokia-com": {
                             "ui-column-span": 2,
                             "ui-order-priority": 200
+                          }
+                        },
+                        "ipv4Parameters": {
+                          "properties": {
+                            "directedBroadcast": {
+                              "description": "Allow receiving and forwarding of directed broadcast packets. Enabled when set to true.",
+                              "title": "Directed Broadcast",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 1,
+                                "ui-order-priority": 2000
+                              }
+                            }
+                          },
+                          "title": "IPv4-specific Parameters",
+                          "type": "object",
+                          "x-eda-nokia-com": {
+                            "ui-order-priority": 1300
                           }
                         },
                         "ipv6RouterAdvertisement": {
@@ -7378,8 +7978,7 @@
                                       "x-eda-nokia-com": {
                                         "ui-category": "BGP",
                                         "ui-column-span": 2,
-                                        "ui-order-priority": 600,
-                                        "ui-visible-if": "spec.bgp.enabled === true"
+                                        "ui-order-priority": 600
                                       }
                                     },
                                     "prependGlobalAS": {
@@ -7458,8 +8057,7 @@
                                       "x-eda-nokia-com": {
                                         "ui-category": "BGP",
                                         "ui-column-span": 2,
-                                        "ui-order-priority": 600,
-                                        "ui-visible-if": "spec.bgp.enabled === true"
+                                        "ui-order-priority": 600
                                       }
                                     }
                                   },
@@ -7972,8 +8570,7 @@
                                       "x-eda-nokia-com": {
                                         "ui-category": "BGP",
                                         "ui-column-span": 2,
-                                        "ui-order-priority": 600,
-                                        "ui-visible-if": "spec.bgp.enabled === true"
+                                        "ui-order-priority": 600
                                       }
                                     },
                                     "prependGlobalAS": {
@@ -8070,8 +8667,7 @@
                                       "x-eda-nokia-com": {
                                         "ui-category": "BGP",
                                         "ui-column-span": 2,
-                                        "ui-order-priority": 600,
-                                        "ui-visible-if": "spec.bgp.enabled === true"
+                                        "ui-order-priority": 600
                                       }
                                     }
                                   },
@@ -8314,6 +8910,58 @@
                                             "ui-single-line-group": "LocalPrefOrigin"
                                           }
                                         },
+                                        "med": {
+                                          "description": "Set a new MED value.",
+                                          "properties": {
+                                            "numericalValue": {
+                                              "description": "Fixed numerical value to set or add/subtract.",
+                                              "maximum": 4294967295,
+                                              "minimum": 0,
+                                              "title": "MED Value",
+                                              "type": "integer",
+                                              "x-eda-nokia-com": {
+                                                "ui-column-span": 2,
+                                                "ui-order-priority": 900,
+                                                "ui-visible-if": "self.valueType === \"Fixed\""
+                                              }
+                                            },
+                                            "operation": {
+                                              "description": "The operation to perform on the MED value.",
+                                              "enum": [
+                                                "Set",
+                                                "Add",
+                                                "Subtract"
+                                              ],
+                                              "title": "Operation",
+                                              "type": "string",
+                                              "x-eda-nokia-com": {
+                                                "ui-column-span": 1,
+                                                "ui-order-priority": 300,
+                                                "ui-single-line-group": "SetMED"
+                                              }
+                                            },
+                                            "valueType": {
+                                              "description": "Use a fixed value or an IGP metric to adjust the MED.",
+                                              "enum": [
+                                                "Fixed",
+                                                "IGP"
+                                              ],
+                                              "title": "Value Type",
+                                              "type": "string",
+                                              "x-eda-nokia-com": {
+                                                "ui-column-span": 1,
+                                                "ui-order-priority": 600,
+                                                "ui-single-line-group": "SetMED"
+                                              }
+                                            }
+                                          },
+                                          "title": "Set MED",
+                                          "type": "object",
+                                          "x-eda-nokia-com": {
+                                            "ui-order-priority": 2000,
+                                            "ui-presence-toggle": true
+                                          }
+                                        },
                                         "setOrigin": {
                                           "description": "Set a new ORIGIN attribute for matching BGP routes.",
                                           "enum": [
@@ -8415,6 +9063,58 @@
                                                   "ui-single-line-group": "LocalPrefOrigin"
                                                 }
                                               },
+                                              "med": {
+                                                "description": "Set a new MED value.",
+                                                "properties": {
+                                                  "numericalValue": {
+                                                    "description": "Fixed numerical value to set or add/subtract.",
+                                                    "maximum": 4294967295,
+                                                    "minimum": 0,
+                                                    "title": "MED Value",
+                                                    "type": "integer",
+                                                    "x-eda-nokia-com": {
+                                                      "ui-column-span": 2,
+                                                      "ui-order-priority": 900,
+                                                      "ui-visible-if": "self.valueType === \"Fixed\""
+                                                    }
+                                                  },
+                                                  "operation": {
+                                                    "description": "The operation to perform on the MED value.",
+                                                    "enum": [
+                                                      "Set",
+                                                      "Add",
+                                                      "Subtract"
+                                                    ],
+                                                    "title": "Operation",
+                                                    "type": "string",
+                                                    "x-eda-nokia-com": {
+                                                      "ui-column-span": 1,
+                                                      "ui-order-priority": 300,
+                                                      "ui-single-line-group": "SetMED"
+                                                    }
+                                                  },
+                                                  "valueType": {
+                                                    "description": "Use a fixed value or an IGP metric to adjust the MED.",
+                                                    "enum": [
+                                                      "Fixed",
+                                                      "IGP"
+                                                    ],
+                                                    "title": "Value Type",
+                                                    "type": "string",
+                                                    "x-eda-nokia-com": {
+                                                      "ui-column-span": 1,
+                                                      "ui-order-priority": 600,
+                                                      "ui-single-line-group": "SetMED"
+                                                    }
+                                                  }
+                                                },
+                                                "title": "Set MED",
+                                                "type": "object",
+                                                "x-eda-nokia-com": {
+                                                  "ui-order-priority": 2000,
+                                                  "ui-presence-toggle": true
+                                                }
+                                              },
                                               "setOrigin": {
                                                 "description": "Set a new ORIGIN attribute for matching BGP routes.",
                                                 "enum": [
@@ -8462,6 +9162,59 @@
                                           "bgp": {
                                             "description": "Configuration for BGP-specific policy match criteria.",
                                             "properties": {
+                                              "asPathMatch": {
+                                                "description": "AS Path match criteria.",
+                                                "properties": {
+                                                  "asPathExpression": {
+                                                    "description": "A singular regular expression string to match against AS_PATH objects. Mutually exclusive with the ASPathSet reference.",
+                                                    "title": "AS Path Expression",
+                                                    "type": "string",
+                                                    "x-eda-nokia-com": {
+                                                      "ui-column-span": 4,
+                                                      "ui-order-priority": 200
+                                                    }
+                                                  },
+                                                  "asPathSet": {
+                                                    "description": "Reference to an ASPathSet resource. Mutually exclusive with the ASPathExpression.",
+                                                    "title": "AS Path Set",
+                                                    "type": "string",
+                                                    "x-eda-nokia-com": {
+                                                      "ui-auto-completes": [
+                                                        {
+                                                          "condition": "true",
+                                                          "group": "routingpolicies.eda.nokia.com",
+                                                          "resource": "aspathsets",
+                                                          "type": "gvr",
+                                                          "version": "v1alpha1"
+                                                        }
+                                                      ],
+                                                      "ui-column-span": 2,
+                                                      "ui-order-priority": 400,
+                                                      "ui-single-line-group": "ASPathMatch"
+                                                    }
+                                                  },
+                                                  "matchSetOptions": {
+                                                    "description": "The matching criteria that applies to the members in the referenced set.",
+                                                    "enum": [
+                                                      "Any",
+                                                      "All",
+                                                      "Invert"
+                                                    ],
+                                                    "title": "Match Set Options",
+                                                    "type": "string",
+                                                    "x-eda-nokia-com": {
+                                                      "ui-column-span": 1,
+                                                      "ui-order-priority": 800,
+                                                      "ui-single-line-group": "ASPathMatch"
+                                                    }
+                                                  }
+                                                },
+                                                "title": "AS Path",
+                                                "type": "object",
+                                                "x-eda-nokia-com": {
+                                                  "ui-order-priority": 800
+                                                }
+                                              },
                                               "communitySet": {
                                                 "description": "Match conditions for BGP communities.",
                                                 "title": "BGP Community",
@@ -8769,8 +9522,20 @@
                                   "title": "Blackhole",
                                   "type": "boolean",
                                   "x-eda-nokia-com": {
-                                    "ui-column-span": 2,
-                                    "ui-order-priority": 400
+                                    "ui-column-span": 1,
+                                    "ui-order-priority": 400,
+                                    "ui-single-line-group": "Blackhole"
+                                  }
+                                },
+                                "blackholeSendICMP": {
+                                  "description": "When enabled, the router will generate ICMP Unreachable messages for packets destined to the blackhole route.",
+                                  "title": "Blackhole ICMP Generation",
+                                  "type": "boolean",
+                                  "x-eda-nokia-com": {
+                                    "ui-column-span": 1,
+                                    "ui-order-priority": 400,
+                                    "ui-single-line-group": "Blackhole",
+                                    "ui-visible-if": "self.blackhole === true"
                                   }
                                 },
                                 "nexthops": {
@@ -9026,10 +9791,10 @@
                               }
                             },
                             "minEchoReceiveInterval": {
-                              "default": 1000000,
+                              "default": 0,
                               "description": "The minimum interval between echo packets the local node can receive.",
                               "maximum": 100000000,
-                              "minimum": 250000,
+                              "minimum": 0,
                               "title": "Minimum Echo Receive Interval",
                               "type": "integer",
                               "x-eda-nokia-com": {
@@ -9052,6 +9817,18 @@
                                 "ui-column-span": 1,
                                 "ui-order-priority": 400,
                                 "ui-single-line-group": "TransmitReceiveInterval",
+                                "ui-visible-if": "self.enabled === true"
+                              }
+                            },
+                            "ttl": {
+                              "description": "Sets custom IP TTL or Hop Limit for multi-hop BFD sessions packets. Not appllicable to single-hop BFD sessions.",
+                              "maximum": 255,
+                              "minimum": 2,
+                              "title": "IP TTL/Hop Limit",
+                              "type": "integer",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 1,
+                                "ui-order-priority": 9000,
                                 "ui-visible-if": "self.enabled === true"
                               }
                             }
@@ -9242,6 +10019,24 @@
                           "x-eda-nokia-com": {
                             "ui-column-span": 4,
                             "ui-order-priority": 500
+                          }
+                        },
+                        "ipv4Parameters": {
+                          "properties": {
+                            "directedBroadcast": {
+                              "description": "Allow receiving and forwarding of directed broadcast packets. Enabled when set to true.",
+                              "title": "Directed Broadcast",
+                              "type": "boolean",
+                              "x-eda-nokia-com": {
+                                "ui-column-span": 1,
+                                "ui-order-priority": 2000
+                              }
+                            }
+                          },
+                          "title": "IPv4-specific Parameters",
+                          "type": "object",
+                          "x-eda-nokia-com": {
+                            "ui-order-priority": 1300
                           }
                         },
                         "ipv6Addresses": {
@@ -10762,6 +11557,7 @@
       "com.nokia.eda.services.v1alpha1.VirtualNetwork_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -10998,7 +11794,7 @@
     },
     "/apps/services.eda.nokia.com/v1alpha1/bridgedomains": {
       "get": {
-        "description": "list bridgedomains",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Bridgedomains",
         "parameters": [
           {
@@ -11021,6 +11817,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -11048,6 +11860,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list bridgedomains",
         "tags": [
           "apps"
         ]
@@ -11055,7 +11868,7 @@
     },
     "/apps/services.eda.nokia.com/v1alpha1/bridgeinterfaces": {
       "get": {
-        "description": "list bridgeinterfaces",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Bridgeinterfaces",
         "parameters": [
           {
@@ -11078,6 +11891,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -11105,6 +11934,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list bridgeinterfaces",
         "tags": [
           "apps"
         ]
@@ -11112,7 +11942,7 @@
     },
     "/apps/services.eda.nokia.com/v1alpha1/dhcprelays": {
       "get": {
-        "description": "list dhcprelays",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Dhcprelays",
         "parameters": [
           {
@@ -11135,6 +11965,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -11162,6 +12008,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list dhcprelays",
         "tags": [
           "apps"
         ]
@@ -11169,7 +12016,7 @@
     },
     "/apps/services.eda.nokia.com/v1alpha1/irbinterfaces": {
       "get": {
-        "description": "list irbinterfaces",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Irbinterfaces",
         "parameters": [
           {
@@ -11192,6 +12039,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -11219,6 +12082,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list irbinterfaces",
         "tags": [
           "apps"
         ]
@@ -11274,7 +12138,7 @@
         ]
       },
       "get": {
-        "description": "list bridgedomains in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceBridgedomains",
         "parameters": [
           {
@@ -11309,6 +12173,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -11333,6 +12213,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list bridgedomains in namespace",
         "tags": [
           "apps"
         ]
@@ -11396,6 +12277,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -11719,6 +12616,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -11746,6 +12644,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced BridgeDomain.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/bridgedomains/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceBridgedomains",
+        "parameters": [
+          {
+            "description": "name of the BridgeDomain to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced BridgeDomain.",
         "tags": [
           "apps"
         ]
@@ -11801,7 +12790,7 @@
         ]
       },
       "get": {
-        "description": "list bridgeinterfaces in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceBridgeinterfaces",
         "parameters": [
           {
@@ -11836,6 +12825,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -11860,6 +12865,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list bridgeinterfaces in namespace",
         "tags": [
           "apps"
         ]
@@ -11923,6 +12929,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -12246,6 +13268,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -12273,6 +13296,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced BridgeInterface.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/bridgeinterfaces/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceBridgeinterfaces",
+        "parameters": [
+          {
+            "description": "name of the BridgeInterface to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced BridgeInterface.",
         "tags": [
           "apps"
         ]
@@ -12328,7 +13442,7 @@
         ]
       },
       "get": {
-        "description": "list dhcprelays in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceDhcprelays",
         "parameters": [
           {
@@ -12363,6 +13477,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -12387,6 +13517,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list dhcprelays in namespace",
         "tags": [
           "apps"
         ]
@@ -12450,6 +13581,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -12773,6 +13920,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -12800,6 +13948,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced DHCPRelay.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/dhcprelays/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceDhcprelays",
+        "parameters": [
+          {
+            "description": "name of the DHCPRelay to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced DHCPRelay.",
         "tags": [
           "apps"
         ]
@@ -12855,7 +14094,7 @@
         ]
       },
       "get": {
-        "description": "list irbinterfaces in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceIrbinterfaces",
         "parameters": [
           {
@@ -12890,6 +14129,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -12914,6 +14169,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list irbinterfaces in namespace",
         "tags": [
           "apps"
         ]
@@ -12977,6 +14233,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -13300,6 +14572,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -13327,6 +14600,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced IRBInterface.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/irbinterfaces/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceIrbinterfaces",
+        "parameters": [
+          {
+            "description": "name of the IRBInterface to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced IRBInterface.",
         "tags": [
           "apps"
         ]
@@ -13382,7 +14746,7 @@
         ]
       },
       "get": {
-        "description": "list routedinterfaces in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceRoutedinterfaces",
         "parameters": [
           {
@@ -13417,6 +14781,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -13441,6 +14821,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list routedinterfaces in namespace",
         "tags": [
           "apps"
         ]
@@ -13504,6 +14885,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -13827,6 +15224,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -13854,6 +15252,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced RoutedInterface.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/routedinterfaces/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceRoutedinterfaces",
+        "parameters": [
+          {
+            "description": "name of the RoutedInterface to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced RoutedInterface.",
         "tags": [
           "apps"
         ]
@@ -13909,7 +15398,7 @@
         ]
       },
       "get": {
-        "description": "list routers in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceRouters",
         "parameters": [
           {
@@ -13944,6 +15433,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -13968,6 +15473,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list routers in namespace",
         "tags": [
           "apps"
         ]
@@ -14031,6 +15537,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -14354,6 +15876,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -14381,6 +15904,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced Router.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/routers/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceRouters",
+        "parameters": [
+          {
+            "description": "name of the Router to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced Router.",
         "tags": [
           "apps"
         ]
@@ -14436,7 +16050,7 @@
         ]
       },
       "get": {
-        "description": "list virtualnetworks in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceVirtualnetworks",
         "parameters": [
           {
@@ -14471,6 +16085,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -14495,6 +16125,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list virtualnetworks in namespace",
         "tags": [
           "apps"
         ]
@@ -14558,6 +16189,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -14881,6 +16528,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -14908,6 +16556,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced VirtualNetwork.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/virtualnetworks/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceVirtualnetworks",
+        "parameters": [
+          {
+            "description": "name of the VirtualNetwork to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced VirtualNetwork.",
         "tags": [
           "apps"
         ]
@@ -14963,7 +16702,7 @@
         ]
       },
       "get": {
-        "description": "list vlans in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1NamespaceVlans",
         "parameters": [
           {
@@ -14998,6 +16737,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -15022,6 +16777,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list vlans in namespace",
         "tags": [
           "apps"
         ]
@@ -15085,6 +16841,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -15408,6 +17180,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -15440,9 +17213,100 @@
         ]
       }
     },
+    "/apps/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/vlans/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyServicesEdaNokiaComV1alpha1NamespaceVlans",
+        "parameters": [
+          {
+            "description": "name of the VLAN to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced VLAN.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/services.eda.nokia.com/v1alpha1/routedinterfaces": {
       "get": {
-        "description": "list routedinterfaces",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Routedinterfaces",
         "parameters": [
           {
@@ -15465,6 +17329,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -15492,6 +17372,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list routedinterfaces",
         "tags": [
           "apps"
         ]
@@ -15499,7 +17380,7 @@
     },
     "/apps/services.eda.nokia.com/v1alpha1/routers": {
       "get": {
-        "description": "list routers",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Routers",
         "parameters": [
           {
@@ -15522,6 +17403,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -15549,6 +17446,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list routers",
         "tags": [
           "apps"
         ]
@@ -15556,7 +17454,7 @@
     },
     "/apps/services.eda.nokia.com/v1alpha1/virtualnetworks": {
       "get": {
-        "description": "list virtualnetworks",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Virtualnetworks",
         "parameters": [
           {
@@ -15579,6 +17477,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -15606,6 +17520,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list virtualnetworks",
         "tags": [
           "apps"
         ]
@@ -15613,7 +17528,7 @@
     },
     "/apps/services.eda.nokia.com/v1alpha1/vlans": {
       "get": {
-        "description": "list vlans",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listServicesEdaNokiaComV1alpha1Vlans",
         "parameters": [
           {
@@ -15636,6 +17551,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -15663,8 +17594,61 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list vlans",
         "tags": [
           "apps"
+        ]
+      }
+    },
+    "/workflows/v1/services.eda.nokia.com/v1alpha1/namespaces/{namespace}/edgepings": {
+      "post": {
+        "description": "create a EdgePing",
+        "operationId": "createServicesEdaNokiaComV1alpha1NamespaceEdgepings",
+        "parameters": [
+          {
+            "description": "the namespace scope in which to create the EdgePing",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.nokia.eda.services.v1alpha1.EdgePing"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowId"
+                }
+              }
+            },
+            "description": "The response for a successful POST workflows request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "workflows"
         ]
       }
     }

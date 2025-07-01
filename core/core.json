@@ -377,7 +377,7 @@
     },
     "/core/admin/federationprovidertest": {
       "post": {
-        "description": "This endpoint instructs the keycloak server to test a federation provider\non behalf of the requesting user.",
+        "description": "This endpoint instructs the keycloak server to test a federation provider\non behalf of the requesting user.  If the \"name\" in the test parameters\nis provided by the user for an authentication test, a provider by that\nname must exist, and the bind credential (password) saved in that\nprovider will be used for the test.  Otherwise, the bind credential\nmust be provided in the test parameters.",
         "operationId": "adminTestProvider",
         "requestBody": {
           "content": {
@@ -1912,9 +1912,17 @@
         ]
       },
       "get": {
-        "description": "Gets all alarms including namespaced alarms from all namespaces and all non-namespaced\nalarms.  This API can get a snapshot of the alarms, or can return a\nstream of the alarms and the changes to them. The API does not provide\nsuppressed alarms by default, but the suppressed alarms will be included if\nthe \"all\" query parameter is set to \"true\".",
+        "description": "This API can get a snapshot of the alarms, or can return a stream of the alarms and the changes to them.\nThe API does not provide suppressed alarms by default, but the suppressed alarms will be included if the \"all\" query parameter is set to \"true\".\nThe alarm fields returned can optionally be specified using the \"fields\" query parameter.\nThe alarm namespace and name fields are never filtered.\nThe set of alarms returned can be filtered by providing the \"filter\" query parameter.",
         "operationId": "alarmGetAlarms",
         "parameters": [
+          {
+            "description": "requests all alarms; the default is to filter-out suppressed alarms.\nValue must be \"true\" to get all alarms.",
+            "in": "query",
+            "name": "all",
+            "schema": {
+              "type": "boolean"
+            }
+          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -1927,6 +1935,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of alarm fields to fetch/return.  If unspecified, all fields are fetched.  If an empty list, only the alarm name and namespace will be returned.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EDA-query-language \"where\" expression that will be used to filter the list of alarms fetched.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -1960,6 +1984,7 @@
             "description": "ErrorResponse"
           }
         },
+        "summary": "Gets all alarms including namespaced alarms from all namespaces and all non-namespaced alarms.",
         "tags": [
           "coreAlarms"
         ]
@@ -2063,7 +2088,7 @@
         ]
       },
       "get": {
-        "description": "This API can get a snapshot of the alarm, or a stream of changes to that alarm.\nThe suppression state of the alarm is irrelevant.",
+        "description": "This API can get a snapshot of the alarm, or a stream of changes to that alarm.\nThe API does not provide information about a suppressed alarm by default, but the suppressed alarm will be included if the \"all\" query parameter is set to \"true\".",
         "operationId": "alarmGetAlarm",
         "parameters": [
           {
@@ -2073,6 +2098,14 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "description": "requests all alarms; the default is to filter-out suppressed alarms.\nValue must be \"true\" to get information about a suppressed alarm.",
+            "in": "query",
+            "name": "all",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -2246,80 +2279,6 @@
         ]
       }
     },
-    "/core/alarm/v2/namespaces/{nsName}/alarm/{alarm-name}/history": {
-      "get": {
-        "description": "and if requested the history of the alarm will be streamed back on the provided stream,\nincluding any subsequent changes.  If not using streaming, a snapshot of the history\nwill be returned.",
-        "operationId": "alarmGetNamespaceAlarmHistory",
-        "parameters": [
-          {
-            "description": "the name of the namespace for the alarm",
-            "in": "path",
-            "name": "nsName",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the alarm whose history should be retrieved.",
-            "in": "path",
-            "name": "alarm-name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "client information for streaming request",
-            "in": "query",
-            "name": "eventclient",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "stream information for streaming request",
-            "in": "query",
-            "name": "stream",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/AlarmHistoryData"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "The response for a successful non-streaming GET alarm history request."
-          },
-          "204": {
-            "description": "no data is returned for this response type."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "ErrorResponse"
-          }
-        },
-        "summary": "Gets the history of the specified alarm in a namespace.  This API supports streaming,",
-        "tags": [
-          "coreAlarms"
-        ]
-      }
-    },
     "/core/alarm/v2/namespaces/{nsName}/alarms": {
       "delete": {
         "description": "Deletes all the alarms named in the JSON string array in the body.  All alarms acted\non must be within a single namespace.  It is possible for some deletes on alarms to have\nbeen successful and other deletes to have failed if an error is returned.",
@@ -2369,7 +2328,7 @@
         ]
       },
       "get": {
-        "description": "Gets all alarms from a specific namespace.  This API can get a snapshot of the\nalarms, or can return a stream of the alarms and the changes to them. The API does\nnot provide suppressed alarms by default, but the suppressed alarms will be included if\nthe \"all\" query parameter is set to \"true\".",
+        "description": "This API can get a snapshot of the alarms, or can return a stream of the alarms and the changes to them.\nThe API does not provide suppressed alarms by default, but the suppressed alarms will be included if the \"all\" query parameter is set to \"true\".\nThe alarm fields returned can optionally be specified using the \"fields\" query parameter.\nThe alarm namespace and name fields are never filtered.\nThe set of alarms returned can be filtered by providing the \"filter\" query parameter.",
         "operationId": "alarmGetNamespaceAlarms",
         "parameters": [
           {
@@ -2378,7 +2337,7 @@
             "name": "nsName",
             "required": true,
             "schema": {
-              "type": "boolean"
+              "type": "string"
             }
           },
           {
@@ -2401,6 +2360,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of alarm fields to fetch/return.  If unspecified, all fields are fetched.  If an empty list, only the alarm name and namespace will be returned.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EDA-query-language \"where\" expression that will be used to filter the list of alarms fetched.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -2434,6 +2409,7 @@
             "description": "ErrorResponse"
           }
         },
+        "summary": "Gets all alarms from a specific namespace.",
         "tags": [
           "coreAlarms"
         ]
@@ -2555,7 +2531,7 @@
         ]
       },
       "get": {
-        "description": "This API can get a snapshot of the alarm, or a stream of changes to that alarm.\nThe suppression state of the alarm is irrelevant.",
+        "description": "This API can get a snapshot of the alarm, or a stream of changes to that alarm.\nThe API does not provide information about a suppressed alarm by default, but the suppressed alarm will be included if the \"all\" query parameter is set to \"true\".",
         "operationId": "alarmGetNamespaceAlarm",
         "parameters": [
           {
@@ -2564,7 +2540,7 @@
             "name": "nsName",
             "required": true,
             "schema": {
-              "type": "boolean"
+              "type": "string"
             }
           },
           {
@@ -2577,7 +2553,7 @@
             }
           },
           {
-            "description": "requests all alarms; the default is to filter-out suppressed alarms.\nValue must be \"true\" to get all alarms.",
+            "description": "requests all alarms; the default is to filter-out suppressed alarms.\nValue must be \"true\" to get information about a suppressed alarm.",
             "in": "query",
             "name": "all",
             "schema": {
@@ -2699,177 +2675,31 @@
         ]
       }
     },
-    "/core/alltransaction/v1/details/{transactionId}": {
+    "/core/alarm/v2/namespaces/{nsName}/alarms/{alarm-name}/history": {
       "get": {
-        "operationId": "transGetAllDetails",
+        "description": "and if requested the history of the alarm will be streamed back on the provided stream,\nincluding any subsequent changes.  If not using streaming, a snapshot of the history\nwill be returned.",
+        "operationId": "alarmGetNamespaceAlarmHistory",
         "parameters": [
           {
-            "description": "The identifier for the transaction whose details are being requested",
+            "description": "the name of the namespace for the alarm",
             "in": "path",
-            "name": "transactionId",
+            "name": "nsName",
             "required": true,
             "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Flag for the request to wait until the transaction is complete before returning.  By default it returns the current state.",
-            "in": "query",
-            "name": "waitForComplete",
-            "schema": {
               "type": "string"
             }
           },
           {
-            "description": "Flag to tell the request to fail if the transaction has errors.  By default it will not fail.",
-            "in": "query",
-            "name": "failOnErrors",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionDetails"
-                }
-              }
-            },
-            "description": "The response for a successful GET transaction-details request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Gets the details of a posted transaction for any user.",
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/alltransaction/v1/diffs/{transactionId}": {
-      "get": {
-        "operationId": "transGetAllDiffs",
-        "parameters": [
-          {
-            "description": "The identifier for the transaction whose configuration record diffs are being requested",
+            "description": "name of the alarm whose history should be retrieved.",
             "in": "path",
-            "name": "transactionId",
-            "required": true,
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Group information for the configuration record diffs being requested",
-            "in": "query",
-            "name": "group",
+            "name": "alarm-name",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "description": "Version information for the configuration record diffs being requested.  Group is\nrequired if nodeCfg is not provided",
-            "in": "query",
-            "name": "version",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "kind information for the configuration record diffs being requested.  Version is\nrequired if nodeCfg is not provided",
-            "in": "query",
-            "name": "kind",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Name information for the configuration record diffs being requested.  Name is required\nif nodeCfg is not provided",
-            "in": "query",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Name of the node for the configuration diff being requested",
-            "in": "query",
-            "name": "nodeCfg",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Namespace information for the configuration record diffs being requested.  Namespace is\nrequired",
-            "in": "query",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResultObject"
-                }
-              }
-            },
-            "description": "The response for a successful GET transaction-diffs request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Gets the diff view of the configuration records in a posted transaction for any user, or the diff view of a node configuration.",
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/alltransaction/v1/resultsummary": {
-      "get": {
-        "description": "Gets summarized results of transactions for all users.  These results can be streamed back to the requestor if\nthe appropriate streaming parameters are supplied.",
-        "operationId": "transGetAllSummaryResult",
-        "parameters": [
-          {
-            "description": "Maximum number of transaction results to return",
-            "in": "query",
-            "name": "size",
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Client information for streaming request",
+            "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
             "schema": {
@@ -2877,7 +2707,7 @@
             }
           },
           {
-            "description": "Stream information for streaming request",
+            "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
             "schema": {
@@ -2890,11 +2720,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TransactionSummaryResults"
+                  "items": {
+                    "$ref": "#/components/schemas/AlarmHistoryData"
+                  },
+                  "type": "array"
                 }
               }
             },
-            "description": "The response for a successful GET transaction-result-summary-list request."
+            "description": "The response for a successful non-streaming GET alarm history request."
+          },
+          "204": {
+            "description": "no data is returned for this response type."
           },
           "default": {
             "content": {
@@ -2904,70 +2740,12 @@
                 }
               }
             },
-            "description": "Details of an error in response to an API REST request."
+            "description": "ErrorResponse"
           }
         },
+        "summary": "Gets the history of the specified alarm in a namespace.  This API supports streaming,",
         "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/alltransaction/v1/state/{transactionId}": {
-      "get": {
-        "description": "Gets the state of a posted transaction ignoring the user that intiated the transaction.  State changes for the transaction\ncan be streamed back to the requestor if the appropriate streaming parameters are supplied.",
-        "operationId": "transGetAllState",
-        "parameters": [
-          {
-            "description": "The identifier for the transaction whose state is being requested",
-            "in": "path",
-            "name": "transactionId",
-            "required": true,
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Client information for streaming request",
-            "in": "query",
-            "name": "eventclient",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Stream information for streaming request",
-            "in": "query",
-            "name": "stream",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionState"
-                }
-              }
-            },
-            "description": "The response for a successful GET transaction-state request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "tags": [
-          "coreTransaction"
+          "coreAlarms"
         ]
       }
     },
@@ -3066,7 +2844,7 @@
     },
     "/core/query/v1": {
       "get": {
-        "description": "Streaming is mandatory for this API.\nWhenever the information described by the query parameter changes,\nthe result of the query will be sent to the requestor/client via the specified stream.\nNote that if the namespaces argument is not provided, the user must have cluster role\npermission to access the table specified in the query.  If one or more namespaces\nare supplied, the user must have cluster role permission, or role permission (in all\nthe specified namespaces) to access the table specified in the query.",
+        "description": "Streaming API:\nInitiate a streaming query request using the EDA query language.\n\nNon Streaming API:\nREST endpoint supporting one-shot queries.\n\nWhenever the information described by the query parameter changes,\nthe result of the query will be sent to the requestor/client via the specified stream.\nNote that if the namespaces argument is not provided, the user must have cluster role\npermission to access the table specified in the query. If one or more namespaces\nare supplied, the user must have cluster role permission, or role permission (in all\nthe specified namespaces) to access the table specified in the query.",
         "operationId": "queryGetQuery",
         "parameters": [
           {
@@ -3090,7 +2868,6 @@
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3099,7 +2876,6 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3110,11 +2886,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StreamResult"
+                  "$ref": "#/components/schemas/QueryResponse"
                 }
               }
             },
-            "description": "The response for a streaming GET request."
+            "description": "The response returned for a non-streamed query."
           },
           "default": {
             "content": {
@@ -3127,7 +2903,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Initiate a streaming query request using the EDA query language.",
+        "summary": "Query request using the EDA query language",
         "tags": [
           "coreQuery"
         ]
@@ -3135,7 +2911,7 @@
     },
     "/core/query/v1/eql": {
       "get": {
-        "description": "Streaming is mandatory for this API.\nWhenever the information described by the query parameter changes,\nthe result of the query will be sent to the requestor/client via the specified stream.",
+        "description": "Streaming API:\nInitiate a streaming query request using the EDA query language.\n\nNon Streaming API:\nREST endpoint supporting one-shot queries.\n\nWhenever the information described by the query parameter changes,\nthe result of the query will be sent to the requestor/client via the specified stream.",
         "operationId": "queryGetEqlQuery",
         "parameters": [
           {
@@ -3159,7 +2935,6 @@
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3168,7 +2943,6 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3179,11 +2953,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StreamResult"
+                  "$ref": "#/components/schemas/QueryResponse"
                 }
               }
             },
-            "description": "The response for a streaming GET request."
+            "description": "The response returned for a non-streamed query."
           },
           "default": {
             "content": {
@@ -3196,7 +2970,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Initiate a streaming query request using the EDA query language.",
+        "summary": "Query request using the EDA query language",
         "tags": [
           "coreQuery"
         ]
@@ -3256,7 +3030,7 @@
     },
     "/core/query/v1/nql": {
       "get": {
-        "description": "Streaming is mandatory for this API.\nWhenever the information described by the query parameter changes,\nthe result of the query will be sent to the requestor/client via the specified stream.\nNote that if the namespaces argument is not provided, the user must have cluster role\npermission to access the table specified in the query.  If one or more namespaces\nare supplied, the user must have cluster role permission, or role permission (in all\nthe specified namespaces) to access the table specified in the query.",
+        "description": "Streaming API:\nInitiate a streaming query request using the 'natural' query language.\n\nNon Streaming API:\nREST endpoint supporting one-shot queries.\n\nWhenever the information described by the query parameter changes,\nthe result of the query will be sent to the requestor/client via the specified stream.\nNote that if the namespaces argument is not provided, the user must have cluster role\npermission to access the table specified in the query. If one or more namespaces\nare supplied, the user must have cluster role permission, or role permission (in all\nthe specified namespaces) to access the table specified in the query.",
         "operationId": "queryGetNqlQuery",
         "parameters": [
           {
@@ -3280,7 +3054,6 @@
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3289,7 +3062,6 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3300,11 +3072,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StreamResult"
+                  "$ref": "#/components/schemas/QueryResponse"
                 }
               }
             },
-            "description": "The response for a streaming GET request."
+            "description": "The response returned for a non-streamed query."
           },
           "default": {
             "content": {
@@ -3317,7 +3089,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Initiate a streaming query request using the 'natural' query language.",
+        "summary": "Query request using the 'natural' query language",
         "tags": [
           "coreQuery"
         ]
@@ -3602,7 +3374,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TopologyState"
+                  "$ref": "#/components/schemas/OverlayState"
                 }
               }
             },
@@ -3621,395 +3393,6 @@
         },
         "tags": [
           "coreTopology"
-        ]
-      }
-    },
-    "/core/transaction/v1": {
-      "post": {
-        "operationId": "transPostTransactionV1",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionId"
-                }
-              }
-            },
-            "description": "The response for a successful POST transaction request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Runs a transaction.",
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/transaction/v1/details/{transactionId}": {
-      "get": {
-        "operationId": "transGetDetails",
-        "parameters": [
-          {
-            "description": "The identifier for the transaction whose details are being requested",
-            "in": "path",
-            "name": "transactionId",
-            "required": true,
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Flag for the request to wait until the transaction is complete before returning.  By default it returns the current state.",
-            "in": "query",
-            "name": "waitForComplete",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Flag to tell the request to fail if the transaction has errors.  By default it will not fail.",
-            "in": "query",
-            "name": "failOnErrors",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionDetails"
-                }
-              }
-            },
-            "description": "The response for a successful GET transaction-details request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Gets the details of a posted transaction for a user.",
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/transaction/v1/diffs/{transactionId}": {
-      "get": {
-        "operationId": "transGetDiffs",
-        "parameters": [
-          {
-            "description": "The identifier for the transaction whose configuration record diffs are being requested",
-            "in": "path",
-            "name": "transactionId",
-            "required": true,
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Group information for the configuration record diffs being requested",
-            "in": "query",
-            "name": "group",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Version information for the configuration record diffs being requested.  Group is\nrequired if nodeCfg is not provided",
-            "in": "query",
-            "name": "version",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "kind information for the configuration record diffs being requested.  Version is\nrequired if nodeCfg is not provided",
-            "in": "query",
-            "name": "kind",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Name information for the configuration record diffs being requested.  Name is required\nif nodeCfg is not provided",
-            "in": "query",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Name of the node for the configuration diff being requested",
-            "in": "query",
-            "name": "nodeCfg",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Namespace information for the configuration record diffs being requested.  Namespace is\nrequired",
-            "in": "query",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResultObject"
-                }
-              }
-            },
-            "description": "The response for a successful GET transaction-diffs request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Gets the diff view of the configuration records in a posted transaction for the user, or the diff view of a node configuration.",
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/transaction/v1/restore/{transactionId}": {
-      "post": {
-        "operationId": "transRestoreTransactionV1",
-        "parameters": [
-          {
-            "description": "The identifier for the transaction being reverted or restored.",
-            "in": "path",
-            "name": "transactionId",
-            "required": true,
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionId"
-                }
-              }
-            },
-            "description": "The identifier for the transaction ID used to restore to the state of the specified transaction."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Restores the configuration of the system to the state at the time of the transaction identified by the specified transaction id.",
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/transaction/v1/resultsummary": {
-      "get": {
-        "description": "Gets summarized results of transactions run by the user.  These results can be streamed back to the requestor if\nthe appropriate streaming parameters are supplied.",
-        "operationId": "transGetSummaryResultV1",
-        "parameters": [
-          {
-            "description": "Maximum number of transaction results to return",
-            "in": "query",
-            "name": "size",
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Client information for streaming request",
-            "in": "query",
-            "name": "eventclient",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Stream information for streaming request",
-            "in": "query",
-            "name": "stream",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionSummaryResults"
-                }
-              }
-            },
-            "description": "The response for a successful GET transaction-result-summary-list request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/transaction/v1/revert/{transactionId}": {
-      "post": {
-        "operationId": "transRevertTransactionV1",
-        "parameters": [
-          {
-            "description": "The identifier for the transaction being reverted or restored.",
-            "in": "path",
-            "name": "transactionId",
-            "required": true,
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionId"
-                }
-              }
-            },
-            "description": "The identifier for the transaction ID used to revert the transaction."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "summary": "Reverts the transaction identified by the transaction id.",
-        "tags": [
-          "coreTransaction"
-        ]
-      }
-    },
-    "/core/transaction/v1/state/{transactionId}": {
-      "get": {
-        "description": "Gets the state of a posted transaction.  State changes for the transaction can be streamed back to the\nrequestor if the appropriate streaming parameters are supplied.",
-        "operationId": "transGetStateForUser",
-        "parameters": [
-          {
-            "description": "The identifier for the transaction whose state is being requested",
-            "in": "path",
-            "name": "transactionId",
-            "required": true,
-            "schema": {
-              "format": "uint64",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Client information for streaming request",
-            "in": "query",
-            "name": "eventclient",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Stream information for streaming request",
-            "in": "query",
-            "name": "stream",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionState"
-                }
-              }
-            },
-            "description": "The response for a successful GET transaction-state request."
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Details of an error in response to an API REST request."
-          }
-        },
-        "tags": [
-          "coreTransaction"
         ]
       }
     },
@@ -4460,6 +3843,49 @@
         ]
       }
     },
+    "/core/transaction/v2/result/topology/{transactionId}": {
+      "get": {
+        "operationId": "transGetResultTopology",
+        "parameters": [
+          {
+            "description": "The identifier for the transaction whose topology is being requested",
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uint64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionTopologyResult"
+                }
+              }
+            },
+            "description": "The response for a successful GET transaction-result-topology request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets a topology of a posted transaction.",
+        "tags": [
+          "coreTransaction"
+        ]
+      }
+    },
     "/core/transaction/v2/revert/{transactionId}": {
       "post": {
         "operationId": "transRevertTransaction",
@@ -4576,7 +4002,7 @@
               }
             }
           },
-          "description": "The CR to validate",
+          "description": "The CRs to validate",
           "required": true
         },
         "responses": {
@@ -5305,7 +4731,7 @@
                 }
               }
             },
-            "description": "The response for a successful POST workflow request."
+            "description": "The response for a successful POST workflows request."
           },
           "default": {
             "content": {
@@ -5621,7 +5047,7 @@
             "type": "integer"
           },
           "parentAlarms": {
-            "description": "The names of other alarms that is are parents of this alarm. This is used to\nfilter out alarms that are not a root cause.",
+            "description": "The names of other alarms that are parents of this alarm. This may be used to\nfilter out alarms that are not a root cause.",
             "items": {
               "type": "string"
             },
@@ -5905,6 +5331,9 @@
             "type": "integer",
             "x-eda-nokia-com": {
               "ui-column-span": 2,
+              "ui-internal-feature": [
+                "testConnection"
+              ],
               "ui-order-priority": 100,
               "ui-title": "Timeout",
               "ui-title-key": "timeout"
@@ -6022,6 +5451,10 @@
           "auth": {
             "$ref": "#/components/schemas/ProviderAuth"
           },
+          "name": {
+            "description": "The name of the provider to test",
+            "type": "string"
+          },
           "timeout": {
             "description": "LDAP connection timeout in milliseconds",
             "format": "int64",
@@ -6036,6 +5469,10 @@
             "type": "string"
           }
         },
+        "required": [
+          "action",
+          "url"
+        ],
         "type": "object"
       },
       "AuthProviders": {
@@ -6260,6 +5697,10 @@
             "additionalProperties": true,
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
+          },
+          "domain": {
+            "description": "The \"domain\" for the error.  If empty, it is an EDA\ncore error.  Alternatively it can be an EDA application\n\"apiVersion\" value (e.g. interfaces.eda.nokia.com/v1alpha1)\nindicating that the error is specific to that application.\nThe domain gives the receiver information that they can use\nto help them interpret the \"internal\" error code value, or\nto find an internationalization translation for the message.",
+            "type": "string"
           },
           "errors": {
             "description": "Collection of errors in cases where more than one exists. This needs to be\nflexible so we can support multiple formats",
@@ -6727,14 +6168,32 @@
       },
       "Overlay": {
         "properties": {
+          "endpoint_attr_queries": {
+            "items": {
+              "$ref": "#/components/schemas/TopoOverlayAttrQuery"
+            },
+            "type": "array"
+          },
           "endpoint_state": {
             "items": {
               "$ref": "#/components/schemas/TopoOverlayStateMetadata"
             },
             "type": "array"
           },
+          "endpoint_state_heading": {
+            "type": "string"
+          },
+          "endpoint_state_heading_key": {
+            "type": "string"
+          },
           "group": {
             "type": "string"
+          },
+          "link_attr_queries": {
+            "items": {
+              "$ref": "#/components/schemas/TopoOverlayAttrQuery"
+            },
+            "type": "array"
           },
           "link_state": {
             "items": {
@@ -6742,8 +6201,20 @@
             },
             "type": "array"
           },
+          "link_state_heading": {
+            "type": "string"
+          },
+          "link_state_heading_key": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
+          },
+          "node_attr_queries": {
+            "items": {
+              "$ref": "#/components/schemas/TopoOverlayAttrQuery"
+            },
+            "type": "array"
           },
           "node_badge": {
             "items": {
@@ -6756,6 +6227,12 @@
               "$ref": "#/components/schemas/TopoOverlayStateMetadata"
             },
             "type": "array"
+          },
+          "node_state_heading": {
+            "type": "string"
+          },
+          "node_state_heading_key": {
+            "type": "string"
           },
           "ui_description": {
             "type": "string"
@@ -6771,6 +6248,23 @@
           },
           "version": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "OverlayState": {
+        "properties": {
+          "links": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLink"
+            },
+            "type": "object"
+          },
+          "nodes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNode"
+            },
+            "type": "object"
           }
         },
         "type": "object"
@@ -6793,6 +6287,10 @@
             "description": "Credentials to use when binding to an LDAP provider",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-internal-feature": [
+                "testAuthentication"
+              ],
+              "ui-order-priority": 20,
               "ui-title": "Bind Credential",
               "ui-title-key": "bind_credential"
             }
@@ -6801,6 +6299,7 @@
             "description": "DN to use when binding to an LDAP provider",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-order-priority": 10,
               "ui-title": "Bind DN",
               "ui-title-key": "bind_dn"
             }
@@ -6830,6 +6329,68 @@
             "description": "Array of possible auto-completion results.",
             "items": {
               "$ref": "#/components/schemas/QueryCompletion"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "QueryField": {
+        "properties": {
+          "alias": {
+            "type": "boolean"
+          },
+          "annotations": {
+            "items": {
+              "$ref": "#/components/schemas/QueryFieldAnnotation"
+            },
+            "type": "array"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "QueryFieldAnnotation": {
+        "properties": {
+          "end_char": {
+            "format": "uint32",
+            "type": "integer"
+          },
+          "start_char": {
+            "format": "uint32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "QueryResponse": {
+        "description": "The response for a non-streaming query request",
+        "properties": {
+          "data": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/QuerySchema"
+          }
+        },
+        "type": "object"
+      },
+      "QuerySchema": {
+        "properties": {
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/QueryField"
             },
             "type": "array"
           }
@@ -6867,20 +6428,6 @@
           "resources"
         ],
         "title": "A role rule controlling access to a kubernetes resource.",
-        "type": "object"
-      },
-      "StreamResult": {
-        "properties": {
-          "details": {
-            "description": "The details for the streaming request; e.g. the query string in the corresponding GET request.",
-            "type": "string"
-          },
-          "stream": {
-            "description": "The stream identifier specified in the corresponding streaming GET request.",
-            "type": "string"
-          }
-        },
-        "title": "The response body content for a streaming GET request.",
         "type": "object"
       },
       "TableRule": {
@@ -6947,38 +6494,6 @@
         },
         "type": "object"
       },
-      "TopoEndpoint": {
-        "properties": {
-          "attributes": {
-            "additionalProperties": {
-              "type": "object"
-            },
-            "type": "object"
-          },
-          "cr_name": {
-            "type": "string"
-          },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "schema": {
-            "$ref": "#/components/schemas/TopoSchema"
-          },
-          "ui_name": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "TopoGroupingStateRequest": {
         "properties": {
           "name": {
@@ -6986,53 +6501,6 @@
           },
           "spec": {
             "$ref": "#/components/schemas/TopologyStateGroupingBase"
-          }
-        },
-        "type": "object"
-      },
-      "TopoLink": {
-        "properties": {
-          "attributes": {
-            "additionalProperties": {
-              "type": "object"
-            },
-            "type": "object"
-          },
-          "cr_name": {
-            "type": "string"
-          },
-          "endpoint_a": {
-            "$ref": "#/components/schemas/TopoLinkEndpoint"
-          },
-          "endpoint_a_details": {
-            "$ref": "#/components/schemas/TopoEndpoint"
-          },
-          "endpoint_b": {
-            "$ref": "#/components/schemas/TopoLinkEndpoint"
-          },
-          "endpoint_b_details": {
-            "$ref": "#/components/schemas/TopoEndpoint"
-          },
-          "key": {
-            "type": "string"
-          },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "schema": {
-            "$ref": "#/components/schemas/TopoSchema"
-          },
-          "ui_name": {
-            "type": "string"
           }
         },
         "type": "object"
@@ -7051,44 +6519,6 @@
         },
         "type": "object"
       },
-      "TopoNode": {
-        "properties": {
-          "attributes": {
-            "additionalProperties": {
-              "type": "object"
-            },
-            "type": "object"
-          },
-          "cr_name": {
-            "type": "string"
-          },
-          "grouping": {
-            "$ref": "#/components/schemas/TopoNodeGrouping"
-          },
-          "key": {
-            "type": "string"
-          },
-          "labels": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "schema": {
-            "$ref": "#/components/schemas/TopoSchema"
-          },
-          "ui_name": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "TopoNodeGrouping": {
         "properties": {
           "group": {
@@ -7097,6 +6527,37 @@
           "tier": {
             "format": "int64",
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayAttrMetadata": {
+        "properties": {
+          "ui_description": {
+            "type": "string"
+          },
+          "ui_description_key": {
+            "type": "string"
+          },
+          "ui_name": {
+            "type": "string"
+          },
+          "ui_name_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayAttrQuery": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayAttrMetadata"
+            },
+            "type": "object"
+          },
+          "query": {
+            "type": "string"
           }
         },
         "type": "object"
@@ -7131,6 +6592,194 @@
         },
         "type": "object"
       },
+      "TopoOverlayEndpoint": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayEndpointState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayEndpointState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLink": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "endpoint_a": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_a_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "endpoint_b": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_b_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLinkState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLinkState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNode": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "grouping": {
+            "$ref": "#/components/schemas/TopoNodeGrouping"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNodeState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNodeState": {
+        "properties": {
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "TopoOverlayStateMetadata": {
         "properties": {
           "color": {
@@ -7151,17 +6800,6 @@
           "value": {
             "format": "int64",
             "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "TopoOverlayStateRequest": {
-        "properties": {
-          "badge": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
           }
         },
         "type": "object"
@@ -7189,7 +6827,10 @@
             "type": "string"
           },
           "overlays": {
-            "$ref": "#/components/schemas/TopoOverlayStateRequest"
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -7234,23 +6875,6 @@
           },
           "version": {
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "TopologyState": {
-        "properties": {
-          "links": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/TopoLink"
-            },
-            "type": "object"
-          },
-          "nodes": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/TopoNode"
-            },
-            "type": "object"
           }
         },
         "type": "object"
@@ -7390,58 +7014,6 @@
         "properties": {
           "type": {
             "$ref": "#/components/schemas/TransactionType"
-          }
-        },
-        "type": "object"
-      },
-      "TransactionDetails": {
-        "properties": {
-          "changedCrs": {
-            "description": "List of changed CRs as part of the transaction",
-            "items": {
-              "$ref": "#/components/schemas/TransactionNsCrGvkNames"
-            },
-            "type": "array"
-          },
-          "dryRun": {
-            "description": "True if the transaction was not committed",
-            "type": "boolean"
-          },
-          "generalErrors": {
-            "description": "List of general errors while running the transaction",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "inputCrs": {
-            "description": "List of input CRs from the transaction",
-            "items": {
-              "$ref": "#/components/schemas/TransactionInputResource"
-            },
-            "type": "array"
-          },
-          "intentsRun": {
-            "description": "List of intents which ran as part of the transaction",
-            "items": {
-              "$ref": "#/components/schemas/TransactionIntentResult"
-            },
-            "type": "array"
-          },
-          "nodesWithConfigChanges": {
-            "description": "List of nodes with configuration changes from the transaction",
-            "items": {
-              "$ref": "#/components/schemas/TransactionNodeResult"
-            },
-            "type": "array"
-          },
-          "state": {
-            "description": "The state of the transaction",
-            "type": "string"
-          },
-          "success": {
-            "description": "True if the CR was successfully applied",
-            "type": "boolean"
           }
         },
         "type": "object"
@@ -7739,6 +7311,20 @@
         },
         "type": "object"
       },
+      "TransactionTopologyResult": {
+        "properties": {
+          "overlayMetadata": {
+            "$ref": "#/components/schemas/Overlay"
+          },
+          "topology": {
+            "$ref": "#/components/schemas/OverlayState"
+          },
+          "topologyMetadata": {
+            "$ref": "#/components/schemas/Topology"
+          }
+        },
+        "type": "object"
+      },
       "TransactionType": {
         "properties": {
           "create": {
@@ -7919,7 +7505,7 @@
         "properties": {
           "id": {
             "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
-            "format": "uint64",
+            "format": "int64",
             "type": "integer"
           }
         },
@@ -7981,6 +7567,10 @@
             "description": "Credentials to use when binding to an LDAP provider",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-internal-feature": [
+                "testAuthentication"
+              ],
+              "ui-order-priority": 20,
               "ui-title": "Bind Credential",
               "ui-title-key": "bind_credential"
             }
@@ -7989,6 +7579,7 @@
             "description": "DN to use when binding to an LDAP provider",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-order-priority": 10,
               "ui-title": "Bind DN",
               "ui-title-key": "bind_dn"
             }

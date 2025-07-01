@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export EDA_API_URL="https://eda-api.k8s.orb.local"
-export EDA_VERSION="v25.4.1"
+export EDA_API_URL="https://devbox.netdevops.me:9443"
+export EDA_VERSION="v25.8.1"
 export KC_KEYCLOAK_URL="${EDA_API_URL}/core/httpproxy/v1/keycloak/"
 export KC_REALM="master"
 export KC_CLIENT_ID="admin-cli"
@@ -78,7 +78,7 @@ EDA_APIS=$(curl -sk ${EDA_API_URL}/openapi/v3 \
 
 echo $EDA_APIS | jq .
 
-echo "$EDA_APIS" | jq -r '.paths | to_entries[] | .key + " " + .value.serverRelativeURL' | while read -r path url; do
+echo "$EDA_APIS" | jq -r '.paths | to_entries[] | .key + " " + .value["x-eda-nokia-com"].serverRelativeURL' | while read -r path url; do
     # Create directory structure
     mkdir -p "./${path}"
 

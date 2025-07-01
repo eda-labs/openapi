@@ -73,6 +73,10 @@
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
+          "domain": {
+            "description": "The \"domain\" for the error.  If empty, it is an EDA\ncore error.  Alternatively it can be an EDA application\n\"apiVersion\" value (e.g. interfaces.eda.nokia.com/v1alpha1)\nindicating that the error is specific to that application.\nThe domain gives the receiver information that they can use\nto help them interpret the \"internal\" error code value, or\nto find an internationalization translation for the message.",
+            "type": "string"
+          },
           "errors": {
             "description": "Collection of errors in cases where more than one exists. This needs to be\nflexible so we can support multiple formats",
             "items": {
@@ -131,6 +135,23 @@
         ],
         "type": "object"
       },
+      "OverlayState": {
+        "properties": {
+          "links": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLink"
+            },
+            "type": "object"
+          },
+          "nodes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNode"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "Patch": {
         "items": {
           "$ref": "#/components/schemas/K8SPatchOp"
@@ -175,6 +196,7 @@
             "type": "string"
           },
           "commitTime": {
+            "format": "date-time",
             "type": "string"
           },
           "hash": {
@@ -206,6 +228,17 @@
               "$ref": "#/components/schemas/Resource"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ResourceTopology": {
+        "properties": {
+          "topology": {
+            "$ref": "#/components/schemas/OverlayState"
+          },
+          "topologyMetadata": {
+            "$ref": "#/components/schemas/Topology"
           }
         },
         "type": "object"
@@ -242,8 +275,324 @@
         },
         "type": "object"
       },
+      "TopoAttrMetadata": {
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "ui_description": {
+            "type": "string"
+          },
+          "ui_description_key": {
+            "type": "string"
+          },
+          "ui_name": {
+            "type": "string"
+          },
+          "ui_name_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoElemMetadata": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoAttrMetadata"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "subtitle_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoLinkEndpoint": {
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          },
+          "node": {
+            "type": "string"
+          },
+          "node_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoNodeGrouping": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "tier": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayEndpoint": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayEndpointState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayEndpointState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLink": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "endpoint_a": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_a_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "endpoint_b": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_b_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLinkState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLinkState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNode": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "grouping": {
+            "$ref": "#/components/schemas/TopoNodeGrouping"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNodeState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNodeState": {
+        "properties": {
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoSchema": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Topology": {
+        "properties": {
+          "endpoints": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "group": {
+            "type": "string"
+          },
+          "grouping": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "links": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nodes": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "ui_description": {
+            "type": "string"
+          },
+          "ui_description_key": {
+            "type": "string"
+          },
+          "ui_name": {
+            "type": "string"
+          },
+          "ui_name_key": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "UIResult": {
         "type": "string"
+      },
+      "WorkflowId": {
+        "properties": {
+          "id": {
+            "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
       },
       "com.nokia.eda.interfaces.v1alpha1.Breakout": {
         "description": "Breakout is the Schema for the breakouts API",
@@ -398,6 +747,7 @@
       "com.nokia.eda.interfaces.v1alpha1.Breakout_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -471,6 +821,157 @@
                   "condition": "true",
                   "group": "interfaces.eda.nokia.com",
                   "kind": "Breakout",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
+      "com.nokia.eda.interfaces.v1alpha1.CheckInterfaces": {
+        "description": "CheckInterfaces is the Schema for the checkinterfacess API",
+        "properties": {
+          "apiVersion": {
+            "default": "interfaces.eda.nokia.com/v1alpha1",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "kind": {
+            "default": "CheckInterfaces",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/com.nokia.eda.interfaces.v1alpha1.CheckInterfaces_metadata"
+          },
+          "spec": {
+            "description": "CheckInterfacesSpec defines the desired state of CheckInterfaces",
+            "properties": {
+              "interfaceSelector": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "interfaceselector",
+                "type": "array"
+              },
+              "nodeSelector": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "nodeselector",
+                "type": "array"
+              },
+              "nodes": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "nodes",
+                "type": "array"
+              },
+              "waitFor": {
+                "title": "waitfor",
+                "type": "integer"
+              }
+            },
+            "title": "Specification",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
+          },
+          "status": {
+            "description": "CheckInterfacesStatus defines the observed state of CheckInterfaces",
+            "properties": {
+              "id": {
+                "description": "Id",
+                "title": "ID",
+                "type": "integer"
+              },
+              "result": {
+                "description": "Aggregate result of the Flow",
+                "title": "Result",
+                "type": "string"
+              }
+            },
+            "readOnly": true,
+            "title": "Status",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind",
+          "metadata",
+          "spec"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.interfaces.v1alpha1.CheckInterfaces_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "interfaces.eda.nokia.com",
+                  "kind": "CheckInterfaces",
                   "type": "label",
                   "version": "v1alpha1"
                 }
@@ -1416,6 +1917,7 @@
       "com.nokia.eda.interfaces.v1alpha1.InterfaceState_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -1534,6 +2036,7 @@
       "com.nokia.eda.interfaces.v1alpha1.Interface_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -1770,7 +2273,7 @@
     },
     "/apps/interfaces.eda.nokia.com/v1alpha1/breakouts": {
       "get": {
-        "description": "list breakouts",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listInterfacesEdaNokiaComV1alpha1Breakouts",
         "parameters": [
           {
@@ -1793,6 +2296,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -1820,6 +2339,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list breakouts",
         "tags": [
           "apps"
         ]
@@ -1827,7 +2347,7 @@
     },
     "/apps/interfaces.eda.nokia.com/v1alpha1/interfaces": {
       "get": {
-        "description": "list interfaces",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listInterfacesEdaNokiaComV1alpha1Interfaces",
         "parameters": [
           {
@@ -1850,6 +2370,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -1877,6 +2413,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list interfaces",
         "tags": [
           "apps"
         ]
@@ -1884,7 +2421,7 @@
     },
     "/apps/interfaces.eda.nokia.com/v1alpha1/interfacestates": {
       "get": {
-        "description": "list interfacestates",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listInterfacesEdaNokiaComV1alpha1Interfacestates",
         "parameters": [
           {
@@ -1907,6 +2444,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -1934,6 +2487,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list interfacestates",
         "tags": [
           "apps"
         ]
@@ -1989,7 +2543,7 @@
         ]
       },
       "get": {
-        "description": "list breakouts in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listInterfacesEdaNokiaComV1alpha1NamespaceBreakouts",
         "parameters": [
           {
@@ -2024,6 +2578,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2048,6 +2618,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list breakouts in namespace",
         "tags": [
           "apps"
         ]
@@ -2111,6 +2682,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -2434,6 +3021,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -2461,6 +3049,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced Breakout.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/interfaces.eda.nokia.com/v1alpha1/namespaces/{namespace}/breakouts/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyInterfacesEdaNokiaComV1alpha1NamespaceBreakouts",
+        "parameters": [
+          {
+            "description": "name of the Breakout to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced Breakout.",
         "tags": [
           "apps"
         ]
@@ -2516,7 +3195,7 @@
         ]
       },
       "get": {
-        "description": "list interfaces in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listInterfacesEdaNokiaComV1alpha1NamespaceInterfaces",
         "parameters": [
           {
@@ -2551,6 +3230,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2575,6 +3270,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list interfaces in namespace",
         "tags": [
           "apps"
         ]
@@ -2638,6 +3334,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -2961,6 +3673,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -2988,6 +3701,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced Interface.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/interfaces.eda.nokia.com/v1alpha1/namespaces/{namespace}/interfaces/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyInterfacesEdaNokiaComV1alpha1NamespaceInterfaces",
+        "parameters": [
+          {
+            "description": "name of the Interface to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced Interface.",
         "tags": [
           "apps"
         ]
@@ -3043,7 +3847,7 @@
         ]
       },
       "get": {
-        "description": "list interfacestates in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listInterfacesEdaNokiaComV1alpha1NamespaceInterfacestates",
         "parameters": [
           {
@@ -3078,6 +3882,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3102,6 +3922,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list interfacestates in namespace",
         "tags": [
           "apps"
         ]
@@ -3165,6 +3986,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -3488,6 +4325,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -3517,6 +4355,149 @@
         "summary": "Get revision history for the specified namespaced InterfaceState.",
         "tags": [
           "apps"
+        ]
+      }
+    },
+    "/apps/interfaces.eda.nokia.com/v1alpha1/namespaces/{namespace}/interfacestates/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyInterfacesEdaNokiaComV1alpha1NamespaceInterfacestates",
+        "parameters": [
+          {
+            "description": "name of the InterfaceState to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced InterfaceState.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/workflows/v1/interfaces.eda.nokia.com/v1alpha1/namespaces/{namespace}/checkinterfacess": {
+      "post": {
+        "description": "create a CheckInterfaces",
+        "operationId": "createInterfacesEdaNokiaComV1alpha1NamespaceCheckinterfacess",
+        "parameters": [
+          {
+            "description": "the namespace scope in which to create the CheckInterfaces",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.nokia.eda.interfaces.v1alpha1.CheckInterfaces"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowId"
+                }
+              }
+            },
+            "description": "The response for a successful POST workflows request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "workflows"
         ]
       }
     }

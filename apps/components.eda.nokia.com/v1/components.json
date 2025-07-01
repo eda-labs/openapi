@@ -73,6 +73,10 @@
             "description": "Dictionary/map of associated data/information relevant to the error.\nThe error \"message\" may contain {{name}} escapes that should be substituted\nwith information from this dictionary.",
             "type": "object"
           },
+          "domain": {
+            "description": "The \"domain\" for the error.  If empty, it is an EDA\ncore error.  Alternatively it can be an EDA application\n\"apiVersion\" value (e.g. interfaces.eda.nokia.com/v1alpha1)\nindicating that the error is specific to that application.\nThe domain gives the receiver information that they can use\nto help them interpret the \"internal\" error code value, or\nto find an internationalization translation for the message.",
+            "type": "string"
+          },
           "errors": {
             "description": "Collection of errors in cases where more than one exists. This needs to be\nflexible so we can support multiple formats",
             "items": {
@@ -131,6 +135,23 @@
         ],
         "type": "object"
       },
+      "OverlayState": {
+        "properties": {
+          "links": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLink"
+            },
+            "type": "object"
+          },
+          "nodes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNode"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "Patch": {
         "items": {
           "$ref": "#/components/schemas/K8SPatchOp"
@@ -175,6 +196,7 @@
             "type": "string"
           },
           "commitTime": {
+            "format": "date-time",
             "type": "string"
           },
           "hash": {
@@ -210,6 +232,17 @@
         },
         "type": "object"
       },
+      "ResourceTopology": {
+        "properties": {
+          "topology": {
+            "$ref": "#/components/schemas/OverlayState"
+          },
+          "topologyMetadata": {
+            "$ref": "#/components/schemas/Topology"
+          }
+        },
+        "type": "object"
+      },
       "Status": {
         "properties": {
           "apiVersion": {
@@ -237,6 +270,312 @@
             "type": "string"
           },
           "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoAttrMetadata": {
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "ui_description": {
+            "type": "string"
+          },
+          "ui_description_key": {
+            "type": "string"
+          },
+          "ui_name": {
+            "type": "string"
+          },
+          "ui_name_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoElemMetadata": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoAttrMetadata"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "subtitle_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoLinkEndpoint": {
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          },
+          "node": {
+            "type": "string"
+          },
+          "node_key": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoNodeGrouping": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "tier": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayEndpoint": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayEndpointState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayEndpointState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLink": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "endpoint_a": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_a_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "endpoint_b": {
+            "$ref": "#/components/schemas/TopoLinkEndpoint"
+          },
+          "endpoint_b_details": {
+            "$ref": "#/components/schemas/TopoOverlayEndpoint"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayLinkState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayLinkState": {
+        "properties": {
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNode": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "cr_name": {
+            "type": "string"
+          },
+          "grouping": {
+            "$ref": "#/components/schemas/TopoNodeGrouping"
+          },
+          "key": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "overlays": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TopoOverlayNodeState"
+            },
+            "type": "object"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ui_name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TopoOverlayNodeState": {
+        "properties": {
+          "badges": {
+            "items": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "state": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "TopoSchema": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Topology": {
+        "properties": {
+          "endpoints": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "group": {
+            "type": "string"
+          },
+          "grouping": {
+            "$ref": "#/components/schemas/TopoSchema"
+          },
+          "links": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nodes": {
+            "$ref": "#/components/schemas/TopoElemMetadata"
+          },
+          "ui_description": {
+            "type": "string"
+          },
+          "ui_description_key": {
+            "type": "string"
+          },
+          "ui_name": {
+            "type": "string"
+          },
+          "ui_name_key": {
+            "type": "string"
+          },
+          "version": {
             "type": "string"
           }
         },
@@ -2630,6 +2969,7 @@
       "com.nokia.eda.components.v1.Monitor_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
+            "format": "date-time",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-order-priority": 50,
@@ -3248,7 +3588,7 @@
     },
     "/apps/components.eda.nokia.com/v1/chassis": {
       "get": {
-        "description": "list chassis",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Chassis",
         "parameters": [
           {
@@ -3271,6 +3611,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -3298,6 +3654,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list chassis",
         "tags": [
           "apps"
         ]
@@ -3305,7 +3662,7 @@
     },
     "/apps/components.eda.nokia.com/v1/components": {
       "get": {
-        "description": "list components",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Components",
         "parameters": [
           {
@@ -3328,6 +3685,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -3355,6 +3728,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list components",
         "tags": [
           "apps"
         ]
@@ -3362,7 +3736,7 @@
     },
     "/apps/components.eda.nokia.com/v1/controlmodules": {
       "get": {
-        "description": "list controlmodules",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Controlmodules",
         "parameters": [
           {
@@ -3385,6 +3759,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -3412,6 +3802,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list controlmodules",
         "tags": [
           "apps"
         ]
@@ -3419,7 +3810,7 @@
     },
     "/apps/components.eda.nokia.com/v1/fabricmodules": {
       "get": {
-        "description": "list fabricmodules",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Fabricmodules",
         "parameters": [
           {
@@ -3442,6 +3833,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -3469,6 +3876,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list fabricmodules",
         "tags": [
           "apps"
         ]
@@ -3476,7 +3884,7 @@
     },
     "/apps/components.eda.nokia.com/v1/fans": {
       "get": {
-        "description": "list fans",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Fans",
         "parameters": [
           {
@@ -3499,6 +3907,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -3526,6 +3950,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list fans",
         "tags": [
           "apps"
         ]
@@ -3533,7 +3958,7 @@
     },
     "/apps/components.eda.nokia.com/v1/interfacemodules": {
       "get": {
-        "description": "list interfacemodules",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Interfacemodules",
         "parameters": [
           {
@@ -3556,6 +3981,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -3583,6 +4024,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list interfacemodules",
         "tags": [
           "apps"
         ]
@@ -3590,7 +4032,7 @@
     },
     "/apps/components.eda.nokia.com/v1/monitors": {
       "get": {
-        "description": "list monitors",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Monitors",
         "parameters": [
           {
@@ -3613,6 +4055,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -3640,6 +4098,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list monitors",
         "tags": [
           "apps"
         ]
@@ -3647,7 +4106,7 @@
     },
     "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/chassis": {
       "get": {
-        "description": "list chassis in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespaceChassis",
         "parameters": [
           {
@@ -3682,6 +4141,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3706,6 +4181,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list chassis in namespace",
         "tags": [
           "apps"
         ]
@@ -3838,6 +4314,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -3870,9 +4347,100 @@
         ]
       }
     },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/chassis/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespaceChassis",
+        "parameters": [
+          {
+            "description": "name of the Chassis to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced Chassis.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/components": {
       "get": {
-        "description": "list components in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespaceComponents",
         "parameters": [
           {
@@ -3907,6 +4475,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3931,6 +4515,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list components in namespace",
         "tags": [
           "apps"
         ]
@@ -4063,6 +4648,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -4095,9 +4681,100 @@
         ]
       }
     },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/components/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespaceComponents",
+        "parameters": [
+          {
+            "description": "name of the Component to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced Component.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/controlmodules": {
       "get": {
-        "description": "list controlmodules in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespaceControlmodules",
         "parameters": [
           {
@@ -4132,6 +4809,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4156,6 +4849,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list controlmodules in namespace",
         "tags": [
           "apps"
         ]
@@ -4288,6 +4982,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -4320,9 +5015,100 @@
         ]
       }
     },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/controlmodules/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespaceControlmodules",
+        "parameters": [
+          {
+            "description": "name of the ControlModule to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced ControlModule.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/fabricmodules": {
       "get": {
-        "description": "list fabricmodules in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespaceFabricmodules",
         "parameters": [
           {
@@ -4357,6 +5143,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4381,6 +5183,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list fabricmodules in namespace",
         "tags": [
           "apps"
         ]
@@ -4513,6 +5316,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -4545,9 +5349,100 @@
         ]
       }
     },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/fabricmodules/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespaceFabricmodules",
+        "parameters": [
+          {
+            "description": "name of the FabricModule to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced FabricModule.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/fans": {
       "get": {
-        "description": "list fans in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespaceFans",
         "parameters": [
           {
@@ -4582,6 +5477,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4606,6 +5517,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list fans in namespace",
         "tags": [
           "apps"
         ]
@@ -4738,6 +5650,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -4770,9 +5683,100 @@
         ]
       }
     },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/fans/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespaceFans",
+        "parameters": [
+          {
+            "description": "name of the Fan to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced Fan.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/interfacemodules": {
       "get": {
-        "description": "list interfacemodules in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespaceInterfacemodules",
         "parameters": [
           {
@@ -4807,6 +5811,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4831,6 +5851,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list interfacemodules in namespace",
         "tags": [
           "apps"
         ]
@@ -4963,6 +5984,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -4990,6 +6012,97 @@
           }
         },
         "summary": "Get revision history for the specified namespaced InterfaceModule.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/interfacemodules/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespaceInterfacemodules",
+        "parameters": [
+          {
+            "description": "name of the InterfaceModule to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced InterfaceModule.",
         "tags": [
           "apps"
         ]
@@ -5045,7 +6158,7 @@
         ]
       },
       "get": {
-        "description": "list monitors in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespaceMonitors",
         "parameters": [
           {
@@ -5080,6 +6193,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -5104,6 +6233,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list monitors in namespace",
         "tags": [
           "apps"
         ]
@@ -5167,6 +6297,22 @@
             "in": "path",
             "name": "namespace",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
             "schema": {
               "type": "string"
             }
@@ -5490,6 +6636,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -5522,9 +6669,100 @@
         ]
       }
     },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/monitors/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespaceMonitors",
+        "parameters": [
+          {
+            "description": "name of the Monitor to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced Monitor.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/powersupplies": {
       "get": {
-        "description": "list powersupplies in namespace",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1NamespacePowersupplies",
         "parameters": [
           {
@@ -5559,6 +6797,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -5583,6 +6837,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list powersupplies in namespace",
         "tags": [
           "apps"
         ]
@@ -5715,6 +6970,7 @@
             "name": "limit",
             "schema": {
               "format": "uint64",
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -5747,9 +7003,100 @@
         ]
       }
     },
+    "/apps/components.eda.nokia.com/v1/namespaces/{namespace}/powersupplies/{name}/_topology": {
+      "get": {
+        "operationId": "getTopologyComponentsEdaNokiaComV1NamespacePowersupplies",
+        "parameters": [
+          {
+            "description": "name of the PowerSupply to retrieve",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope from which to retrieve the result",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the type of topology to retrieve",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": "childrenAndParents",
+              "enum": [
+                "children",
+                "parents",
+                "childrenAndParents",
+                "dependentCrs"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "whether to recursively build the topology to include all layers or just a single layer of the topology",
+            "in": "query",
+            "name": "recurse",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceTopology"
+                }
+              }
+            },
+            "description": "Returns the topology of the specified resource"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get the topology for the specified namespaced PowerSupply.",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
     "/apps/components.eda.nokia.com/v1/powersupplies": {
       "get": {
-        "description": "list powersupplies",
+        "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
         "operationId": "listComponentsEdaNokiaComV1Powersupplies",
         "parameters": [
           {
@@ -5772,6 +7119,22 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -5799,6 +7162,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "summary": "list powersupplies",
         "tags": [
           "apps"
         ]
