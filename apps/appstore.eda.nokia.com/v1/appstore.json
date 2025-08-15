@@ -584,6 +584,317 @@
       "UIResult": {
         "type": "string"
       },
+      "WorkflowGetInputsRespElem": {
+        "properties": {
+          "ackPrompt": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "schemaPrompt": {
+            "properties": {},
+            "type": "object"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowId": {
+        "properties": {
+          "id": {
+            "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "WorkflowIdentifier": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowInputData": {
+        "items": {
+          "$ref": "#/components/schemas/WorkflowInputDataElem"
+        },
+        "type": "array"
+      },
+      "WorkflowInputDataElem": {
+        "properties": {
+          "ack": {
+            "description": "acknowledge or reject the input request",
+            "type": "boolean"
+          },
+          "input": {
+            "description": "provide a json blob to the workflow",
+            "properties": {},
+            "type": "object"
+          },
+          "subflow": {
+            "$ref": "#/components/schemas/WorkflowIdentifier"
+          }
+        },
+        "type": "object"
+      },
+      "com.nokia.eda.appstore.v1.AppInstaller": {
+        "description": "AppInstaller is the Schema for the appinstallers API",
+        "properties": {
+          "apiVersion": {
+            "default": "appstore.eda.nokia.com/v1",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "kind": {
+            "default": "AppInstaller",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.AppInstaller_metadata"
+          },
+          "spec": {
+            "properties": {
+              "apps": {
+                "description": "Apps are the input apps to the installer.",
+                "items": {
+                  "properties": {
+                    "appId": {
+                      "description": "AppID of the app, which is the unique identifier of an app. It should be equal to the group of the app.",
+                      "title": "App ID",
+                      "type": "string"
+                    },
+                    "appSettings": {
+                      "description": "AppSettings defines a list of variables and their value. Only variables that are customised need to be mentioned.\nIf AppSettings are not again mentioned on upgrade, values will remain as is.",
+                      "format": "json",
+                      "title": "App Settings",
+                      "type": "object"
+                    },
+                    "catalog": {
+                      "description": "Catalog of the app to be installed.\nThis is where app manifest is retrieved from, along with some other metadata.",
+                      "title": "Catalog",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "Version of the App that is to be installed.",
+                      "properties": {
+                        "type": {
+                          "default": "semver",
+                          "description": "The version type of the App. Currently supported: semver, commit.\nDefault is semver.",
+                          "enum": [
+                            "semver",
+                            "commit"
+                          ],
+                          "title": "Type",
+                          "type": "string"
+                        },
+                        "value": {
+                          "description": "The version of the App.\nIf the VersionType is set to semver,\nthen the semantic version of the git tag in the form of \"apps/<appname>/<semver>\" is used.\nIf the VersionType is set to commit,\nthen the commit reference (e.g. git hash) is expected.",
+                          "title": "Value",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "title": "Version",
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "appId",
+                    "catalog",
+                    "version"
+                  ],
+                  "type": "object"
+                },
+                "title": "Apps",
+                "type": "array"
+              },
+              "autoProcessRequirements": {
+                "description": "AutoProcessRequirements tells the installer what it can do w.r.t. the requirements of an app.\nCurrently only 'strict' is supported.",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Auto Process Requirements",
+                "type": "array"
+              },
+              "operation": {
+                "description": "Operation is the installing operation.\nCurrently supported are 'install', 'delete'.",
+                "enum": [
+                  "install",
+                  "delete"
+                ],
+                "title": "Operation",
+                "type": "string"
+              }
+            },
+            "required": [
+              "apps",
+              "operation"
+            ],
+            "title": "Specification",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
+          },
+          "status": {
+            "properties": {
+              "error": {
+                "title": "Error",
+                "type": "string"
+              },
+              "id": {
+                "description": "ID is the workflow ID that can be used to get more information on.",
+                "title": "ID",
+                "type": "integer"
+              },
+              "result": {
+                "title": "Result",
+                "type": "string"
+              }
+            },
+            "readOnly": true,
+            "required": [
+              "result"
+            ],
+            "title": "Status",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind",
+          "metadata",
+          "spec"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.appstore.v1.AppInstallerList": {
+        "description": "AppInstallerList is a list of appinstallers",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.AppInstaller"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.appstore.v1.AppInstaller_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "appstore.eda.nokia.com",
+                  "kind": "AppInstaller",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
       "com.nokia.eda.appstore.v1.Catalog": {
         "description": "Catalog is the Schema for the catalogs API",
         "properties": {
@@ -1199,14 +1510,6 @@
         "operationId": "listAppstoreEdaNokiaComV1Catalogs",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -1234,6 +1537,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -1401,18 +1712,10 @@
         "operationId": "readAppstoreEdaNokiaComV1Catalogs",
         "parameters": [
           {
-            "description": "name of the Catalog to retrieve",
+            "description": "name of the Catalog",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -1762,14 +2065,6 @@
         "operationId": "listAppstoreEdaNokiaComV1Registries",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -1797,6 +2092,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -1964,18 +2267,10 @@
         "operationId": "readAppstoreEdaNokiaComV1Registries",
         "parameters": [
           {
-            "description": "name of the Registry to retrieve",
+            "description": "name of the Registry",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -2277,6 +2572,448 @@
         "summary": "Get the topology for the specified non-namespaced Registry.",
         "tags": [
           "apps"
+        ]
+      }
+    },
+    "/workflows/v1/appstore.eda.nokia.com/v1/appinstallers": {
+      "get": {
+        "operationId": "wfListAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.AppInstallerList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.appstore.v1.AppInstallerList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all AppInstaller instances.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "post": {
+        "description": "create a non-namespaced AppInstaller",
+        "operationId": "wfCreateAppstoreEdaNokiaComV1Appinstallers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.AppInstaller"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowId"
+                }
+              }
+            },
+            "description": "The response for a successful POST workflows request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/appstore.eda.nokia.com/v1/appinstallers/{name}": {
+      "delete": {
+        "operationId": "wfDeleteAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "name of the AppInstaller",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Delete a AppInstaller workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "get": {
+        "operationId": "wfReadAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "name of the AppInstaller",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.appstore.v1.AppInstaller"
+                }
+              }
+            },
+            "description": "com.nokia.eda.appstore.v1.AppInstaller"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read the specified AppInstaller.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/appstore.eda.nokia.com/v1/appinstallers/{name}/_artifacts": {
+      "get": {
+        "operationId": "wfListArtifactsAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "name of the AppInstaller",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "The response for a successful list artifacts request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read list of artifacts generated by a AppInstaller workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/appstore.eda.nokia.com/v1/appinstallers/{name}/_artifacts/{artifact}": {
+      "get": {
+        "operationId": "wfReadArtifactAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "name of the AppInstaller",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "name of the artifact to download",
+            "in": "path",
+            "name": "artifact",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested artifact."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read artifact generated by a AppInstaller workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/appstore.eda.nokia.com/v1/appinstallers/{name}/_input": {
+      "get": {
+        "operationId": "wfListInputAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "name of the AppInstaller",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowGetInputsRespElem"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing specifications for this flow & subflow's requested input."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get inputs requested by the AppInstaller.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "put": {
+        "operationId": "wfSubmitInputAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "name of the AppInstaller",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowInputData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {},
+            "description": ""
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Submit input requested by the AppInstaller.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/appstore.eda.nokia.com/v1/appinstallers/{name}/_logs": {
+      "get": {
+        "operationId": "wfReadLogsAppstoreEdaNokiaComV1Appinstallers",
+        "parameters": [
+          {
+            "description": "name of the AppInstaller",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The response for a successful GET logs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read logs output by the AppInstaller.",
+        "tags": [
+          "workflows"
         ]
       }
     }

@@ -1133,14 +1133,6 @@
         "operationId": "listSecurityEdaNokiaComV1alpha1Keychaindeployments",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -1168,6 +1160,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -1207,14 +1207,6 @@
         "operationId": "listSecurityEdaNokiaComV1alpha1Keychains",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -1242,6 +1234,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -1329,23 +1329,6 @@
         "operationId": "listSecurityEdaNokiaComV1alpha1NamespaceKeychaindeployments",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -1373,6 +1356,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -1460,15 +1460,6 @@
         "operationId": "getDeletedSecurityEdaNokiaComV1alpha1NamespaceKeychaindeployments",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -1480,6 +1471,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -1568,27 +1568,10 @@
         "operationId": "readSecurityEdaNokiaComV1alpha1NamespaceKeychaindeployments",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the KeychainDeployment to retrieve",
+            "description": "name of the KeychainDeployment",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -1613,6 +1596,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -1981,23 +1973,6 @@
         "operationId": "listSecurityEdaNokiaComV1alpha1NamespaceKeychains",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2025,6 +2000,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -2112,15 +2104,6 @@
         "operationId": "getDeletedSecurityEdaNokiaComV1alpha1NamespaceKeychains",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2132,6 +2115,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -2220,27 +2212,10 @@
         "operationId": "readSecurityEdaNokiaComV1alpha1NamespaceKeychains",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Keychain to retrieve",
+            "description": "name of the Keychain",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -2265,6 +2240,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }

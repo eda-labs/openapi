@@ -31,7 +31,7 @@ KC_CLIENTS=$(curl -sk \
   -H "Authorization: Bearer $KC_ADMIN_ACCESS_TOKEN" \
   -H "Content-Type: application/json")
 
-echo ${KC_CLIENTS}
+# echo ${KC_CLIENTS}
 
 # Get the `eda` client's ID
 EDA_CLIENT_ID=$(echo "$KC_CLIENTS" | jq -r ".[] | select(.clientId==\"${API_CLIENT_ID}\") | .id")

@@ -828,8 +828,22 @@
                 "type": "string",
                 "x-eda-nokia-com": {
                   "ui-column-span": 4,
-                  "ui-order-priority": 300,
+                  "ui-order-priority": 2500,
                   "ui-single-line-group": "Community Set"
+                }
+              },
+              "matchSetOptions": {
+                "description": "The matching criteria that applies to the Members list.",
+                "enum": [
+                  "All",
+                  "Any",
+                  "Invert"
+                ],
+                "title": "Match Set Options",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 1500
                 }
               },
               "members": {
@@ -841,7 +855,7 @@
                 "type": "array",
                 "x-eda-nokia-com": {
                   "ui-column-span": 4,
-                  "ui-order-priority": 200,
+                  "ui-order-priority": 500,
                   "ui-single-line-group": "Community Set"
                 }
               }
@@ -1075,6 +1089,80 @@
                           "ui-single-line-group": "ASPrependReplace"
                         }
                       },
+                      "communitySet": {
+                        "description": "Modify BGP communities associated with the route using hybrid Community Sets.",
+                        "properties": {
+                          "add": {
+                            "description": "List of community sets to add to the route.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "maxItems": 1,
+                            "title": "Add Communities",
+                            "type": "array",
+                            "x-eda-nokia-com": {
+                              "ui-auto-completes": [
+                                {
+                                  "condition": "true",
+                                  "group": "routingpolicies.eda.nokia.com",
+                                  "resource": "communitysets",
+                                  "type": "gvr",
+                                  "version": "v1alpha1"
+                                }
+                              ],
+                              "ui-column-span": 3
+                            }
+                          },
+                          "remove": {
+                            "description": "List of community sets to remove from the route.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "maxItems": 1,
+                            "title": "Remove Communities",
+                            "type": "array",
+                            "x-eda-nokia-com": {
+                              "ui-auto-completes": [
+                                {
+                                  "condition": "true",
+                                  "group": "routingpolicies.eda.nokia.com",
+                                  "resource": "communitysets",
+                                  "type": "gvr",
+                                  "version": "v1alpha1"
+                                }
+                              ],
+                              "ui-column-span": 3
+                            }
+                          },
+                          "replace": {
+                            "description": "List of community sets to replace the existing communities with. Cannot be combined with Add or Remove.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "maxItems": 1,
+                            "title": "Replace Communities",
+                            "type": "array",
+                            "x-eda-nokia-com": {
+                              "ui-auto-completes": [
+                                {
+                                  "condition": "true",
+                                  "group": "routingpolicies.eda.nokia.com",
+                                  "resource": "communitysets",
+                                  "type": "gvr",
+                                  "version": "v1alpha1"
+                                }
+                              ],
+                              "ui-column-span": 3
+                            }
+                          }
+                        },
+                        "title": "Modify Communities",
+                        "type": "object",
+                        "x-eda-nokia-com": {
+                          "ui-order-priority": 2500,
+                          "ui-presence-toggle": true
+                        }
+                      },
                       "localPreference": {
                         "description": "Set a new LOCAL_PREF value for matching BGP routes.",
                         "format": "int32",
@@ -1166,7 +1254,9 @@
                     "description": "Final disposition for the route.",
                     "enum": [
                       "accept",
-                      "reject"
+                      "reject",
+                      "NextPolicy",
+                      "NextStatement"
                     ],
                     "title": "Policy Result",
                     "type": "string",
@@ -1226,6 +1316,80 @@
                                 "ui-column-span": 2,
                                 "ui-order-priority": 500,
                                 "ui-single-line-group": "ASPrependReplace"
+                              }
+                            },
+                            "communitySet": {
+                              "description": "Modify BGP communities associated with the route using hybrid Community Sets.",
+                              "properties": {
+                                "add": {
+                                  "description": "List of community sets to add to the route.",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "maxItems": 1,
+                                  "title": "Add Communities",
+                                  "type": "array",
+                                  "x-eda-nokia-com": {
+                                    "ui-auto-completes": [
+                                      {
+                                        "condition": "true",
+                                        "group": "routingpolicies.eda.nokia.com",
+                                        "resource": "communitysets",
+                                        "type": "gvr",
+                                        "version": "v1alpha1"
+                                      }
+                                    ],
+                                    "ui-column-span": 3
+                                  }
+                                },
+                                "remove": {
+                                  "description": "List of community sets to remove from the route.",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "maxItems": 1,
+                                  "title": "Remove Communities",
+                                  "type": "array",
+                                  "x-eda-nokia-com": {
+                                    "ui-auto-completes": [
+                                      {
+                                        "condition": "true",
+                                        "group": "routingpolicies.eda.nokia.com",
+                                        "resource": "communitysets",
+                                        "type": "gvr",
+                                        "version": "v1alpha1"
+                                      }
+                                    ],
+                                    "ui-column-span": 3
+                                  }
+                                },
+                                "replace": {
+                                  "description": "List of community sets to replace the existing communities with. Cannot be combined with Add or Remove.",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "maxItems": 1,
+                                  "title": "Replace Communities",
+                                  "type": "array",
+                                  "x-eda-nokia-com": {
+                                    "ui-auto-completes": [
+                                      {
+                                        "condition": "true",
+                                        "group": "routingpolicies.eda.nokia.com",
+                                        "resource": "communitysets",
+                                        "type": "gvr",
+                                        "version": "v1alpha1"
+                                      }
+                                    ],
+                                    "ui-column-span": 3
+                                  }
+                                }
+                              },
+                              "title": "Modify Communities",
+                              "type": "object",
+                              "x-eda-nokia-com": {
+                                "ui-order-priority": 2500,
+                                "ui-presence-toggle": true
                               }
                             },
                             "localPreference": {
@@ -1319,7 +1483,9 @@
                           "description": "Final disposition for the route.",
                           "enum": [
                             "accept",
-                            "reject"
+                            "reject",
+                            "NextPolicy",
+                            "NextStatement"
                           ],
                           "title": "Policy Result",
                           "type": "string",
@@ -2057,14 +2223,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1Aspathsets",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2092,6 +2250,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -2131,14 +2297,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1Communitysets",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2166,6 +2324,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -2253,23 +2419,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1NamespaceAspathsets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2297,6 +2446,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -2384,15 +2550,6 @@
         "operationId": "getDeletedRoutingpoliciesEdaNokiaComV1alpha1NamespaceAspathsets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2404,6 +2561,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -2492,27 +2658,10 @@
         "operationId": "readRoutingpoliciesEdaNokiaComV1alpha1NamespaceAspathsets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the ASPathSet to retrieve",
+            "description": "name of the ASPathSet",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -2537,6 +2686,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -2905,23 +3063,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1NamespaceCommunitysets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2949,6 +3090,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3036,15 +3194,6 @@
         "operationId": "getDeletedRoutingpoliciesEdaNokiaComV1alpha1NamespaceCommunitysets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3056,6 +3205,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3144,27 +3302,10 @@
         "operationId": "readRoutingpoliciesEdaNokiaComV1alpha1NamespaceCommunitysets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the CommunitySet to retrieve",
+            "description": "name of the CommunitySet",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3189,6 +3330,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3557,23 +3707,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1NamespacePolicys",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3601,6 +3734,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3688,15 +3838,6 @@
         "operationId": "getDeletedRoutingpoliciesEdaNokiaComV1alpha1NamespacePolicys",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3708,6 +3849,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3796,27 +3946,10 @@
         "operationId": "readRoutingpoliciesEdaNokiaComV1alpha1NamespacePolicys",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Policy to retrieve",
+            "description": "name of the Policy",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3841,6 +3974,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4209,23 +4351,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1NamespacePrefixsets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4253,6 +4378,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4340,15 +4482,6 @@
         "operationId": "getDeletedRoutingpoliciesEdaNokiaComV1alpha1NamespacePrefixsets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4360,6 +4493,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4448,27 +4590,10 @@
         "operationId": "readRoutingpoliciesEdaNokiaComV1alpha1NamespacePrefixsets",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the PrefixSet to retrieve",
+            "description": "name of the PrefixSet",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4493,6 +4618,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4813,14 +4947,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1Policys",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4848,6 +4974,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4887,14 +5021,6 @@
         "operationId": "listRoutingpoliciesEdaNokiaComV1alpha1Prefixsets",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4922,6 +5048,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }

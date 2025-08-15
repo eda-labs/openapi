@@ -584,6 +584,98 @@
       "UIResult": {
         "type": "string"
       },
+      "WorkflowGetInputsRespElem": {
+        "properties": {
+          "ackPrompt": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "schemaPrompt": {
+            "properties": {},
+            "type": "object"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowId": {
+        "properties": {
+          "id": {
+            "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "WorkflowIdentifier": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowInputData": {
+        "items": {
+          "$ref": "#/components/schemas/WorkflowInputDataElem"
+        },
+        "type": "array"
+      },
+      "WorkflowInputDataElem": {
+        "properties": {
+          "ack": {
+            "description": "acknowledge or reject the input request",
+            "type": "boolean"
+          },
+          "input": {
+            "description": "provide a json blob to the workflow",
+            "properties": {},
+            "type": "object"
+          },
+          "subflow": {
+            "$ref": "#/components/schemas/WorkflowIdentifier"
+          }
+        },
+        "type": "object"
+      },
       "com.nokia.eda.fabrics.v1alpha1.Fabric": {
         "description": "Fabric is the Schema for the fabrics API",
         "properties": {
@@ -832,7 +924,7 @@
                               "group": "qos.eda.nokia.com",
                               "resource": "egresspolicys",
                               "type": "gvr",
-                              "version": "v1alpha1"
+                              "version": "v1"
                             }
                           ],
                           "ui-column-span": 2,
@@ -850,7 +942,7 @@
                               "group": "qos.eda.nokia.com",
                               "resource": "ingresspolicys",
                               "type": "gvr",
-                              "version": "v1alpha1"
+                              "version": "v1"
                             }
                           ],
                           "ui-column-span": 2,
@@ -2018,7 +2110,7 @@
               },
               "lastChange": {
                 "description": "The time when the state of the resource last changed.",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string"
               },
@@ -2507,7 +2599,7 @@
                           "group": "qos.eda.nokia.com",
                           "resource": "egresspolicys",
                           "type": "gvr",
-                          "version": "v1alpha1"
+                          "version": "v1"
                         }
                       ],
                       "ui-column-span": 2,
@@ -2525,7 +2617,7 @@
                           "group": "qos.eda.nokia.com",
                           "resource": "ingresspolicys",
                           "type": "gvr",
-                          "version": "v1alpha1"
+                          "version": "v1"
                         }
                       ],
                       "ui-column-span": 2,
@@ -2606,7 +2698,7 @@
               },
               "lastChange": {
                 "description": "The time when the state of the resource last changed",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string"
               },
@@ -2826,6 +2918,278 @@
           "ui-title": "Metadata",
           "ui-title-key": "metadata"
         }
+      },
+      "com.nokia.eda.fabrics.v1alpha1.IslPing": {
+        "description": "IslPing is the Schema for the islpings API",
+        "properties": {
+          "apiVersion": {
+            "default": "fabrics.eda.nokia.com/v1alpha1",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "kind": {
+            "default": "IslPing",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-visible-if": "false"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.IslPing_metadata"
+          },
+          "spec": {
+            "description": "This workflow is used to ping ISLs (Inter-Switch Links) to verify connectivity within a Fabric.\nIt accepts a list of fabrics, ISLs, or selectors for both to match ISLs,\nand returns the results of the pings, including the status of each ISL.",
+            "properties": {
+              "count": {
+                "default": 1,
+                "description": "Count is the number of pings to send.",
+                "title": "Count",
+                "type": "integer"
+              },
+              "fabricSelectors": {
+                "description": "Fabric Selectors is a list of fabric selectors to execute ISL pings for.\nThis is a list of label expressions, e.g. [\"eda.nokia.com/role=leaf\", \"eda.nokia.com/region=us-west\"].",
+                "format": "labelselector",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Fabric Selectors",
+                "type": "array"
+              },
+              "fabrics": {
+                "description": "Fabrics is a list of fabrics to execute ISL pings for.",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Fabrics",
+                "type": "array",
+                "x-eda-nokia-com": {
+                  "ui-auto-completes": [
+                    {
+                      "condition": "true",
+                      "group": "fabrics.eda.nokia.com",
+                      "resource": "fabrics",
+                      "subject": true,
+                      "type": "gvr",
+                      "version": "v1alpha1"
+                    }
+                  ]
+                }
+              },
+              "islSelectors": {
+                "description": "Inter-Switch Link Selectors is a list of selectors to execute ISL pings for.\nThis is a list of label expressions, e.g. [\"eda.nokia.com/role=leaf\", \"eda.nokia.com/region=us-west\"].",
+                "format": "labelselector",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Inter-Switch Link Selectors",
+                "type": "array"
+              },
+              "isls": {
+                "description": "Inter-Switch Links is a list of named ISL resources to execute ISL pings for.",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Inter-Switch Links",
+                "type": "array",
+                "x-eda-nokia-com": {
+                  "ui-auto-completes": [
+                    {
+                      "condition": "true",
+                      "group": "fabrics.eda.nokia.com",
+                      "resource": "isls",
+                      "subject": true,
+                      "type": "gvr",
+                      "version": "v1alpha1"
+                    }
+                  ]
+                }
+              },
+              "timeoutSeconds": {
+                "default": 5,
+                "description": "TimeoutSeconds is the timeout for the ping in seconds.",
+                "title": "Timeout Seconds",
+                "type": "integer"
+              }
+            },
+            "title": "Specification",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
+          },
+          "status": {
+            "description": "IslPingStatus defines the observed state of IslPing",
+            "properties": {
+              "details": {
+                "description": "Details contains the results of the pings performed for each ISL.\nEach entry in the list corresponds to an ISL that was pinged.",
+                "items": {
+                  "properties": {
+                    "details": {
+                      "properties": {
+                        "averageTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "maxTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "minTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "received": {
+                          "type": "integer"
+                        },
+                        "sent": {
+                          "type": "integer"
+                        },
+                        "stdDevNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "totalTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "result": {
+                "description": "Result is the overall result of the ping operation.\nIt can be one of the following values:\n- \"Success\": All pings were successful.\n- \"Failed\": No pings were successful.\n- \"PartialSuccess\": Some pings were successful, but not all.",
+                "enum": [
+                  "Success",
+                  "Failed",
+                  "PartialSuccess"
+                ],
+                "title": "Result",
+                "type": "string"
+              }
+            },
+            "readOnly": true,
+            "title": "Status",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind",
+          "metadata",
+          "spec"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.fabrics.v1alpha1.IslPingList": {
+        "description": "IslPingList is a list of islpings",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.IslPing"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.fabrics.v1alpha1.IslPing_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "fabrics.eda.nokia.com",
+                  "kind": "IslPing",
+                  "type": "label",
+                  "version": "v1alpha1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
       }
     },
     "securitySchemes": {
@@ -2952,14 +3316,6 @@
         "operationId": "listFabricsEdaNokiaComV1alpha1Fabrics",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -2987,6 +3343,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3026,14 +3390,6 @@
         "operationId": "listFabricsEdaNokiaComV1alpha1Isls",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3061,6 +3417,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3148,23 +3512,6 @@
         "operationId": "listFabricsEdaNokiaComV1alpha1NamespaceFabrics",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3192,6 +3539,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3279,15 +3643,6 @@
         "operationId": "getDeletedFabricsEdaNokiaComV1alpha1NamespaceFabrics",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3299,6 +3654,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3387,27 +3751,10 @@
         "operationId": "readFabricsEdaNokiaComV1alpha1NamespaceFabrics",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Fabric to retrieve",
+            "description": "name of the Fabric",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3432,6 +3779,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3800,23 +4156,6 @@
         "operationId": "listFabricsEdaNokiaComV1alpha1NamespaceIsls",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3844,6 +4183,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3931,15 +4287,6 @@
         "operationId": "getDeletedFabricsEdaNokiaComV1alpha1NamespaceIsls",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3951,6 +4298,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4039,27 +4395,10 @@
         "operationId": "readFabricsEdaNokiaComV1alpha1NamespaceIsls",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the ISL to retrieve",
+            "description": "name of the ISL",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4084,6 +4423,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4395,6 +4743,604 @@
         "summary": "Get the topology for the specified namespaced ISL.",
         "tags": [
           "apps"
+        ]
+      }
+    },
+    "/workflows/v1/fabrics.eda.nokia.com/v1alpha1/islpings": {
+      "get": {
+        "operationId": "wfListFabricsEdaNokiaComV1alpha1Islpings",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.IslPingList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.fabrics.v1alpha1.IslPingList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all IslPing instances.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/fabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/islpings": {
+      "get": {
+        "operationId": "wfListFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.IslPingList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.fabrics.v1alpha1.IslPingList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all IslPing instances in this namespace.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "post": {
+        "description": "create a IslPing",
+        "operationId": "wfCreateFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "the namespace scope in which to create the IslPing",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.IslPing"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowId"
+                }
+              }
+            },
+            "description": "The response for a successful POST workflows request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/fabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/islpings/{name}": {
+      "delete": {
+        "operationId": "wfDeleteFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "name of the IslPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Delete a IslPing workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "get": {
+        "operationId": "wfReadFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "name of the IslPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.fabrics.v1alpha1.IslPing"
+                }
+              }
+            },
+            "description": "com.nokia.eda.fabrics.v1alpha1.IslPing"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read the specified IslPing.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/fabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/islpings/{name}/_artifacts": {
+      "get": {
+        "operationId": "wfListArtifactsFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "name of the IslPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "The response for a successful list artifacts request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read list of artifacts generated by a IslPing workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/fabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/islpings/{name}/_artifacts/{artifact}": {
+      "get": {
+        "operationId": "wfReadArtifactFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "name of the IslPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "name of the artifact to download",
+            "in": "path",
+            "name": "artifact",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested artifact."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read artifact generated by a IslPing workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/fabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/islpings/{name}/_input": {
+      "get": {
+        "operationId": "wfListInputFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "name of the IslPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowGetInputsRespElem"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing specifications for this flow & subflow's requested input."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get inputs requested by the IslPing.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "put": {
+        "operationId": "wfSubmitInputFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "name of the IslPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowInputData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {},
+            "description": ""
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Submit input requested by the IslPing.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/fabrics.eda.nokia.com/v1alpha1/namespaces/{namespace}/islpings/{name}/_logs": {
+      "get": {
+        "operationId": "wfReadLogsFabricsEdaNokiaComV1alpha1NamespaceIslpings",
+        "parameters": [
+          {
+            "description": "name of the IslPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The response for a successful GET logs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read logs output by the IslPing.",
+        "tags": [
+          "workflows"
         ]
       }
     }

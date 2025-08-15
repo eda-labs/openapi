@@ -682,7 +682,7 @@
               },
               "lastBooted": {
                 "description": "The date and time this component last booted",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Booted",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -693,7 +693,7 @@
               },
               "lastChange": {
                 "description": "The date and time this component last changed operational state",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -800,8 +800,7 @@
         "required": [
           "apiVersion",
           "kind",
-          "metadata",
-          "spec"
+          "metadata"
         ],
         "type": "object"
       },
@@ -985,7 +984,7 @@
               },
               "lastChange": {
                 "description": "The date and time this Component last changed operational state",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -1204,7 +1203,7 @@
               },
               "lastBooted": {
                 "description": "The date and time this component last booted",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Booted",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -1215,7 +1214,7 @@
               },
               "lastChange": {
                 "description": "The date and time this component last changed operational state",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -1456,8 +1455,7 @@
         "required": [
           "apiVersion",
           "kind",
-          "metadata",
-          "spec"
+          "metadata"
         ],
         "type": "object"
       },
@@ -1591,7 +1589,7 @@
               },
               "lastBooted": {
                 "description": "The date and time this component last booted",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Booted",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -1602,7 +1600,7 @@
               },
               "lastChange": {
                 "description": "The date and time this component last changed operational state",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -1829,8 +1827,7 @@
         "required": [
           "apiVersion",
           "kind",
-          "metadata",
-          "spec"
+          "metadata"
         ],
         "type": "object"
       },
@@ -1964,7 +1961,7 @@
               },
               "lastBooted": {
                 "description": "The date and time this component last booted",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Booted",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -1975,7 +1972,7 @@
               },
               "lastChange": {
                 "description": "The date and time this component last changed operational state",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -2133,8 +2130,7 @@
         "required": [
           "apiVersion",
           "kind",
-          "metadata",
-          "spec"
+          "metadata"
         ],
         "type": "object"
       },
@@ -2268,7 +2264,7 @@
               },
               "lastBooted": {
                 "description": "The date and time this component last booted",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Booted",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -2279,7 +2275,7 @@
               },
               "lastChange": {
                 "description": "The date and time this component last changed operational state",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -2506,8 +2502,7 @@
         "required": [
           "apiVersion",
           "kind",
-          "metadata",
-          "spec"
+          "metadata"
         ],
         "type": "object"
       },
@@ -3136,7 +3131,7 @@
               },
               "lastBooted": {
                 "description": "The date and time this component last booted",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Booted",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -3147,7 +3142,7 @@
               },
               "lastChange": {
                 "description": "The date and time this component last changed operational state",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string",
                 "x-eda-nokia-com": {
@@ -3592,14 +3587,6 @@
         "operationId": "listComponentsEdaNokiaComV1Chassis",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3627,6 +3614,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3666,14 +3661,6 @@
         "operationId": "listComponentsEdaNokiaComV1Components",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3701,6 +3688,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3740,14 +3735,6 @@
         "operationId": "listComponentsEdaNokiaComV1Controlmodules",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3775,6 +3762,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3814,14 +3809,6 @@
         "operationId": "listComponentsEdaNokiaComV1Fabricmodules",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3849,6 +3836,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3888,14 +3883,6 @@
         "operationId": "listComponentsEdaNokiaComV1Fans",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3923,6 +3910,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3962,14 +3957,6 @@
         "operationId": "listComponentsEdaNokiaComV1Interfacemodules",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3997,6 +3984,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4036,14 +4031,6 @@
         "operationId": "listComponentsEdaNokiaComV1Monitors",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4071,6 +4058,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4110,23 +4105,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespaceChassis",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4154,6 +4132,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4193,27 +4188,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespaceChassis",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Chassis to retrieve",
+            "description": "name of the Chassis",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4238,6 +4216,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4444,23 +4431,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespaceComponents",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4488,6 +4458,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4527,27 +4514,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespaceComponents",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Component to retrieve",
+            "description": "name of the Component",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4572,6 +4542,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4778,23 +4757,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespaceControlmodules",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4822,6 +4784,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4861,27 +4840,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespaceControlmodules",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the ControlModule to retrieve",
+            "description": "name of the ControlModule",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4906,6 +4868,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -5112,23 +5083,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespaceFabricmodules",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -5156,6 +5110,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -5195,27 +5166,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespaceFabricmodules",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the FabricModule to retrieve",
+            "description": "name of the FabricModule",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -5240,6 +5194,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -5446,23 +5409,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespaceFans",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -5490,6 +5436,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -5529,27 +5492,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespaceFans",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Fan to retrieve",
+            "description": "name of the Fan",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -5574,6 +5520,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -5780,23 +5735,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespaceInterfacemodules",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -5824,6 +5762,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -5863,27 +5818,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespaceInterfacemodules",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the InterfaceModule to retrieve",
+            "description": "name of the InterfaceModule",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -5908,6 +5846,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -6162,23 +6109,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespaceMonitors",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -6206,6 +6136,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -6293,15 +6240,6 @@
         "operationId": "getDeletedComponentsEdaNokiaComV1NamespaceMonitors",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -6313,6 +6251,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -6401,27 +6348,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespaceMonitors",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Monitor to retrieve",
+            "description": "name of the Monitor",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -6446,6 +6376,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -6766,23 +6705,6 @@
         "operationId": "listComponentsEdaNokiaComV1NamespacePowersupplies",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -6810,6 +6732,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -6849,27 +6788,10 @@
         "operationId": "readComponentsEdaNokiaComV1NamespacePowersupplies",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the PowerSupply to retrieve",
+            "description": "name of the PowerSupply",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -6894,6 +6816,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -7100,14 +7031,6 @@
         "operationId": "listComponentsEdaNokiaComV1Powersupplies",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -7135,6 +7058,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }

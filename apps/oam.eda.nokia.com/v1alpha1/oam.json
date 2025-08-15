@@ -584,12 +584,94 @@
       "UIResult": {
         "type": "string"
       },
+      "WorkflowGetInputsRespElem": {
+        "properties": {
+          "ackPrompt": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "schemaPrompt": {
+            "properties": {},
+            "type": "object"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
       "WorkflowId": {
         "properties": {
           "id": {
             "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
             "format": "int64",
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "WorkflowIdentifier": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowInputData": {
+        "items": {
+          "$ref": "#/components/schemas/WorkflowInputDataElem"
+        },
+        "type": "array"
+      },
+      "WorkflowInputDataElem": {
+        "properties": {
+          "ack": {
+            "description": "acknowledge or reject the input request",
+            "type": "boolean"
+          },
+          "input": {
+            "description": "provide a json blob to the workflow",
+            "properties": {},
+            "type": "object"
+          },
+          "subflow": {
+            "$ref": "#/components/schemas/WorkflowIdentifier"
           }
         },
         "type": "object"
@@ -719,7 +801,7 @@
                           "group": "services.eda.nokia.com",
                           "resource": "routers",
                           "type": "gvr",
-                          "version": "v1alpha1"
+                          "version": "v1"
                         }
                       ],
                       "ui-column-span": 2,
@@ -1534,6 +1616,7 @@
                                   },
                                   "type": {
                                     "default": "Auto",
+                                    "description": "Type of the entry which can be IPV4, IPV6 or Auto.",
                                     "enum": [
                                       "IPV4",
                                       "IPV6",
@@ -1587,7 +1670,7 @@
                                     "group": "services.eda.nokia.com",
                                     "resource": "bridgeinterfaces",
                                     "type": "gvr",
-                                    "version": "v1alpha1"
+                                    "version": "v1"
                                   }
                                 ],
                                 "ui-column-span": 2,
@@ -1636,7 +1719,7 @@
                                           "group": "services.eda.nokia.com",
                                           "resource": "vlans",
                                           "type": "gvr",
-                                          "version": "v1alpha1"
+                                          "version": "v1"
                                         }
                                       ],
                                       "ui-column-span": 2,
@@ -1670,7 +1753,7 @@
                                     "group": "services.eda.nokia.com",
                                     "resource": "vlans",
                                     "type": "gvr",
-                                    "version": "v1alpha1"
+                                    "version": "v1"
                                   }
                                 ],
                                 "ui-column-span": 2,
@@ -1762,7 +1845,7 @@
                               "group": "services.eda.nokia.com",
                               "resource": "bridgeinterfaces",
                               "type": "gvr",
-                              "version": "v1alpha1"
+                              "version": "v1"
                             }
                           ],
                           "ui-column-span": 2,
@@ -1811,7 +1894,7 @@
                                     "group": "services.eda.nokia.com",
                                     "resource": "vlans",
                                     "type": "gvr",
-                                    "version": "v1alpha1"
+                                    "version": "v1"
                                   }
                                 ],
                                 "ui-column-span": 2,
@@ -1845,7 +1928,7 @@
                               "group": "services.eda.nokia.com",
                               "resource": "vlans",
                               "type": "gvr",
-                              "version": "v1alpha1"
+                              "version": "v1"
                             }
                           ],
                           "ui-column-span": 2,
@@ -1898,7 +1981,7 @@
             "properties": {
               "lastChange": {
                 "description": "Indicates when this SubInterface last changed state.",
-                "format": "date",
+                "format": "date-time",
                 "title": "Last Change",
                 "type": "string"
               },
@@ -2154,8 +2237,8 @@
           "ui-title-key": "metadata"
         }
       },
-      "com.nokia.eda.oam.v1alpha1.Ping": {
-        "description": "Ping is the Schema for the pings API",
+      "com.nokia.eda.oam.v1alpha1.NewPing": {
+        "description": "NewPing is the Schema for the newpings API",
         "properties": {
           "apiVersion": {
             "default": "oam.eda.nokia.com/v1alpha1",
@@ -2165,29 +2248,66 @@
             }
           },
           "kind": {
-            "default": "Ping",
+            "default": "NewPing",
             "type": "string",
             "x-eda-nokia-com": {
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.Ping_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing_metadata"
           },
           "spec": {
-            "description": "PingSpec defines the desired state of Ping",
+            "description": "Ping allows a ping to be initiated to a specific address on node/set of nodes.",
             "properties": {
               "address": {
-                "title": "address",
-                "type": "string"
+                "description": "Address to ping.\nThis is a single IP address (IPv4 or IPv6) or a hostname that resolves to an IP address.",
+                "title": "Target Address",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 50
+                }
+              },
+              "count": {
+                "default": 1,
+                "description": "Count is the number of pings to send.",
+                "title": "Count",
+                "type": "integer",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 300,
+                  "ui-single-line-group": "CountTimeout"
+                }
               },
               "networkInstance": {
-                "title": "NetworkInstance",
-                "type": "string"
-              },
-              "node": {
-                "title": "node",
+                "description": "The network instance to use for the ping. This is the named network instance on the node, typically \"default\" or some other base name.\nIf not specified, the default network instance will be used, which is typically the main/default/global network interface on the node.",
+                "title": "Network Instance",
                 "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 250
+                }
+              },
+              "nodeSelectors": {
+                "description": "NodeSelectors is a list of node selectors to select nodes to perform pings on.\nThis matches labels on TopoNode resources, including those TopoNodes in the list of nodes that pings will be performed on.\nIf no nodes are specified, and no node selectors are specified, all nodes in the given namespace will be selected.",
+                "format": "labelselector",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Node Selectors",
+                "type": "array",
+                "x-eda-nokia-com": {
+                  "ui-order-priority": 200
+                }
+              },
+              "nodes": {
+                "description": "Nodes is a list of nodes to perform pings on.\nItems in the list should be the names of the nodes, where each node will have a ping performed on it.\nIf no nodes are specified, and no node selectors are specified, all nodes in the given namespace will be selected.",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Nodes",
+                "type": "array",
                 "x-eda-nokia-com": {
                   "ui-auto-completes": [
                     {
@@ -2198,35 +2318,24 @@
                       "type": "gvr",
                       "version": "v1"
                     }
-                  ]
+                  ],
+                  "ui-order-priority": 100
                 }
               },
-              "pingType": {
-                "enum": [
-                  "isl",
-                  "node",
-                  "system"
-                ],
-                "title": "pingtype",
-                "type": "string"
-              },
-              "pods": {
-                "items": {
-                  "type": "string"
-                },
-                "title": "Pods",
-                "type": "array"
-              },
-              "roles": {
-                "items": {
-                  "type": "string"
-                },
-                "title": "roles",
-                "type": "array"
+              "timeoutSeconds": {
+                "default": 5,
+                "description": "TimeoutSeconds is the timeout for the ping in seconds.",
+                "title": "Timeout Seconds",
+                "type": "integer",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 400,
+                  "ui-single-line-group": "CountTimeout"
+                }
               }
             },
             "required": [
-              "pingType"
+              "address"
             ],
             "title": "Specification",
             "type": "object",
@@ -2235,32 +2344,78 @@
             }
           },
           "status": {
-            "description": "PingStatus defines the observed state of Ping",
+            "description": "NewPingStatus defines the observed state of NewPing",
             "properties": {
-              "id": {
-                "description": "Id",
-                "title": "ID",
-                "type": "integer"
+              "details": {
+                "description": "Details contains the results of the pings performed on each node.\nEach entry in the list corresponds to a node that was pinged.",
+                "items": {
+                  "properties": {
+                    "details": {
+                      "properties": {
+                        "averageTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "maxTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "minTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "received": {
+                          "type": "integer"
+                        },
+                        "sent": {
+                          "type": "integer"
+                        },
+                        "stdDevNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "totalTimeNanoseconds": {
+                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "format": "int64",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "networkInstance": {
+                      "type": "string"
+                    },
+                    "node": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
               },
               "result": {
-                "description": "Aggregate result of the Flow",
+                "default": "Success",
+                "description": "Result is the overall result of the ping operation.\nIt can be one of the following values:\n- \"Success\": All pings were successful.\n- \"Failed\": No pings were successful.\n- \"PartialSuccess\": Some pings were successful, but not all.",
                 "enum": [
-                  "OK",
+                  "Success",
                   "Failed",
-                  "Terminated",
-                  "WaitingForInput",
-                  "Running",
-                  "WaitingToStart",
-                  "SubflowWaitingForInput"
+                  "PartialSuccess"
                 ],
                 "title": "Result",
                 "type": "string"
               }
             },
             "readOnly": true,
-            "required": [
-              "result"
-            ],
             "title": "Status",
             "type": "object",
             "x-eda-nokia-com": {
@@ -2276,7 +2431,29 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.oam.v1alpha1.Ping_metadata": {
+      "com.nokia.eda.oam.v1alpha1.NewPingList": {
+        "description": "NewPingList is a list of newpings",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.oam.v1alpha1.NewPing_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -2299,7 +2476,7 @@
                 {
                   "condition": "true",
                   "group": "oam.eda.nokia.com",
-                  "kind": "Ping",
+                  "kind": "NewPing",
                   "type": "label",
                   "version": "v1alpha1"
                 }
@@ -2363,21 +2540,40 @@
             "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.TechSupport_metadata"
           },
           "spec": {
-            "description": "TechSupportSpec defines the desired state of TechSupport",
+            "description": "Generate technical support packages for a node or set of nodes.",
             "properties": {
-              "nodeSelector": {
+              "nodeSelectors": {
+                "description": "List of node selectors to select nodes generate technical support packages for.\nThis matches labels on TopoNode resources.\nIf no nodes are specified, and no node selectors are specified, all nodes in the given namespace will be selected.\nThis is a list of label expressions, e.g. [\"eda.nokia.com/role=leaf\"].",
+                "format": "labelselector",
                 "items": {
                   "type": "string"
                 },
-                "title": "nodeselector",
-                "type": "array"
+                "title": "Node Selectors",
+                "type": "array",
+                "x-eda-nokia-com": {
+                  "ui-order-priority": 200
+                }
               },
               "nodes": {
+                "description": "List of nodes to generate and collect technical support packages for.",
                 "items": {
                   "type": "string"
                 },
-                "title": "nodes",
-                "type": "array"
+                "title": "Nodes",
+                "type": "array",
+                "x-eda-nokia-com": {
+                  "ui-auto-completes": [
+                    {
+                      "condition": "true",
+                      "group": "core.eda.nokia.com",
+                      "resource": "toponodes",
+                      "subject": true,
+                      "type": "gvr",
+                      "version": "v1"
+                    }
+                  ],
+                  "ui-order-priority": 100
+                }
               }
             },
             "title": "Specification",
@@ -2387,7 +2583,7 @@
             }
           },
           "status": {
-            "description": "TechSupportStatus defines the observed state of TechSupport",
+            "description": "Result of the technical support package generation.",
             "properties": {
               "id": {
                 "description": "Id",
@@ -2413,6 +2609,28 @@
           "kind",
           "metadata",
           "spec"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.oam.v1alpha1.TechSupportList": {
+        "description": "TechSupportList is a list of techsupports",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.TechSupport"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind"
         ],
         "type": "object"
       },
@@ -3027,14 +3245,6 @@
         "operationId": "listOamEdaNokiaComV1alpha1Mirrors",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3062,6 +3272,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3149,23 +3367,6 @@
         "operationId": "listOamEdaNokiaComV1alpha1NamespaceMirrors",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3193,6 +3394,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3280,15 +3498,6 @@
         "operationId": "getDeletedOamEdaNokiaComV1alpha1NamespaceMirrors",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3300,6 +3509,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3388,27 +3606,10 @@
         "operationId": "readOamEdaNokiaComV1alpha1NamespaceMirrors",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Mirror to retrieve",
+            "description": "name of the Mirror",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -3433,6 +3634,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3801,23 +4011,6 @@
         "operationId": "listOamEdaNokiaComV1alpha1NamespaceThresholds",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3845,6 +4038,23 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -3932,15 +4142,6 @@
         "operationId": "getDeletedOamEdaNokiaComV1alpha1NamespaceThresholds",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -3952,6 +4153,15 @@
             "description": "stream information for streaming request",
             "in": "query",
             "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4040,27 +4250,10 @@
         "operationId": "readOamEdaNokiaComV1alpha1NamespaceThresholds",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Threshold to retrieve",
+            "description": "name of the Threshold",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4085,6 +4278,15 @@
             "description": "resource content will be returned as it was at the time of this git hash",
             "in": "query",
             "name": "hash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4405,14 +4607,6 @@
         "operationId": "listOamEdaNokiaComV1alpha1Thresholds",
         "parameters": [
           {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "client information for streaming request",
             "in": "query",
             "name": "eventclient",
@@ -4440,6 +4634,14 @@
             "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
             "in": "query",
             "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4473,13 +4675,93 @@
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/pings": {
-      "post": {
-        "description": "create a Ping",
-        "operationId": "createOamEdaNokiaComV1alpha1NamespacePings",
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings": {
+      "get": {
+        "operationId": "wfListOamEdaNokiaComV1alpha1NamespaceNewpings",
         "parameters": [
           {
-            "description": "the namespace scope in which to create the Ping",
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPingList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.oam.v1alpha1.NewPingList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all NewPing instances in this namespace.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "post": {
+        "description": "create a NewPing",
+        "operationId": "wfCreateOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "the namespace scope in which to create the NewPing",
             "in": "path",
             "name": "namespace",
             "required": true,
@@ -4492,7 +4774,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.Ping"
+                "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing"
               }
             }
           },
@@ -4525,10 +4807,483 @@
         ]
       }
     },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}": {
+      "delete": {
+        "operationId": "wfDeleteOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "name of the NewPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Delete a NewPing workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "get": {
+        "operationId": "wfReadOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "name of the NewPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing"
+                }
+              }
+            },
+            "description": "com.nokia.eda.oam.v1alpha1.NewPing"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read the specified NewPing.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_artifacts": {
+      "get": {
+        "operationId": "wfListArtifactsOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "name of the NewPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "The response for a successful list artifacts request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read list of artifacts generated by a NewPing workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_artifacts/{artifact}": {
+      "get": {
+        "operationId": "wfReadArtifactOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "name of the NewPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "name of the artifact to download",
+            "in": "path",
+            "name": "artifact",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested artifact."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read artifact generated by a NewPing workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_input": {
+      "get": {
+        "operationId": "wfListInputOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "name of the NewPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowGetInputsRespElem"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing specifications for this flow & subflow's requested input."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get inputs requested by the NewPing.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "put": {
+        "operationId": "wfSubmitInputOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "name of the NewPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowInputData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {},
+            "description": ""
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Submit input requested by the NewPing.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_logs": {
+      "get": {
+        "operationId": "wfReadLogsOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "parameters": [
+          {
+            "description": "name of the NewPing",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The response for a successful GET logs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read logs output by the NewPing.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
     "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/techsupports": {
+      "get": {
+        "operationId": "wfListOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.TechSupportList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.oam.v1alpha1.TechSupportList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all TechSupport instances in this namespace.",
+        "tags": [
+          "workflows"
+        ]
+      },
       "post": {
         "description": "create a TechSupport",
-        "operationId": "createOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "operationId": "wfCreateOamEdaNokiaComV1alpha1NamespaceTechsupports",
         "parameters": [
           {
             "description": "the namespace scope in which to create the TechSupport",
@@ -4572,6 +5327,545 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/techsupports/{name}": {
+      "delete": {
+        "operationId": "wfDeleteOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "name of the TechSupport",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Delete a TechSupport workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "get": {
+        "operationId": "wfReadOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "name of the TechSupport",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.TechSupport"
+                }
+              }
+            },
+            "description": "com.nokia.eda.oam.v1alpha1.TechSupport"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read the specified TechSupport.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/techsupports/{name}/_artifacts": {
+      "get": {
+        "operationId": "wfListArtifactsOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "name of the TechSupport",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "The response for a successful list artifacts request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read list of artifacts generated by a TechSupport workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/techsupports/{name}/_artifacts/{artifact}": {
+      "get": {
+        "operationId": "wfReadArtifactOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "name of the TechSupport",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "name of the artifact to download",
+            "in": "path",
+            "name": "artifact",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested artifact."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read artifact generated by a TechSupport workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/techsupports/{name}/_input": {
+      "get": {
+        "operationId": "wfListInputOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "name of the TechSupport",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowGetInputsRespElem"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing specifications for this flow & subflow's requested input."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get inputs requested by the TechSupport.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "put": {
+        "operationId": "wfSubmitInputOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "name of the TechSupport",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowInputData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {},
+            "description": ""
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Submit input requested by the TechSupport.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/techsupports/{name}/_logs": {
+      "get": {
+        "operationId": "wfReadLogsOamEdaNokiaComV1alpha1NamespaceTechsupports",
+        "parameters": [
+          {
+            "description": "name of the TechSupport",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The response for a successful GET logs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read logs output by the TechSupport.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/newpings": {
+      "get": {
+        "operationId": "wfListOamEdaNokiaComV1alpha1Newpings",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPingList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.oam.v1alpha1.NewPingList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all NewPing instances.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/techsupports": {
+      "get": {
+        "operationId": "wfListOamEdaNokiaComV1alpha1Techsupports",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.TechSupportList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.oam.v1alpha1.TechSupportList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all TechSupport instances.",
         "tags": [
           "workflows"
         ]

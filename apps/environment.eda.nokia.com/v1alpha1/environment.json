@@ -77,12 +77,94 @@
         ],
         "type": "object"
       },
+      "WorkflowGetInputsRespElem": {
+        "properties": {
+          "ackPrompt": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "schemaPrompt": {
+            "properties": {},
+            "type": "object"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
       "WorkflowId": {
         "properties": {
           "id": {
             "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
             "format": "int64",
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "WorkflowIdentifier": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowInputData": {
+        "items": {
+          "$ref": "#/components/schemas/WorkflowInputDataElem"
+        },
+        "type": "array"
+      },
+      "WorkflowInputDataElem": {
+        "properties": {
+          "ack": {
+            "description": "acknowledge or reject the input request",
+            "type": "boolean"
+          },
+          "input": {
+            "description": "provide a json blob to the workflow",
+            "properties": {},
+            "type": "object"
+          },
+          "subflow": {
+            "$ref": "#/components/schemas/WorkflowIdentifier"
           }
         },
         "type": "object"
@@ -108,14 +190,16 @@
             "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.CliPlugin_metadata"
           },
           "spec": {
-            "description": "CliPluginSpec defines the desired state of CliPlugin",
+            "description": "This workflow is used to push a CLI plugin to a node.",
             "properties": {
-              "pluginContent": {
-                "title": "PluginContent",
+              "content": {
+                "description": "Content of the plugin to push.",
+                "title": "Plugin Content",
                 "type": "string"
               },
-              "pluginName": {
-                "title": "PluginName",
+              "fileName": {
+                "description": "Name of the plugin to push. For SR Linux this should include the .py extension, without leading slashes.\ne.g. \"myplugin.py\".",
+                "title": "Plugin Name",
                 "type": "string"
               }
             },
@@ -152,6 +236,28 @@
           "kind",
           "metadata",
           "spec"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.environment.v1alpha1.CliPluginList": {
+        "description": "CliPluginList is a list of cliplugins",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.CliPlugin"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind"
         ],
         "type": "object"
       },
@@ -242,9 +348,10 @@
             "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.SetupEnv_metadata"
           },
           "spec": {
-            "description": "SetupEnvSpec defines the desired state of SetupEnv",
+            "description": "This workflow is used to set up the global environment on a node.\nFor SR Linux this results in an overwrite of the /etc/opt/srlinux/env file.",
             "properties": {
               "env": {
+                "description": "Content of the environment file to push.",
                 "title": "env",
                 "type": "string"
               }
@@ -282,6 +389,28 @@
           "kind",
           "metadata",
           "spec"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.environment.v1alpha1.SetupEnvList": {
+        "description": "SetupEnvList is a list of setupenvs",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.SetupEnv"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind"
         ],
         "type": "object"
       },
@@ -366,10 +495,163 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/cliplugins": {
+      "get": {
+        "operationId": "wfListEnvironmentEdaNokiaComV1alpha1Cliplugins",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.CliPluginList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.environment.v1alpha1.CliPluginList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all CliPlugin instances.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
     "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/cliplugins": {
+      "get": {
+        "operationId": "wfListEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.CliPluginList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.environment.v1alpha1.CliPluginList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all CliPlugin instances in this namespace.",
+        "tags": [
+          "workflows"
+        ]
+      },
       "post": {
         "description": "create a CliPlugin",
-        "operationId": "createEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "operationId": "wfCreateEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
         "parameters": [
           {
             "description": "the namespace scope in which to create the CliPlugin",
@@ -418,10 +700,483 @@
         ]
       }
     },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/cliplugins/{name}": {
+      "delete": {
+        "operationId": "wfDeleteEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "name of the CliPlugin",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Delete a CliPlugin workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "get": {
+        "operationId": "wfReadEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "name of the CliPlugin",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.CliPlugin"
+                }
+              }
+            },
+            "description": "com.nokia.eda.environment.v1alpha1.CliPlugin"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read the specified CliPlugin.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/cliplugins/{name}/_artifacts": {
+      "get": {
+        "operationId": "wfListArtifactsEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "name of the CliPlugin",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "The response for a successful list artifacts request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read list of artifacts generated by a CliPlugin workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/cliplugins/{name}/_artifacts/{artifact}": {
+      "get": {
+        "operationId": "wfReadArtifactEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "name of the CliPlugin",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "name of the artifact to download",
+            "in": "path",
+            "name": "artifact",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested artifact."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read artifact generated by a CliPlugin workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/cliplugins/{name}/_input": {
+      "get": {
+        "operationId": "wfListInputEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "name of the CliPlugin",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowGetInputsRespElem"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing specifications for this flow & subflow's requested input."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get inputs requested by the CliPlugin.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "put": {
+        "operationId": "wfSubmitInputEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "name of the CliPlugin",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowInputData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {},
+            "description": ""
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Submit input requested by the CliPlugin.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/cliplugins/{name}/_logs": {
+      "get": {
+        "operationId": "wfReadLogsEnvironmentEdaNokiaComV1alpha1NamespaceCliplugins",
+        "parameters": [
+          {
+            "description": "name of the CliPlugin",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The response for a successful GET logs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read logs output by the CliPlugin.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
     "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/setupenvs": {
+      "get": {
+        "operationId": "wfListEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.SetupEnvList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.environment.v1alpha1.SetupEnvList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all SetupEnv instances in this namespace.",
+        "tags": [
+          "workflows"
+        ]
+      },
       "post": {
         "description": "create a SetupEnv",
-        "operationId": "createEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "operationId": "wfCreateEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
         "parameters": [
           {
             "description": "the namespace scope in which to create the SetupEnv",
@@ -465,6 +1220,472 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/setupenvs/{name}": {
+      "delete": {
+        "operationId": "wfDeleteEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "name of the SetupEnv",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Delete a SetupEnv workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "get": {
+        "operationId": "wfReadEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "name of the SetupEnv",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.SetupEnv"
+                }
+              }
+            },
+            "description": "com.nokia.eda.environment.v1alpha1.SetupEnv"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read the specified SetupEnv.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/setupenvs/{name}/_artifacts": {
+      "get": {
+        "operationId": "wfListArtifactsEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "name of the SetupEnv",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "The response for a successful list artifacts request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read list of artifacts generated by a SetupEnv workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/setupenvs/{name}/_artifacts/{artifact}": {
+      "get": {
+        "operationId": "wfReadArtifactEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "name of the SetupEnv",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "name of the artifact to download",
+            "in": "path",
+            "name": "artifact",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested artifact."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read artifact generated by a SetupEnv workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/setupenvs/{name}/_input": {
+      "get": {
+        "operationId": "wfListInputEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "name of the SetupEnv",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowGetInputsRespElem"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing specifications for this flow & subflow's requested input."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get inputs requested by the SetupEnv.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "put": {
+        "operationId": "wfSubmitInputEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "name of the SetupEnv",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowInputData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {},
+            "description": ""
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Submit input requested by the SetupEnv.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/namespaces/{namespace}/setupenvs/{name}/_logs": {
+      "get": {
+        "operationId": "wfReadLogsEnvironmentEdaNokiaComV1alpha1NamespaceSetupenvs",
+        "parameters": [
+          {
+            "description": "name of the SetupEnv",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The response for a successful GET logs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read logs output by the SetupEnv.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/environment.eda.nokia.com/v1alpha1/setupenvs": {
+      "get": {
+        "operationId": "wfListEnvironmentEdaNokiaComV1alpha1Setupenvs",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.environment.v1alpha1.SetupEnvList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.environment.v1alpha1.SetupEnvList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all SetupEnv instances.",
         "tags": [
           "workflows"
         ]

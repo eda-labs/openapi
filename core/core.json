@@ -114,6 +114,66 @@
         ]
       }
     },
+    "/core/access/v1/checkAccess": {
+      "post": {
+        "description": "Checks the current user's access to the various resources, urls and tables provided in the\nrequest body.",
+        "operationId": "accessCheckAccess",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckAccessRequest"
+              }
+            }
+          },
+          "description": "The set of resources/urls/tables to check for user access levels.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckAccessResponse"
+                }
+              }
+            },
+            "description": "The response for a successful non-streaming POST request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "ErrorResponse"
+          }
+        },
+        "tags": [
+          "coreAccess"
+        ]
+      }
+    },
     "/core/access/v1/namespaces": {
       "get": {
         "description": "Gets the list of namespaces the current user can access. If the current user is able to access the\n'All Namespaces' option that will be indicated in the response.",
@@ -2772,7 +2832,7 @@
                 }
               }
             },
-            "description": "The response for a successful POST label completion request."
+            "description": "The potential label completions from the request."
           },
           "default": {
             "content": {
@@ -3092,6 +3152,309 @@
         "summary": "Query request using the 'natural' query language",
         "tags": [
           "coreQuery"
+        ]
+      }
+    },
+    "/core/store/v1/appsummaries": {
+      "get": {
+        "description": "Retrieve a list of all applications that are discovered by the EDA store in all catalogs.\nThe list can be optionally filtered based on the installed and upgradable state of the applications.",
+        "operationId": "storeGetAppSummaries",
+        "parameters": [
+          {
+            "description": "If present, this causes only installed(if true)/uninstalled(if false) applications to be returned.",
+            "in": "query",
+            "name": "installed",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "If present, this causes only upgradable(if true)/up-to-date(if false) applications to be returned.",
+            "in": "query",
+            "name": "upgradable",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreAppSummaryList"
+                }
+              }
+            },
+            "description": "List of application summaries from the EDA store"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Retrieve application summary list",
+        "tags": [
+          "coreStore"
+        ]
+      }
+    },
+    "/core/store/v1/categories": {
+      "get": {
+        "description": "Retrieves the list of application categories that are set on all the applications in all the catalogs in the store.",
+        "operationId": "storeGetCategories",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreCategoryList"
+                }
+              }
+            },
+            "description": "Array of application category strings from the EDA store"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Retrieve application category list",
+        "tags": [
+          "coreStore"
+        ]
+      }
+    },
+    "/core/store/v1/installedsettings/app/{appId}": {
+      "get": {
+        "operationId": "storeGetAppInstalledSettings",
+        "parameters": [
+          {
+            "description": "application ID of the application whose settings should be retrieved.",
+            "in": "path",
+            "name": "appId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreAppInstalledSettings"
+                }
+              }
+            },
+            "description": "The currently installed settings for the application."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Gets the currently installed settings for the specified application.",
+        "tags": [
+          "coreStore"
+        ]
+      }
+    },
+    "/core/store/v1/manifest/catalog/{catalog}/app/{appId}": {
+      "get": {
+        "description": "The version should be specified by one or the other (not both) of the semVer and commitHash\nquery parameters.",
+        "operationId": "storeGetAppManifest",
+        "parameters": [
+          {
+            "description": "The catalog where the application version resides",
+            "in": "path",
+            "name": "catalog",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "application ID of the application version",
+            "in": "path",
+            "name": "appId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The semantic version for the application version.",
+            "in": "query",
+            "name": "semVer",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The commit hash for the application version.",
+            "in": "query",
+            "name": "commitHash",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreAppManifest"
+                }
+              }
+            },
+            "description": "Application manifest"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "retrieves the manifest of the specified version of the application from the specified catalog.",
+        "tags": [
+          "coreStore"
+        ]
+      }
+    },
+    "/core/store/v1/requirementsgraph/catalog/{catalog}/app/{appId}": {
+      "get": {
+        "description": "The version should be specified by one or the other (not both) of the semVer and commitHash\nquery parameters.",
+        "operationId": "storeGetAppRequirementsGraph",
+        "parameters": [
+          {
+            "description": "The catalog where the application version resides",
+            "in": "path",
+            "name": "catalog",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "application ID of the application version",
+            "in": "path",
+            "name": "appId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The semantic version for the application version.",
+            "in": "query",
+            "name": "semVer",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The commit hash for the application version.",
+            "in": "query",
+            "name": "commitHash",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreAppRequirementsGraph"
+                }
+              }
+            },
+            "description": "The requirements graph information corresponding to the request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Initiates the calculation of (if necessary) and retrieves the requirements graph for the application version specified specified by the arguments to the request.",
+        "tags": [
+          "coreStore"
+        ]
+      }
+    },
+    "/core/store/v1/versions/app/{appId}": {
+      "get": {
+        "description": "Retrieves the versions of the specified application available in the EDA store.",
+        "operationId": "storeGetAppVersions",
+        "parameters": [
+          {
+            "description": "application ID of the application whose versions should be retrieved",
+            "in": "path",
+            "name": "appId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreAppVersionList"
+                }
+              }
+            },
+            "description": "List of versions of the application"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Retrieve list of application versions",
+        "tags": [
+          "coreStore"
         ]
       }
     },
@@ -4982,10 +5345,227 @@
           "coreWorkflow"
         ]
       }
+    },
+    "/core/workflows/v1": {
+      "get": {
+        "operationId": "wfListAllNs",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowStatusSummary"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing a summary of each workflow's status."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get workflows across all groups, versions, and kinds.",
+        "tags": [
+          "coreWorkflows"
+        ]
+      }
+    },
+    "/store/v1/file/catalog/{catalog}/app/{appId}/{path}": {
+      "get": {
+        "description": "The version should be specified by one or the other (not both) of the semVer and commitHash\nquery parameters.",
+        "operationId": "storeGetAppFile",
+        "parameters": [
+          {
+            "description": "The catalog where the application version resides",
+            "in": "path",
+            "name": "catalog",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "application ID of the application version",
+            "in": "path",
+            "name": "appId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The semantic version for the application version.",
+            "in": "query",
+            "name": "semVer",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The commit hash for the application version.",
+            "in": "query",
+            "name": "commitHash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the path in the application for the requested file",
+            "in": "path",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested file"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Response for errors."
+          }
+        },
+        "summary": "retrieves the contents of the file in the application version specified by the arguments to the request.",
+        "tags": [
+          "coreStore"
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "AccessQuery": {
+        "properties": {
+          "gvk": {
+            "$ref": "#/components/schemas/GroupVersionKind"
+          },
+          "gvr": {
+            "$ref": "#/components/schemas/GroupVersionResource"
+          },
+          "namespace": {
+            "description": "The namespace to check. Empty string (or omit) to check for cluster-wide access",
+            "type": "string"
+          },
+          "path": {
+            "description": "Target url or table of the access check. Provided when type is table or url",
+            "type": "string"
+          },
+          "permissions": {
+            "description": "The permissions for the requested resource/url/table.",
+            "enum": [
+              "read",
+              "readWrite"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of rule to check for",
+            "enum": [
+              "gvk",
+              "gvr",
+              "url",
+              "table"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "AccessResult": {
+        "properties": {
+          "access": {
+            "description": "Indicates if the user can access the requested resource",
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        },
+        "type": "object"
+      },
       "AlarmData": {
         "description": "The information about a single alarm or alarm history",
         "properties": {
@@ -5303,7 +5883,6 @@
           "readOnly": {
             "default": true,
             "description": "If false, changes made to LDAP-mapped attribute via EDA will be synced back to the LDAP server.  Otherwise, changes are not made in LDAP.",
-            "readOnly": true,
             "type": "boolean",
             "x-eda-nokia-com": {
               "ui-column-span": 2,
@@ -5632,6 +6211,20 @@
         },
         "type": "array"
       },
+      "CheckAccessRequest": {
+        "additionalProperties": {
+          "$ref": "#/components/schemas/AccessQuery"
+        },
+        "description": "Body of a checkAccess request. Contains a key and AccessQuery for each resource/url/table to be checked for user access",
+        "type": "object"
+      },
+      "CheckAccessResponse": {
+        "additionalProperties": {
+          "$ref": "#/components/schemas/AccessResult"
+        },
+        "description": "Body of a access check response. Contains an AccessResult for each of the keys provided in the request",
+        "type": "object"
+      },
       "CrAnnotation": {
         "properties": {
           "cr": {
@@ -5925,12 +6518,32 @@
       "GroupVersionKind": {
         "properties": {
           "group": {
+            "description": "Name of the API group",
             "type": "string"
           },
           "kind": {
+            "description": "The Kind of the resource",
             "type": "string"
           },
           "version": {
+            "description": "Version of the API group",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "GroupVersionResource": {
+        "properties": {
+          "group": {
+            "description": "Name of the API group",
+            "type": "string"
+          },
+          "resource": {
+            "description": "The plural name of the resource",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version of the API group",
             "type": "string"
           }
         },
@@ -5995,6 +6608,30 @@
           "status"
         ],
         "title": "Structure containing a health report for a particular service.",
+        "type": "object"
+      },
+      "Identifier": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "K8SPatchOp": {
@@ -6380,6 +7017,13 @@
             },
             "type": "array"
           },
+          "jsonSchema": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "description": "The JSON schema definition for the query data being returned.",
+            "type": "object"
+          },
           "schema": {
             "$ref": "#/components/schemas/QuerySchema"
           }
@@ -6429,6 +7073,215 @@
         ],
         "title": "A role rule controlling access to a kubernetes resource.",
         "type": "object"
+      },
+      "StoreAppInstalledSettings": {
+        "properties": {
+          "appId": {
+            "description": "The application identifier.",
+            "type": "string"
+          },
+          "settings": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "description": "The settings for the application as a JSON object.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "StoreAppManifest": {
+        "properties": {
+          "manifest": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "description": "The application manifest as JSON",
+            "type": "object"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/StoreAppVersionMetadata"
+          },
+          "version": {
+            "$ref": "#/components/schemas/StoreAppVersion"
+          }
+        },
+        "type": "object"
+      },
+      "StoreAppRequirementsGraph": {
+        "properties": {
+          "graphItems": {
+            "description": "The items in the requirements graph resulting from the request.  Only present if the state is FINISHED.",
+            "items": {
+              "$ref": "#/components/schemas/StoreAppRequirementsGraphItem"
+            },
+            "type": "array"
+          },
+          "state": {
+            "description": "The state of the requirements graph generation request.",
+            "enum": [
+              "UNKNOWN",
+              "RUNNING",
+              "FINISHED",
+              "FAILED"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "StoreAppRequirementsGraphItem": {
+        "properties": {
+          "appId": {
+            "description": "The application identifier to which the 'requires' elements of graph items will refer.",
+            "type": "string"
+          },
+          "installedAppVersion": {
+            "$ref": "#/components/schemas/StoreAppRequirementsGraphItem_installedAppVersion"
+          },
+          "requires": {
+            "description": "The identifiers for the applications on which this application version depends.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "targetAppVersion": {
+            "$ref": "#/components/schemas/StoreAppRequirementsGraphItem_targetAppVersion"
+          }
+        },
+        "required": [
+          "appId",
+          "targetAppVersion"
+        ],
+        "type": "object"
+      },
+      "StoreAppSummary": {
+        "properties": {
+          "appId": {
+            "description": "Unique ID identifying this application",
+            "type": "string"
+          },
+          "catalogs": {
+            "description": "Catalogs where this app was found",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "categories": {
+            "description": "Application categories.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": {
+            "description": "Application description that can be used for user display purposes",
+            "type": "string"
+          },
+          "infoVersion": {
+            "$ref": "#/components/schemas/StoreAppVersion"
+          },
+          "infoVersionMetadata": {
+            "$ref": "#/components/schemas/StoreAppVersionMetadata"
+          },
+          "installed": {
+            "description": "\"true\" if the app is installed",
+            "type": "boolean"
+          },
+          "installedVersion": {
+            "$ref": "#/components/schemas/StoreAppVersion"
+          },
+          "installedVersionMetadata": {
+            "$ref": "#/components/schemas/StoreAppVersionMetadata"
+          },
+          "latestVersion": {
+            "$ref": "#/components/schemas/StoreAppVersion"
+          },
+          "latestVersionMetadata": {
+            "$ref": "#/components/schemas/StoreAppVersionMetadata"
+          },
+          "supportedEndpoints": {
+            "description": "Application supported endpoints.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Application title that can be used for user display purposes",
+            "type": "string"
+          },
+          "upgradable": {
+            "description": "\"true\" if there is a new version that can be installed",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "StoreAppSummaryList": {
+        "items": {
+          "$ref": "#/components/schemas/StoreAppSummary"
+        },
+        "type": "array"
+      },
+      "StoreAppVersion": {
+        "description": "The information about an application version available from a catalog.\nAt least one of \"semVer\" or \"commitHash\" must/will be defined.",
+        "properties": {
+          "appId": {
+            "description": "The identifier for the application",
+            "type": "string"
+          },
+          "catalog": {
+            "description": "The catalog in which this application version was found",
+            "type": "string"
+          },
+          "commitHash": {
+            "description": "The commit hash for the application version.",
+            "type": "string"
+          },
+          "semVer": {
+            "description": "The semantic version for the application version.",
+            "type": "string"
+          }
+        },
+        "title": "Application version information",
+        "type": "object"
+      },
+      "StoreAppVersionList": {
+        "items": {
+          "$ref": "#/components/schemas/StoreAppVersionWithMetadata"
+        },
+        "type": "array"
+      },
+      "StoreAppVersionMetadata": {
+        "properties": {
+          "publishedTime": {
+            "description": "The date and time when the application version was published.",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "title": "The metadata associated with an application version.",
+        "type": "object"
+      },
+      "StoreAppVersionWithMetadata": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/StoreAppVersionMetadata"
+          },
+          "version": {
+            "$ref": "#/components/schemas/StoreAppVersion"
+          }
+        },
+        "type": "object"
+      },
+      "StoreCategoryList": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
       },
       "TableRule": {
         "description": "A role rule controlling access to a EDB table.  Note that\nthere is never write access to EDB.",
@@ -7051,6 +7904,10 @@
               "$ref": "#/components/schemas/TransactionNodeResult"
             },
             "type": "array"
+          },
+          "topologySupported": {
+            "description": "Whether a topology representation of this transaction is supported",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -7090,12 +7947,6 @@
           "outputCrs": {
             "items": {
               "$ref": "#/components/schemas/NsCrGvkName"
-            },
-            "type": "array"
-          },
-          "poolAllocation": {
-            "items": {
-              "$ref": "#/components/schemas/TransactionPoolAllocation"
             },
             "type": "array"
           },
@@ -7158,23 +8009,6 @@
         ],
         "type": "object"
       },
-      "TransactionPoolAllocation": {
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "poolName": {
-            "type": "string"
-          },
-          "poolTemplate": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "TransactionResultInputResources": {
         "properties": {
           "inputCrs": {
@@ -7223,9 +8057,6 @@
           "executionTime": {
             "format": "uint32",
             "type": "integer"
-          },
-          "output": {
-            "type": "string"
           }
         },
         "type": "object"
@@ -7539,6 +8370,48 @@
         },
         "type": "object"
       },
+      "WorkflowStatusSummary": {
+        "properties": {
+          "creationTime": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "lastUpdate": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/Identifier"
+          },
+          "rootWorkflow": {
+            "$ref": "#/components/schemas/Identifier"
+          },
+          "state": {
+            "$ref": "#/components/schemas/WorkflowResult"
+          },
+          "username": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "singleVersionInfo": {
         "properties": {
           "builtDate": {
@@ -7702,6 +8575,50 @@
           "ui-title": "Group Support",
           "ui-title-key": "group_support"
         }
+      },
+      "StoreAppRequirementsGraphItem_installedAppVersion": {
+        "description": "The application version installed in the cluster, if installed.",
+        "properties": {
+          "appId": {
+            "description": "The identifier for the application",
+            "type": "string"
+          },
+          "catalog": {
+            "description": "The catalog in which this application version was found",
+            "type": "string"
+          },
+          "commitHash": {
+            "description": "The commit hash for the application version.",
+            "type": "string"
+          },
+          "semVer": {
+            "description": "The semantic version for the application version.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "StoreAppRequirementsGraphItem_targetAppVersion": {
+        "description": "This graph item instance contains the dependencies for this particular application version.",
+        "properties": {
+          "appId": {
+            "description": "The identifier for the application",
+            "type": "string"
+          },
+          "catalog": {
+            "description": "The catalog in which this application version was found",
+            "type": "string"
+          },
+          "commitHash": {
+            "description": "The commit hash for the application version.",
+            "type": "string"
+          },
+          "semVer": {
+            "description": "The semantic version for the application version.",
+            "type": "string"
+          }
+        },
+        "type": "object"
       }
     },
     "securitySchemes": {
