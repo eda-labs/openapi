@@ -18,7 +18,7 @@ Unofficial catalog of the OpenAPI specs for the [Nokia EDA](https://docs.eda.dev
 * [Interfaces](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/interfaces.eda.nokia.com/v1alpha1/interfaces.json)
 * [OAM](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/oam.eda.nokia.com/v1alpha1/oam.json)
 * [Protocols](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/protocols.eda.nokia.com/v1/protocols.json)
-* [QoS](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/qos.eda.nokia.com/v1alpha1/qos.json)
+* [QoS](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/qos.eda.nokia.com/v1/qos.json)
 * [Routing](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/routing.eda.nokia.com/v1alpha1/routing.json)
 * [Routing Policies](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/routingpolicies.eda.nokia.com/v1alpha1/routingpolicies.json)
 * [Security](https://rest.wiki/?https://raw.githubusercontent.com/eda-labs/openapi/refs/tags/v25.8.1-rc1/apps/security.eda.nokia.com/v1alpha1/security.json)
