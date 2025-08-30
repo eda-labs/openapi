@@ -1,12 +1,13 @@
 #!/bin/bash
 
-export EDA_API_URL="https://eda-api.k8s.orb.local"
-export EDA_VERSION="v25.4.1"
+export EDA_API_URL="${EDA_API_URL:-"https://try.eda.dev:9443"}"
+export EDA_VERSION="v25.8.1"
 export KC_KEYCLOAK_URL="${EDA_API_URL}/core/httpproxy/v1/keycloak/"
 export KC_REALM="master"
 export KC_CLIENT_ID="admin-cli"
 export KC_USERNAME="admin"
-export KC_PASSWORD="admin"
+export KC_PASSWORD=${KC_PASSWORD:-"admin"}
+export EDA_PASSWORD=${EDA_PASSWORD:-"admin"}
 
 # Get access token
 KC_ADMIN_ACCESS_TOKEN=$(curl -sk \
@@ -31,7 +32,7 @@ KC_CLIENTS=$(curl -sk \
   -H "Authorization: Bearer $KC_ADMIN_ACCESS_TOKEN" \
   -H "Content-Type: application/json")
 
-echo ${KC_CLIENTS}
+# echo ${KC_CLIENTS}
 
 # Get the `eda` client's ID
 EDA_CLIENT_ID=$(echo "$KC_CLIENTS" | jq -r ".[] | select(.clientId==\"${API_CLIENT_ID}\") | .id")
@@ -63,7 +64,7 @@ EDA_ACCESS_TOKEN=$(curl -sk "${EDA_API_URL}/core/httpproxy/v1/keycloak/realms/${
   --data-urlencode 'grant_type=password' \
   --data-urlencode 'scope=openid' \
   --data-urlencode 'username=admin' \
-  --data-urlencode 'password=admin' \
+  --data-urlencode "password=${EDA_PASSWORD}" \
   --data-urlencode "client_secret=${EDA_CLIENT_SECRET}" \
   -H 'Content-Type: application/json' | jq -r '.access_token')
 
@@ -78,7 +79,7 @@ EDA_APIS=$(curl -sk ${EDA_API_URL}/openapi/v3 \
 
 echo $EDA_APIS | jq .
 
-echo "$EDA_APIS" | jq -r '.paths | to_entries[] | .key + " " + .value.serverRelativeURL' | while read -r path url; do
+echo "$EDA_APIS" | jq -r '.paths | to_entries[] | .key + " " + .value["x-eda-nokia-com"].serverRelativeURL' | while read -r path url; do
     # Create directory structure
     mkdir -p "./${path}"
 

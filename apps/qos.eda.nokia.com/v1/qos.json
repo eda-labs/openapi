@@ -584,25 +584,29 @@
       "UIResult": {
         "type": "string"
       },
-      "com.nokia.eda.qos.v1alpha1.EgressPolicy": {
+      "com.nokia.eda.qos.v1.EgressPolicy": {
         "description": "EgressPolicy is the Schema for the egresspolicys API",
         "properties": {
           "apiVersion": {
-            "default": "qos.eda.nokia.com/v1alpha1",
+            "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "EgressPolicy",
+            "pattern": "^EgressPolicy$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to EgressPolicy",
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy_metadata"
           },
           "spec": {
             "description": "EgressPolicySpec defines the desired state of EgressPolicy",
@@ -658,7 +662,7 @@
                                 "group": "qos.eda.nokia.com",
                                 "resource": "forwardingclasss",
                                 "type": "gvr",
-                                "version": "v1alpha1"
+                                "version": "v1"
                               }
                             ],
                             "ui-unique-key": true
@@ -749,7 +753,7 @@
                                 "group": "qos.eda.nokia.com",
                                 "resource": "forwardingclasss",
                                 "type": "gvr",
-                                "version": "v1alpha1"
+                                "version": "v1"
                               }
                             ],
                             "ui-unique-key": true
@@ -793,7 +797,7 @@
                             "group": "qos.eda.nokia.com",
                             "resource": "forwardingclasss",
                             "type": "gvr",
-                            "version": "v1alpha1"
+                            "version": "v1"
                           }
                         ],
                         "ui-column-span": 2
@@ -810,7 +814,7 @@
                             "group": "qos.eda.nokia.com",
                             "resource": "queues",
                             "type": "gvr",
-                            "version": "v1alpha1"
+                            "version": "v1"
                           }
                         ],
                         "ui-column-span": 2
@@ -921,7 +925,7 @@
                                   "group": "qos.eda.nokia.com",
                                   "resource": "queues",
                                   "type": "gvr",
-                                  "version": "v1alpha1"
+                                  "version": "v1"
                                 }
                               ],
                               "ui-column-span": 2
@@ -973,7 +977,7 @@
                             "group": "qos.eda.nokia.com",
                             "resource": "queues",
                             "type": "gvr",
-                            "version": "v1alpha1"
+                            "version": "v1"
                           }
                         ],
                         "ui-column-span": 4
@@ -1128,7 +1132,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.EgressPolicyList": {
+      "com.nokia.eda.qos.v1.EgressPolicyList": {
         "description": "EgressPolicyList is a list of egresspolicys",
         "properties": {
           "apiVersion": {
@@ -1136,7 +1140,7 @@
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy"
+              "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy"
             },
             "type": "array"
           },
@@ -1150,7 +1154,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.EgressPolicy_DeletedResourceEntry": {
+      "com.nokia.eda.qos.v1.EgressPolicy_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "format": "date-time",
@@ -1197,13 +1201,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.EgressPolicy_DeletedResources": {
+      "com.nokia.eda.qos.v1.EgressPolicy_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.qos.v1alpha1.EgressPolicy_metadata": {
+      "com.nokia.eda.qos.v1.EgressPolicy_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -1228,7 +1232,7 @@
                   "group": "qos.eda.nokia.com",
                   "kind": "EgressPolicy",
                   "type": "label",
-                  "version": "v1alpha1"
+                  "version": "v1"
                 }
               ],
               "ui-order-priority": 30,
@@ -1269,25 +1273,29 @@
           "ui-title-key": "metadata"
         }
       },
-      "com.nokia.eda.qos.v1alpha1.ForwardingClass": {
+      "com.nokia.eda.qos.v1.ForwardingClass": {
         "description": "ForwardingClass is the Schema for the forwardingclasss API",
         "properties": {
           "apiVersion": {
-            "default": "qos.eda.nokia.com/v1alpha1",
+            "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ForwardingClass",
+            "pattern": "^ForwardingClass$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ForwardingClass",
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass_metadata"
           },
           "spec": {
             "description": "The ForwaringClass is used as a placeholder for to allow multiple other resources to reference the same forwarding class.",
@@ -1310,12 +1318,11 @@
         "required": [
           "apiVersion",
           "kind",
-          "metadata",
-          "spec"
+          "metadata"
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.ForwardingClassList": {
+      "com.nokia.eda.qos.v1.ForwardingClassList": {
         "description": "ForwardingClassList is a list of forwardingclasss",
         "properties": {
           "apiVersion": {
@@ -1323,7 +1330,7 @@
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass"
+              "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass"
             },
             "type": "array"
           },
@@ -1337,7 +1344,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.ForwardingClass_DeletedResourceEntry": {
+      "com.nokia.eda.qos.v1.ForwardingClass_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "format": "date-time",
@@ -1384,13 +1391,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.ForwardingClass_DeletedResources": {
+      "com.nokia.eda.qos.v1.ForwardingClass_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.qos.v1alpha1.ForwardingClass_metadata": {
+      "com.nokia.eda.qos.v1.ForwardingClass_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -1415,7 +1422,7 @@
                   "group": "qos.eda.nokia.com",
                   "kind": "ForwardingClass",
                   "type": "label",
-                  "version": "v1alpha1"
+                  "version": "v1"
                 }
               ],
               "ui-order-priority": 30,
@@ -1456,25 +1463,29 @@
           "ui-title-key": "metadata"
         }
       },
-      "com.nokia.eda.qos.v1alpha1.IngressPolicy": {
+      "com.nokia.eda.qos.v1.IngressPolicy": {
         "description": "IngressPolicy is the Schema for the ingresspolicys API",
         "properties": {
           "apiVersion": {
-            "default": "qos.eda.nokia.com/v1alpha1",
+            "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "IngressPolicy",
+            "pattern": "^IngressPolicy$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to IngressPolicy",
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy_metadata"
           },
           "spec": {
             "description": "IngressPolicySpec defines the desired state of IngressPolicy",
@@ -2412,7 +2423,7 @@
                             "group": "qos.eda.nokia.com",
                             "resource": "forwardingclasss",
                             "type": "gvr",
-                            "version": "v1alpha1"
+                            "version": "v1"
                           }
                         ],
                         "ui-column-span": 2
@@ -2429,7 +2440,7 @@
                             "group": "qos.eda.nokia.com",
                             "resource": "queues",
                             "type": "gvr",
-                            "version": "v1alpha1"
+                            "version": "v1"
                           }
                         ],
                         "ui-column-span": 2
@@ -2527,7 +2538,7 @@
                                   "group": "qos.eda.nokia.com",
                                   "resource": "forwardingclasss",
                                   "type": "gvr",
-                                  "version": "v1alpha1"
+                                  "version": "v1"
                                 }
                               ],
                               "ui-column-span": 2,
@@ -2732,7 +2743,7 @@
                                   "group": "qos.eda.nokia.com",
                                   "resource": "queues",
                                   "type": "gvr",
-                                  "version": "v1alpha1"
+                                  "version": "v1"
                                 }
                               ],
                               "ui-column-span": 2
@@ -2781,7 +2792,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.IngressPolicyList": {
+      "com.nokia.eda.qos.v1.IngressPolicyList": {
         "description": "IngressPolicyList is a list of ingresspolicys",
         "properties": {
           "apiVersion": {
@@ -2789,7 +2800,7 @@
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy"
+              "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy"
             },
             "type": "array"
           },
@@ -2803,7 +2814,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.IngressPolicy_DeletedResourceEntry": {
+      "com.nokia.eda.qos.v1.IngressPolicy_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "format": "date-time",
@@ -2850,13 +2861,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.IngressPolicy_DeletedResources": {
+      "com.nokia.eda.qos.v1.IngressPolicy_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.qos.v1alpha1.IngressPolicy_metadata": {
+      "com.nokia.eda.qos.v1.IngressPolicy_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -2881,7 +2892,7 @@
                   "group": "qos.eda.nokia.com",
                   "kind": "IngressPolicy",
                   "type": "label",
-                  "version": "v1alpha1"
+                  "version": "v1"
                 }
               ],
               "ui-order-priority": 30,
@@ -2922,25 +2933,29 @@
           "ui-title-key": "metadata"
         }
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyAttachment": {
+      "com.nokia.eda.qos.v1.PolicyAttachment": {
         "description": "PolicyAttachment is the Schema for the policyattachments API",
         "properties": {
           "apiVersion": {
-            "default": "qos.eda.nokia.com/v1alpha1",
+            "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "PolicyAttachment",
+            "pattern": "^PolicyAttachment$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to PolicyAttachment",
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment_metadata"
           },
           "spec": {
             "description": "PolicyAttachmentSpec defines the desired state of PolicyAttachment",
@@ -3021,7 +3036,7 @@
                       "group": "qos.eda.nokia.com",
                       "resource": "egresspolicys",
                       "type": "gvr",
-                      "version": "v1alpha1"
+                      "version": "v1"
                     }
                   ],
                   "ui-column-span": 2,
@@ -3040,7 +3055,7 @@
                       "group": "qos.eda.nokia.com",
                       "resource": "ingresspolicys",
                       "type": "gvr",
-                      "version": "v1alpha1"
+                      "version": "v1"
                     }
                   ],
                   "ui-column-span": 2,
@@ -3076,7 +3091,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyAttachmentList": {
+      "com.nokia.eda.qos.v1.PolicyAttachmentList": {
         "description": "PolicyAttachmentList is a list of policyattachments",
         "properties": {
           "apiVersion": {
@@ -3084,7 +3099,7 @@
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment"
+              "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment"
             },
             "type": "array"
           },
@@ -3098,7 +3113,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyAttachment_DeletedResourceEntry": {
+      "com.nokia.eda.qos.v1.PolicyAttachment_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "format": "date-time",
@@ -3145,13 +3160,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyAttachment_DeletedResources": {
+      "com.nokia.eda.qos.v1.PolicyAttachment_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyAttachment_metadata": {
+      "com.nokia.eda.qos.v1.PolicyAttachment_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -3176,7 +3191,7 @@
                   "group": "qos.eda.nokia.com",
                   "kind": "PolicyAttachment",
                   "type": "label",
-                  "version": "v1alpha1"
+                  "version": "v1"
                 }
               ],
               "ui-order-priority": 30,
@@ -3217,25 +3232,29 @@
           "ui-title-key": "metadata"
         }
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyDeployment": {
+      "com.nokia.eda.qos.v1.PolicyDeployment": {
         "description": "PolicyDeployment is the Schema for the policydeployments API",
         "properties": {
           "apiVersion": {
-            "default": "qos.eda.nokia.com/v1alpha1",
+            "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "PolicyDeployment",
+            "pattern": "^PolicyDeployment$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to PolicyDeployment",
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment_metadata"
           },
           "spec": {
             "description": "PolicyDeploymentSpec defines the desired state of PolicyDeployment",
@@ -3251,7 +3270,7 @@
                       "group": "qos.eda.nokia.com",
                       "resource": "egresspolicys",
                       "type": "gvr",
-                      "version": "v1alpha1"
+                      "version": "v1"
                     }
                   ],
                   "ui-column-span": 2,
@@ -3270,7 +3289,7 @@
                       "group": "qos.eda.nokia.com",
                       "resource": "ingresspolicys",
                       "type": "gvr",
-                      "version": "v1alpha1"
+                      "version": "v1"
                     }
                   ],
                   "ui-column-span": 2,
@@ -3281,8 +3300,11 @@
               "interfaceSelector": {
                 "description": "Specifies a label selector to filter the interfaces on which to deploy the policies.",
                 "format": "labelselector",
+                "items": {
+                  "type": "string"
+                },
                 "title": "Interface Selector",
-                "type": "string",
+                "type": "array",
                 "x-eda-nokia-com": {
                   "ui-column-span": 2,
                   "ui-order-priority": 200,
@@ -3346,8 +3368,11 @@
               "nodeSelector": {
                 "description": "Specifies a label selector to filter the nodes on which to deploy the policies.",
                 "format": "labelselector",
+                "items": {
+                  "type": "string"
+                },
                 "title": "Node Selector",
-                "type": "string",
+                "type": "array",
                 "x-eda-nokia-com": {
                   "ui-column-span": 2,
                   "ui-order-priority": 100,
@@ -3379,7 +3404,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyDeploymentList": {
+      "com.nokia.eda.qos.v1.PolicyDeploymentList": {
         "description": "PolicyDeploymentList is a list of policydeployments",
         "properties": {
           "apiVersion": {
@@ -3387,7 +3412,7 @@
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment"
+              "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment"
             },
             "type": "array"
           },
@@ -3401,7 +3426,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyDeployment_DeletedResourceEntry": {
+      "com.nokia.eda.qos.v1.PolicyDeployment_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "format": "date-time",
@@ -3448,13 +3473,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyDeployment_DeletedResources": {
+      "com.nokia.eda.qos.v1.PolicyDeployment_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.qos.v1alpha1.PolicyDeployment_metadata": {
+      "com.nokia.eda.qos.v1.PolicyDeployment_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -3479,7 +3504,7 @@
                   "group": "qos.eda.nokia.com",
                   "kind": "PolicyDeployment",
                   "type": "label",
-                  "version": "v1alpha1"
+                  "version": "v1"
                 }
               ],
               "ui-order-priority": 30,
@@ -3520,25 +3545,29 @@
           "ui-title-key": "metadata"
         }
       },
-      "com.nokia.eda.qos.v1alpha1.Queue": {
+      "com.nokia.eda.qos.v1.Queue": {
         "description": "Queue is the Schema for the queues API",
         "properties": {
           "apiVersion": {
-            "default": "qos.eda.nokia.com/v1alpha1",
+            "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Queue",
+            "pattern": "^Queue$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Queue",
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue_metadata"
           },
           "spec": {
             "description": "The Queue resource is used to define the properties of a queue, which can then be referenced by other resources.",
@@ -3607,7 +3636,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.QueueList": {
+      "com.nokia.eda.qos.v1.QueueList": {
         "description": "QueueList is a list of queues",
         "properties": {
           "apiVersion": {
@@ -3615,7 +3644,7 @@
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue"
+              "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue"
             },
             "type": "array"
           },
@@ -3629,7 +3658,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.Queue_DeletedResourceEntry": {
+      "com.nokia.eda.qos.v1.Queue_DeletedResourceEntry": {
         "properties": {
           "commitTime": {
             "format": "date-time",
@@ -3676,13 +3705,13 @@
         },
         "type": "object"
       },
-      "com.nokia.eda.qos.v1alpha1.Queue_DeletedResources": {
+      "com.nokia.eda.qos.v1.Queue_DeletedResources": {
         "items": {
-          "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue_DeletedResourceEntry"
+          "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue_DeletedResourceEntry"
         },
         "type": "array"
       },
-      "com.nokia.eda.qos.v1alpha1.Queue_metadata": {
+      "com.nokia.eda.qos.v1.Queue_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -3707,7 +3736,7 @@
                   "group": "qos.eda.nokia.com",
                   "kind": "Queue",
                   "type": "label",
-                  "version": "v1alpha1"
+                  "version": "v1"
                 }
               ],
               "ui-order-priority": 30,
@@ -3759,7 +3788,7 @@
   },
   "info": {
     "title": "QoS Application APIs.",
-    "version": "v1alpha1"
+    "version": "v1"
   },
   "openapi": "3.0.1",
   "paths": {
@@ -3794,10 +3823,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1": {
+    "/apps/qos.eda.nokia.com/v1": {
       "get": {
-        "description": "list resources available from qos.eda.nokia.com/v1alpha1",
-        "operationId": "getResourcesQosEdaNokiaComV1alpha1",
+        "description": "list resources available from qos.eda.nokia.com/v1",
+        "operationId": "getResourcesQosEdaNokiaComV1",
         "responses": {
           "200": {
             "content": {
@@ -3825,10 +3854,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/_ui/{pathname}": {
+    "/apps/qos.eda.nokia.com/v1/_ui/{pathname}": {
       "get": {
-        "description": "get UI specification for qos.eda.nokia.com v1alpha1",
-        "operationId": "uiQosEdaNokiaComV1alpha1",
+        "description": "get UI specification for qos.eda.nokia.com v1",
+        "operationId": "uiQosEdaNokiaComV1",
         "parameters": [
           {
             "description": "pathname to the UI specification to retrieve",
@@ -3867,19 +3896,11 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/egresspolicys": {
+    "/apps/qos.eda.nokia.com/v1/egresspolicys": {
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1Egresspolicys",
+        "operationId": "listQosEdaNokiaComV1Egresspolicys",
         "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -3911,6 +3932,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3918,7 +3947,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicyList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicyList"
                 }
               }
             },
@@ -3941,19 +3970,11 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/forwardingclasss": {
+    "/apps/qos.eda.nokia.com/v1/forwardingclasss": {
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1Forwardingclasss",
+        "operationId": "listQosEdaNokiaComV1Forwardingclasss",
         "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -3985,6 +4006,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3992,7 +4021,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClassList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClassList"
                 }
               }
             },
@@ -4015,19 +4044,11 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/ingresspolicys": {
+    "/apps/qos.eda.nokia.com/v1/ingresspolicys": {
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1Ingresspolicys",
+        "operationId": "listQosEdaNokiaComV1Ingresspolicys",
         "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -4059,6 +4080,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4066,7 +4095,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicyList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicyList"
                 }
               }
             },
@@ -4089,9 +4118,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/egresspolicys": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/egresspolicys": {
       "delete": {
-        "operationId": "deleteAllQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "deleteAllQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -4116,7 +4145,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicyList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicyList"
                 }
               }
             },
@@ -4140,25 +4169,8 @@
       },
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "listQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -4190,6 +4202,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4197,7 +4226,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicyList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicyList"
                 }
               }
             },
@@ -4221,7 +4250,7 @@
       },
       "post": {
         "description": "create a EgressPolicy",
-        "operationId": "createQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "createQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
             "in": "path",
@@ -4236,7 +4265,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy"
               }
             }
           },
@@ -4247,7 +4276,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy"
                 }
               }
             },
@@ -4269,19 +4298,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/egresspolicys/_deleted": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/egresspolicys/_deleted": {
       "get": {
-        "operationId": "getDeletedQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "getDeletedQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -4297,6 +4317,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4304,7 +4333,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy_DeletedResources"
                 }
               }
             },
@@ -4327,10 +4356,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/egresspolicys/{name}": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/egresspolicys/{name}": {
       "delete": {
         "description": "delete the specified EgressPolicy",
-        "operationId": "deleteQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "deleteQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -4379,30 +4408,13 @@
       },
       "get": {
         "description": "read the specified EgressPolicy.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "readQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the EgressPolicy to retrieve",
+            "description": "name of the EgressPolicy",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -4430,6 +4442,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4437,7 +4458,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy"
                 }
               }
             },
@@ -4460,7 +4481,7 @@
       },
       "patch": {
         "description": "patch a EgressPolicy",
-        "operationId": "patchQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "patchQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
             "in": "path",
@@ -4494,7 +4515,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy"
                 }
               }
             },
@@ -4517,7 +4538,7 @@
       },
       "put": {
         "description": "replace a EgressPolicy",
-        "operationId": "replaceQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "replaceQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
             "in": "path",
@@ -4540,7 +4561,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy"
               }
             }
           },
@@ -4551,7 +4572,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.EgressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.EgressPolicy"
                 }
               }
             },
@@ -4573,9 +4594,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/egresspolicys/{name}/_revs": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/egresspolicys/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "getHistoryQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
             "description": "name of the EgressPolicy to retrieve",
@@ -4650,9 +4671,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/egresspolicys/{name}/_topology": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/egresspolicys/{name}/_topology": {
       "get": {
-        "operationId": "getTopologyQosEdaNokiaComV1alpha1NamespaceEgresspolicys",
+        "operationId": "getTopologyQosEdaNokiaComV1NamespaceEgresspolicys",
         "parameters": [
           {
             "description": "name of the EgressPolicy to retrieve",
@@ -4741,9 +4762,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/forwardingclasss": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/forwardingclasss": {
       "delete": {
-        "operationId": "deleteAllQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "deleteAllQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -4768,7 +4789,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClassList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClassList"
                 }
               }
             },
@@ -4792,25 +4813,8 @@
       },
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "listQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -4842,6 +4846,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4849,7 +4870,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClassList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClassList"
                 }
               }
             },
@@ -4873,7 +4894,7 @@
       },
       "post": {
         "description": "create a ForwardingClass",
-        "operationId": "createQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "createQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
             "in": "path",
@@ -4888,7 +4909,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass"
               }
             }
           },
@@ -4899,7 +4920,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass"
                 }
               }
             },
@@ -4921,19 +4942,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/forwardingclasss/_deleted": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/forwardingclasss/_deleted": {
       "get": {
-        "operationId": "getDeletedQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "getDeletedQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -4949,6 +4961,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4956,7 +4977,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass_DeletedResources"
                 }
               }
             },
@@ -4979,10 +5000,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/forwardingclasss/{name}": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/forwardingclasss/{name}": {
       "delete": {
         "description": "delete the specified ForwardingClass",
-        "operationId": "deleteQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "deleteQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -5031,30 +5052,13 @@
       },
       "get": {
         "description": "read the specified ForwardingClass.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "readQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the ForwardingClass to retrieve",
+            "description": "name of the ForwardingClass",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -5082,6 +5086,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -5089,7 +5102,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass"
                 }
               }
             },
@@ -5112,7 +5125,7 @@
       },
       "patch": {
         "description": "patch a ForwardingClass",
-        "operationId": "patchQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "patchQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
             "in": "path",
@@ -5146,7 +5159,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass"
                 }
               }
             },
@@ -5169,7 +5182,7 @@
       },
       "put": {
         "description": "replace a ForwardingClass",
-        "operationId": "replaceQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "replaceQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
             "in": "path",
@@ -5192,7 +5205,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass"
               }
             }
           },
@@ -5203,7 +5216,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.ForwardingClass"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.ForwardingClass"
                 }
               }
             },
@@ -5225,9 +5238,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/forwardingclasss/{name}/_revs": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/forwardingclasss/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "getHistoryQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
             "description": "name of the ForwardingClass to retrieve",
@@ -5302,9 +5315,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/forwardingclasss/{name}/_topology": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/forwardingclasss/{name}/_topology": {
       "get": {
-        "operationId": "getTopologyQosEdaNokiaComV1alpha1NamespaceForwardingclasss",
+        "operationId": "getTopologyQosEdaNokiaComV1NamespaceForwardingclasss",
         "parameters": [
           {
             "description": "name of the ForwardingClass to retrieve",
@@ -5393,9 +5406,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/ingresspolicys": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/ingresspolicys": {
       "delete": {
-        "operationId": "deleteAllQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "deleteAllQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -5420,7 +5433,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicyList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicyList"
                 }
               }
             },
@@ -5444,25 +5457,8 @@
       },
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "listQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -5494,6 +5490,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -5501,7 +5514,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicyList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicyList"
                 }
               }
             },
@@ -5525,7 +5538,7 @@
       },
       "post": {
         "description": "create a IngressPolicy",
-        "operationId": "createQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "createQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
             "in": "path",
@@ -5540,7 +5553,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy"
               }
             }
           },
@@ -5551,7 +5564,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy"
                 }
               }
             },
@@ -5573,19 +5586,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/ingresspolicys/_deleted": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/ingresspolicys/_deleted": {
       "get": {
-        "operationId": "getDeletedQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "getDeletedQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -5601,6 +5605,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -5608,7 +5621,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy_DeletedResources"
                 }
               }
             },
@@ -5631,10 +5644,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/ingresspolicys/{name}": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/ingresspolicys/{name}": {
       "delete": {
         "description": "delete the specified IngressPolicy",
-        "operationId": "deleteQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "deleteQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -5683,30 +5696,13 @@
       },
       "get": {
         "description": "read the specified IngressPolicy.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "readQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the IngressPolicy to retrieve",
+            "description": "name of the IngressPolicy",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -5734,6 +5730,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -5741,7 +5746,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy"
                 }
               }
             },
@@ -5764,7 +5769,7 @@
       },
       "patch": {
         "description": "patch a IngressPolicy",
-        "operationId": "patchQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "patchQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
             "in": "path",
@@ -5798,7 +5803,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy"
                 }
               }
             },
@@ -5821,7 +5826,7 @@
       },
       "put": {
         "description": "replace a IngressPolicy",
-        "operationId": "replaceQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "replaceQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
             "in": "path",
@@ -5844,7 +5849,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy"
               }
             }
           },
@@ -5855,7 +5860,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.IngressPolicy"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.IngressPolicy"
                 }
               }
             },
@@ -5877,9 +5882,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/ingresspolicys/{name}/_revs": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/ingresspolicys/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "getHistoryQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
             "description": "name of the IngressPolicy to retrieve",
@@ -5954,9 +5959,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/ingresspolicys/{name}/_topology": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/ingresspolicys/{name}/_topology": {
       "get": {
-        "operationId": "getTopologyQosEdaNokiaComV1alpha1NamespaceIngresspolicys",
+        "operationId": "getTopologyQosEdaNokiaComV1NamespaceIngresspolicys",
         "parameters": [
           {
             "description": "name of the IngressPolicy to retrieve",
@@ -6045,9 +6050,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policyattachments": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policyattachments": {
       "delete": {
-        "operationId": "deleteAllQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "deleteAllQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -6072,7 +6077,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachmentList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachmentList"
                 }
               }
             },
@@ -6096,25 +6101,8 @@
       },
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "listQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -6146,6 +6134,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -6153,7 +6158,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachmentList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachmentList"
                 }
               }
             },
@@ -6177,7 +6182,7 @@
       },
       "post": {
         "description": "create a PolicyAttachment",
-        "operationId": "createQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "createQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
             "in": "path",
@@ -6192,7 +6197,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment"
               }
             }
           },
@@ -6203,7 +6208,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment"
                 }
               }
             },
@@ -6225,19 +6230,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policyattachments/_deleted": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policyattachments/_deleted": {
       "get": {
-        "operationId": "getDeletedQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "getDeletedQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -6253,6 +6249,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -6260,7 +6265,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment_DeletedResources"
                 }
               }
             },
@@ -6283,10 +6288,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policyattachments/{name}": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policyattachments/{name}": {
       "delete": {
         "description": "delete the specified PolicyAttachment",
-        "operationId": "deleteQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "deleteQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -6335,30 +6340,13 @@
       },
       "get": {
         "description": "read the specified PolicyAttachment.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "readQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the PolicyAttachment to retrieve",
+            "description": "name of the PolicyAttachment",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -6386,6 +6374,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -6393,7 +6390,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment"
                 }
               }
             },
@@ -6416,7 +6413,7 @@
       },
       "patch": {
         "description": "patch a PolicyAttachment",
-        "operationId": "patchQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "patchQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
             "in": "path",
@@ -6450,7 +6447,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment"
                 }
               }
             },
@@ -6473,7 +6470,7 @@
       },
       "put": {
         "description": "replace a PolicyAttachment",
-        "operationId": "replaceQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "replaceQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
             "in": "path",
@@ -6496,7 +6493,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment"
               }
             }
           },
@@ -6507,7 +6504,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachment"
                 }
               }
             },
@@ -6529,9 +6526,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policyattachments/{name}/_revs": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policyattachments/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "getHistoryQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
             "description": "name of the PolicyAttachment to retrieve",
@@ -6606,9 +6603,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policyattachments/{name}/_topology": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policyattachments/{name}/_topology": {
       "get": {
-        "operationId": "getTopologyQosEdaNokiaComV1alpha1NamespacePolicyattachments",
+        "operationId": "getTopologyQosEdaNokiaComV1NamespacePolicyattachments",
         "parameters": [
           {
             "description": "name of the PolicyAttachment to retrieve",
@@ -6697,9 +6694,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policydeployments": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policydeployments": {
       "delete": {
-        "operationId": "deleteAllQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "deleteAllQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -6724,7 +6721,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeploymentList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeploymentList"
                 }
               }
             },
@@ -6748,25 +6745,8 @@
       },
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "listQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -6798,6 +6778,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -6805,7 +6802,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeploymentList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeploymentList"
                 }
               }
             },
@@ -6829,7 +6826,7 @@
       },
       "post": {
         "description": "create a PolicyDeployment",
-        "operationId": "createQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "createQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
             "in": "path",
@@ -6844,7 +6841,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment"
               }
             }
           },
@@ -6855,7 +6852,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment"
                 }
               }
             },
@@ -6877,19 +6874,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policydeployments/_deleted": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policydeployments/_deleted": {
       "get": {
-        "operationId": "getDeletedQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "getDeletedQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -6905,6 +6893,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -6912,7 +6909,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment_DeletedResources"
                 }
               }
             },
@@ -6935,10 +6932,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policydeployments/{name}": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policydeployments/{name}": {
       "delete": {
         "description": "delete the specified PolicyDeployment",
-        "operationId": "deleteQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "deleteQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -6987,30 +6984,13 @@
       },
       "get": {
         "description": "read the specified PolicyDeployment.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "readQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the PolicyDeployment to retrieve",
+            "description": "name of the PolicyDeployment",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -7038,6 +7018,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -7045,7 +7034,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment"
                 }
               }
             },
@@ -7068,7 +7057,7 @@
       },
       "patch": {
         "description": "patch a PolicyDeployment",
-        "operationId": "patchQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "patchQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
             "in": "path",
@@ -7102,7 +7091,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment"
                 }
               }
             },
@@ -7125,7 +7114,7 @@
       },
       "put": {
         "description": "replace a PolicyDeployment",
-        "operationId": "replaceQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "replaceQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
             "in": "path",
@@ -7148,7 +7137,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment"
               }
             }
           },
@@ -7159,7 +7148,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeployment"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeployment"
                 }
               }
             },
@@ -7181,9 +7170,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policydeployments/{name}/_revs": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policydeployments/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "getHistoryQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
             "description": "name of the PolicyDeployment to retrieve",
@@ -7258,9 +7247,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/policydeployments/{name}/_topology": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/policydeployments/{name}/_topology": {
       "get": {
-        "operationId": "getTopologyQosEdaNokiaComV1alpha1NamespacePolicydeployments",
+        "operationId": "getTopologyQosEdaNokiaComV1NamespacePolicydeployments",
         "parameters": [
           {
             "description": "name of the PolicyDeployment to retrieve",
@@ -7349,9 +7338,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/queues": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/queues": {
       "delete": {
-        "operationId": "deleteAllQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "deleteAllQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -7376,7 +7365,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.QueueList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.QueueList"
                 }
               }
             },
@@ -7400,25 +7389,8 @@
       },
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "listQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -7450,6 +7422,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -7457,7 +7446,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.QueueList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.QueueList"
                 }
               }
             },
@@ -7481,7 +7470,7 @@
       },
       "post": {
         "description": "create a Queue",
-        "operationId": "createQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "createQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
             "in": "path",
@@ -7496,7 +7485,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue"
               }
             }
           },
@@ -7507,7 +7496,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue"
                 }
               }
             },
@@ -7529,19 +7518,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/queues/_deleted": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/queues/_deleted": {
       "get": {
-        "operationId": "getDeletedQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "getDeletedQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
-          {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -7557,6 +7537,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -7564,7 +7553,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue_DeletedResources"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue_DeletedResources"
                 }
               }
             },
@@ -7587,10 +7576,10 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/queues/{name}": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/queues/{name}": {
       "delete": {
         "description": "delete the specified Queue",
-        "operationId": "deleteQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "deleteQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
             "description": "the namespace scope from which to perform the delete",
@@ -7639,30 +7628,13 @@
       },
       "get": {
         "description": "read the specified Queue.  If a git hash query parameter\nis supplied, the resource as it existed at the time of the git hash\nwill be returned. Streaming is not supported when a particular revision\nis asked for.",
-        "operationId": "readQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "readQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
-            "description": "the namespace scope from which to retrieve the result",
-            "in": "path",
-            "name": "namespace",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "name of the Queue to retrieve",
+            "description": "name of the Queue",
             "in": "path",
             "name": "name",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
             "schema": {
               "type": "string"
             }
@@ -7690,6 +7662,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -7697,7 +7678,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue"
                 }
               }
             },
@@ -7720,7 +7701,7 @@
       },
       "patch": {
         "description": "patch a Queue",
-        "operationId": "patchQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "patchQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
             "in": "path",
@@ -7754,7 +7735,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue"
                 }
               }
             },
@@ -7777,7 +7758,7 @@
       },
       "put": {
         "description": "replace a Queue",
-        "operationId": "replaceQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "replaceQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
             "in": "path",
@@ -7800,7 +7781,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue"
+                "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue"
               }
             }
           },
@@ -7811,7 +7792,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.Queue"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.Queue"
                 }
               }
             },
@@ -7833,9 +7814,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/queues/{name}/_revs": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/queues/{name}/_revs": {
       "get": {
-        "operationId": "getHistoryQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "getHistoryQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
             "description": "name of the Queue to retrieve",
@@ -7910,9 +7891,9 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/namespaces/{namespace}/queues/{name}/_topology": {
+    "/apps/qos.eda.nokia.com/v1/namespaces/{namespace}/queues/{name}/_topology": {
       "get": {
-        "operationId": "getTopologyQosEdaNokiaComV1alpha1NamespaceQueues",
+        "operationId": "getTopologyQosEdaNokiaComV1NamespaceQueues",
         "parameters": [
           {
             "description": "name of the Queue to retrieve",
@@ -8001,19 +7982,11 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/policyattachments": {
+    "/apps/qos.eda.nokia.com/v1/policyattachments": {
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1Policyattachments",
+        "operationId": "listQosEdaNokiaComV1Policyattachments",
         "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -8045,6 +8018,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -8052,7 +8033,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyAttachmentList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyAttachmentList"
                 }
               }
             },
@@ -8075,19 +8056,11 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/policydeployments": {
+    "/apps/qos.eda.nokia.com/v1/policydeployments": {
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1Policydeployments",
+        "operationId": "listQosEdaNokiaComV1Policydeployments",
         "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -8119,6 +8092,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -8126,7 +8107,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.PolicyDeploymentList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.PolicyDeploymentList"
                 }
               }
             },
@@ -8149,19 +8130,11 @@
         ]
       }
     },
-    "/apps/qos.eda.nokia.com/v1alpha1/queues": {
+    "/apps/qos.eda.nokia.com/v1/queues": {
       "get": {
         "description": "The resulting resources can optionally be a subset of the resource content by using the \"fields\" query parameter.",
-        "operationId": "listQosEdaNokiaComV1alpha1Queues",
+        "operationId": "listQosEdaNokiaComV1Queues",
         "parameters": [
-          {
-            "description": "a label selector string to filter the results based on CR labels",
-            "in": "query",
-            "name": "label-selector",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "client information for streaming request",
             "in": "query",
@@ -8193,6 +8166,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -8200,7 +8181,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1alpha1.QueueList"
+                  "$ref": "#/components/schemas/com.nokia.eda.qos.v1.QueueList"
                 }
               }
             },
