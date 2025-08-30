@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "system.eda.nokia.com/v1alpha1",
+            "pattern": "^system\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to system.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Monitor",
+            "pattern": "^Monitor$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Monitor",
               "ui-visible-if": "false"
             }
           },
@@ -940,15 +944,19 @@
         "properties": {
           "apiVersion": {
             "default": "system.eda.nokia.com/v1alpha1",
+            "pattern": "^system\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to system.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "MonitorAggregateState",
+            "pattern": "^MonitorAggregateState$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to MonitorAggregateState",
               "ui-visible-if": "false"
             }
           },
@@ -1159,15 +1167,19 @@
         "properties": {
           "apiVersion": {
             "default": "system.eda.nokia.com/v1alpha1",
+            "pattern": "^system\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to system.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "MonitorState",
+            "pattern": "^MonitorState$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to MonitorState",
               "ui-visible-if": "false"
             }
           },

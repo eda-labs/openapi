@@ -1,12 +1,13 @@
 #!/bin/bash
 
-export EDA_API_URL="https://devbox.netdevops.me:9443"
+export EDA_API_URL="${EDA_API_URL:-"https://try.eda.dev:9443"}"
 export EDA_VERSION="v25.8.1"
 export KC_KEYCLOAK_URL="${EDA_API_URL}/core/httpproxy/v1/keycloak/"
 export KC_REALM="master"
 export KC_CLIENT_ID="admin-cli"
 export KC_USERNAME="admin"
-export KC_PASSWORD="admin"
+export KC_PASSWORD=${KC_PASSWORD:-"admin"}
+export EDA_PASSWORD=${EDA_PASSWORD:-"admin"}
 
 # Get access token
 KC_ADMIN_ACCESS_TOKEN=$(curl -sk \
@@ -63,7 +64,7 @@ EDA_ACCESS_TOKEN=$(curl -sk "${EDA_API_URL}/core/httpproxy/v1/keycloak/realms/${
   --data-urlencode 'grant_type=password' \
   --data-urlencode 'scope=openid' \
   --data-urlencode 'username=admin' \
-  --data-urlencode 'password=admin' \
+  --data-urlencode "password=${EDA_PASSWORD}" \
   --data-urlencode "client_secret=${EDA_CLIENT_SECRET}" \
   -H 'Content-Type: application/json' | jq -r '.access_token')
 

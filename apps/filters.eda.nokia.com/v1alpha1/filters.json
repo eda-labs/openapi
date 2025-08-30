@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "filters.eda.nokia.com/v1alpha1",
+            "pattern": "^filters\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to filters.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ControlPlaneFilter",
+            "pattern": "^ControlPlaneFilter$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ControlPlaneFilter",
               "ui-visible-if": "false"
             }
           },
@@ -1840,15 +1844,19 @@
         "properties": {
           "apiVersion": {
             "default": "filters.eda.nokia.com/v1alpha1",
+            "pattern": "^filters\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to filters.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Filter",
+            "pattern": "^Filter$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Filter",
               "ui-visible-if": "false"
             }
           },

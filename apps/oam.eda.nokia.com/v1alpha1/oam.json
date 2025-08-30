@@ -681,15 +681,19 @@
         "properties": {
           "apiVersion": {
             "default": "oam.eda.nokia.com/v1alpha1",
+            "pattern": "^oam\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to oam.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Mirror",
+            "pattern": "^Mirror$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Mirror",
               "ui-visible-if": "false"
             }
           },
@@ -2237,25 +2241,29 @@
           "ui-title-key": "metadata"
         }
       },
-      "com.nokia.eda.oam.v1alpha1.NewPing": {
-        "description": "NewPing is the Schema for the newpings API",
+      "com.nokia.eda.oam.v1alpha1.Ping": {
+        "description": "Ping is the Schema for the pings API",
         "properties": {
           "apiVersion": {
             "default": "oam.eda.nokia.com/v1alpha1",
+            "pattern": "^oam\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to oam.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
-            "default": "NewPing",
+            "default": "Ping",
+            "pattern": "^Ping$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Ping",
               "ui-visible-if": "false"
             }
           },
           "metadata": {
-            "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing_metadata"
+            "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.Ping_metadata"
           },
           "spec": {
             "description": "Ping allows a ping to be initiated to a specific address on node/set of nodes.",
@@ -2290,7 +2298,7 @@
                 }
               },
               "nodeSelectors": {
-                "description": "NodeSelectors is a list of node selectors to select nodes to perform pings on.\nThis matches labels on TopoNode resources, including those TopoNodes in the list of nodes that pings will be performed on.\nIf no nodes are specified, and no node selectors are specified, all nodes in the given namespace will be selected.",
+                "description": "List of selectors to select nodes to perform pings on.\nThis matches labels on TopoNode resources, including those TopoNodes in the list of nodes that pings will be performed on.\nIf no nodes are specified, and no node selectors are specified, all nodes in the given namespace will be selected.",
                 "format": "labelselector",
                 "items": {
                   "type": "string"
@@ -2302,7 +2310,7 @@
                 }
               },
               "nodes": {
-                "description": "Nodes is a list of nodes to perform pings on.\nItems in the list should be the names of the nodes, where each node will have a ping performed on it.\nIf no nodes are specified, and no node selectors are specified, all nodes in the given namespace will be selected.",
+                "description": "List of nodes to perform pings from.\nItems in the list should be the names of the nodes, where each node will have a ping performed on it.\nIf no nodes are specified, and no node selectors are specified, all nodes in the given namespace will be selected.",
                 "items": {
                   "type": "string"
                 },
@@ -2344,59 +2352,134 @@
             }
           },
           "status": {
-            "description": "NewPingStatus defines the observed state of NewPing",
+            "description": "PingStatus defines the observed state of Ping",
             "properties": {
               "details": {
                 "description": "Details contains the results of the pings performed on each node.\nEach entry in the list corresponds to a node that was pinged.",
                 "items": {
                   "properties": {
                     "details": {
+                      "description": "Details of the ping result, if available.",
                       "properties": {
                         "averageTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Average time taken for a ping reply.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Average Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 200,
+                            "ui-single-line-group": "AverageTotal"
+                          }
                         },
                         "maxTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Maximum time taken for a ping reply.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Maximum Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 150,
+                            "ui-single-line-group": "MinMax"
+                          }
                         },
                         "minTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Minimum time taken for a ping reply.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Minimum Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 150,
+                            "ui-single-line-group": "MinMax"
+                          }
                         },
                         "received": {
-                          "type": "integer"
+                          "description": "Number of pings received.",
+                          "title": "Received",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 100,
+                            "ui-single-line-group": "SentReceived"
+                          }
                         },
                         "sent": {
-                          "type": "integer"
+                          "description": "Number of pings sent.",
+                          "title": "Sent",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 50,
+                            "ui-single-line-group": "SentReceived"
+                          }
                         },
                         "stdDevNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Standard deviation of time taken for all pings.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Standard Deviation (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 300
+                          }
                         },
                         "totalTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Total time taken for all pings.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Total Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 250,
+                            "ui-single-line-group": "AverageTotal"
+                          }
                         }
                       },
-                      "type": "object"
+                      "required": [
+                        "received",
+                        "sent"
+                      ],
+                      "title": "Details",
+                      "type": "object",
+                      "x-eda-nokia-com": {
+                        "ui-order-priority": 150
+                      }
                     },
                     "error": {
-                      "type": "string"
+                      "description": "Error message, if the ping failed.",
+                      "title": "Error",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-order-priority": 200
+                      }
                     },
                     "networkInstance": {
-                      "type": "string"
+                      "description": "Network instance used to source the ping from.",
+                      "title": "Network Instance",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 100
+                      }
                     },
                     "node": {
-                      "type": "string"
+                      "description": "Node the ping was sourced from.",
+                      "title": "Node",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 50
+                      }
                     },
                     "success": {
-                      "type": "boolean"
+                      "description": "Indicates if the ping was successful.",
+                      "title": "Success",
+                      "type": "boolean",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 150
+                      }
                     }
                   },
                   "type": "object"
@@ -2431,15 +2514,15 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.oam.v1alpha1.NewPingList": {
-        "description": "NewPingList is a list of newpings",
+      "com.nokia.eda.oam.v1alpha1.PingList": {
+        "description": "PingList is a list of pings",
         "properties": {
           "apiVersion": {
             "type": "string"
           },
           "items": {
             "items": {
-              "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing"
+              "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.Ping"
             },
             "type": "array"
           },
@@ -2453,7 +2536,7 @@
         ],
         "type": "object"
       },
-      "com.nokia.eda.oam.v1alpha1.NewPing_metadata": {
+      "com.nokia.eda.oam.v1alpha1.Ping_metadata": {
         "properties": {
           "annotations": {
             "additionalProperties": {
@@ -2476,7 +2559,7 @@
                 {
                   "condition": "true",
                   "group": "oam.eda.nokia.com",
-                  "kind": "NewPing",
+                  "kind": "Ping",
                   "type": "label",
                   "version": "v1alpha1"
                 }
@@ -2524,15 +2607,19 @@
         "properties": {
           "apiVersion": {
             "default": "oam.eda.nokia.com/v1alpha1",
+            "pattern": "^oam\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to oam.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "TechSupport",
+            "pattern": "^TechSupport$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to TechSupport",
               "ui-visible-if": "false"
             }
           },
@@ -2705,15 +2792,19 @@
         "properties": {
           "apiVersion": {
             "default": "oam.eda.nokia.com/v1alpha1",
+            "pattern": "^oam\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to oam.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Threshold",
+            "pattern": "^Threshold$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Threshold",
               "ui-visible-if": "false"
             }
           },
@@ -4675,9 +4766,9 @@
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings": {
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/pings": {
       "get": {
-        "operationId": "wfListOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfListOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
             "description": "client information for streaming request",
@@ -4734,11 +4825,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPingList"
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.PingList"
                 }
               }
             },
-            "description": "com.nokia.eda.oam.v1alpha1.NewPingList"
+            "description": "com.nokia.eda.oam.v1alpha1.PingList"
           },
           "default": {
             "content": {
@@ -4751,17 +4842,17 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "List all NewPing instances in this namespace.",
+        "summary": "List all Ping instances in this namespace.",
         "tags": [
           "workflows"
         ]
       },
       "post": {
-        "description": "create a NewPing",
-        "operationId": "wfCreateOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "description": "create a Ping",
+        "operationId": "wfCreateOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "the namespace scope in which to create the NewPing",
+            "description": "the namespace scope in which to create the Ping",
             "in": "path",
             "name": "namespace",
             "required": true,
@@ -4774,7 +4865,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing"
+                "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.Ping"
               }
             }
           },
@@ -4807,12 +4898,12 @@
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}": {
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/pings/{name}": {
       "delete": {
-        "operationId": "wfDeleteOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfDeleteOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "name of the NewPing",
+            "description": "name of the Ping",
             "in": "path",
             "name": "name",
             "required": true,
@@ -4845,16 +4936,16 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Delete a NewPing workflow.",
+        "summary": "Delete a Ping workflow.",
         "tags": [
           "workflows"
         ]
       },
       "get": {
-        "operationId": "wfReadOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfReadOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "name of the NewPing",
+            "description": "name of the Ping",
             "in": "path",
             "name": "name",
             "required": true,
@@ -4893,11 +4984,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPing"
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.Ping"
                 }
               }
             },
-            "description": "com.nokia.eda.oam.v1alpha1.NewPing"
+            "description": "com.nokia.eda.oam.v1alpha1.Ping"
           },
           "default": {
             "content": {
@@ -4910,18 +5001,18 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Read the specified NewPing.",
+        "summary": "Read the specified Ping.",
         "tags": [
           "workflows"
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_artifacts": {
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/pings/{name}/_artifacts": {
       "get": {
-        "operationId": "wfListArtifactsOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfListArtifactsOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "name of the NewPing",
+            "description": "name of the Ping",
             "in": "path",
             "name": "name",
             "required": true,
@@ -4964,18 +5055,18 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Read list of artifacts generated by a NewPing workflow.",
+        "summary": "Read list of artifacts generated by a Ping workflow.",
         "tags": [
           "workflows"
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_artifacts/{artifact}": {
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/pings/{name}/_artifacts/{artifact}": {
       "get": {
-        "operationId": "wfReadArtifactOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfReadArtifactOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "name of the NewPing",
+            "description": "name of the Ping",
             "in": "path",
             "name": "name",
             "required": true,
@@ -5036,18 +5127,18 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Read artifact generated by a NewPing workflow.",
+        "summary": "Read artifact generated by a Ping workflow.",
         "tags": [
           "workflows"
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_input": {
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/pings/{name}/_input": {
       "get": {
-        "operationId": "wfListInputOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfListInputOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "name of the NewPing",
+            "description": "name of the Ping",
             "in": "path",
             "name": "name",
             "required": true,
@@ -5090,16 +5181,16 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Get inputs requested by the NewPing.",
+        "summary": "Get inputs requested by the Ping.",
         "tags": [
           "workflows"
         ]
       },
       "put": {
-        "operationId": "wfSubmitInputOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfSubmitInputOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "name of the NewPing",
+            "description": "name of the Ping",
             "in": "path",
             "name": "name",
             "required": true,
@@ -5143,18 +5234,18 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Submit input requested by the NewPing.",
+        "summary": "Submit input requested by the Ping.",
         "tags": [
           "workflows"
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/newpings/{name}/_logs": {
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/namespaces/{namespace}/pings/{name}/_logs": {
       "get": {
-        "operationId": "wfReadLogsOamEdaNokiaComV1alpha1NamespaceNewpings",
+        "operationId": "wfReadLogsOamEdaNokiaComV1alpha1NamespacePings",
         "parameters": [
           {
-            "description": "name of the NewPing",
+            "description": "name of the Ping",
             "in": "path",
             "name": "name",
             "required": true,
@@ -5194,7 +5285,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "Read logs output by the NewPing.",
+        "summary": "Read logs output by the Ping.",
         "tags": [
           "workflows"
         ]
@@ -5725,9 +5816,9 @@
         ]
       }
     },
-    "/workflows/v1/oam.eda.nokia.com/v1alpha1/newpings": {
+    "/workflows/v1/oam.eda.nokia.com/v1alpha1/pings": {
       "get": {
-        "operationId": "wfListOamEdaNokiaComV1alpha1Newpings",
+        "operationId": "wfListOamEdaNokiaComV1alpha1Pings",
         "parameters": [
           {
             "description": "client information for streaming request",
@@ -5775,11 +5866,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.NewPingList"
+                  "$ref": "#/components/schemas/com.nokia.eda.oam.v1alpha1.PingList"
                 }
               }
             },
-            "description": "com.nokia.eda.oam.v1alpha1.NewPingList"
+            "description": "com.nokia.eda.oam.v1alpha1.PingList"
           },
           "default": {
             "content": {
@@ -5792,7 +5883,7 @@
             "description": "Details of an error in response to an API REST request."
           }
         },
-        "summary": "List all NewPing instances.",
+        "summary": "List all Ping instances.",
         "tags": [
           "workflows"
         ]

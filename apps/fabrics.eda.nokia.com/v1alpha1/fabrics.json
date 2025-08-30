@@ -681,15 +681,19 @@
         "properties": {
           "apiVersion": {
             "default": "fabrics.eda.nokia.com/v1alpha1",
+            "pattern": "^fabrics\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to fabrics.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Fabric",
+            "pattern": "^Fabric$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Fabric",
               "ui-visible-if": "false"
             }
           },
@@ -2375,15 +2379,19 @@
         "properties": {
           "apiVersion": {
             "default": "fabrics.eda.nokia.com/v1alpha1",
+            "pattern": "^fabrics\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to fabrics.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ISL",
+            "pattern": "^ISL$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ISL",
               "ui-visible-if": "false"
             }
           },
@@ -2924,15 +2932,19 @@
         "properties": {
           "apiVersion": {
             "default": "fabrics.eda.nokia.com/v1alpha1",
+            "pattern": "^fabrics\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to fabrics.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "IslPing",
+            "pattern": "^IslPing$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to IslPing",
               "ui-visible-if": "false"
             }
           },
@@ -2947,35 +2959,6 @@
                 "description": "Count is the number of pings to send.",
                 "title": "Count",
                 "type": "integer"
-              },
-              "fabricSelectors": {
-                "description": "Fabric Selectors is a list of fabric selectors to execute ISL pings for.\nThis is a list of label expressions, e.g. [\"eda.nokia.com/role=leaf\", \"eda.nokia.com/region=us-west\"].",
-                "format": "labelselector",
-                "items": {
-                  "type": "string"
-                },
-                "title": "Fabric Selectors",
-                "type": "array"
-              },
-              "fabrics": {
-                "description": "Fabrics is a list of fabrics to execute ISL pings for.",
-                "items": {
-                  "type": "string"
-                },
-                "title": "Fabrics",
-                "type": "array",
-                "x-eda-nokia-com": {
-                  "ui-auto-completes": [
-                    {
-                      "condition": "true",
-                      "group": "fabrics.eda.nokia.com",
-                      "resource": "fabrics",
-                      "subject": true,
-                      "type": "gvr",
-                      "version": "v1alpha1"
-                    }
-                  ]
-                }
               },
               "islSelectors": {
                 "description": "Inter-Switch Link Selectors is a list of selectors to execute ISL pings for.\nThis is a list of label expressions, e.g. [\"eda.nokia.com/role=leaf\", \"eda.nokia.com/region=us-west\"].",
@@ -3020,58 +3003,130 @@
             }
           },
           "status": {
-            "description": "IslPingStatus defines the observed state of IslPing",
+            "description": "The result of the ISL ping",
             "properties": {
               "details": {
                 "description": "Details contains the results of the pings performed for each ISL.\nEach entry in the list corresponds to an ISL that was pinged.",
                 "items": {
                   "properties": {
                     "details": {
+                      "description": "Details of the ping result, if available.",
                       "properties": {
                         "averageTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Average time taken for a ping reply.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Average Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 200,
+                            "ui-single-line-group": "AverageTotal"
+                          }
                         },
                         "maxTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Maximum time taken for a ping reply.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Maximum Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 150,
+                            "ui-single-line-group": "MinMax"
+                          }
                         },
                         "minTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Minimum time taken for a ping reply.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Minimum Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 150,
+                            "ui-single-line-group": "MinMax"
+                          }
                         },
                         "received": {
-                          "type": "integer"
+                          "description": "Number of pings received.",
+                          "title": "Received",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 100,
+                            "ui-single-line-group": "SentReceived"
+                          }
                         },
                         "sent": {
-                          "type": "integer"
+                          "description": "Number of pings sent.",
+                          "title": "Sent",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 50,
+                            "ui-single-line-group": "SentReceived"
+                          }
                         },
                         "stdDevNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Standard deviation of time taken for all pings.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Standard Deviation (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 300
+                          }
                         },
                         "totalTimeNanoseconds": {
-                          "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+                          "description": "Total time taken for all pings.",
                           "format": "int64",
-                          "type": "integer"
+                          "title": "Total Time (ns)",
+                          "type": "integer",
+                          "x-eda-nokia-com": {
+                            "ui-column-span": 2,
+                            "ui-order-priority": 250,
+                            "ui-single-line-group": "AverageTotal"
+                          }
                         }
                       },
-                      "type": "object"
+                      "required": [
+                        "received",
+                        "sent"
+                      ],
+                      "title": "Details",
+                      "type": "object",
+                      "x-eda-nokia-com": {
+                        "ui-order-priority": 150
+                      }
                     },
                     "error": {
-                      "type": "string"
+                      "description": "Error message, if the ping failed.",
+                      "title": "Error",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-order-priority": 200
+                      }
                     },
                     "name": {
-                      "type": "string"
+                      "description": "Name of the ping result.",
+                      "title": "Name",
+                      "type": "string",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 50
+                      }
                     },
                     "success": {
-                      "type": "boolean"
+                      "description": "Indicates if the ping was successful.",
+                      "title": "Success",
+                      "type": "boolean",
+                      "x-eda-nokia-com": {
+                        "ui-column-span": 2,
+                        "ui-order-priority": 100
+                      }
                     }
                   },
+                  "required": [
+                    "success"
+                  ],
                   "type": "object"
                 },
                 "type": "array"

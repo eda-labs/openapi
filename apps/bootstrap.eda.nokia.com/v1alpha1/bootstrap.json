@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "bootstrap.eda.nokia.com/v1alpha1",
+            "pattern": "^bootstrap\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to bootstrap.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Init",
+            "pattern": "^Init$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Init",
               "ui-visible-if": "false"
             }
           },
@@ -860,15 +864,19 @@
         "properties": {
           "apiVersion": {
             "default": "bootstrap.eda.nokia.com/v1alpha1",
+            "pattern": "^bootstrap\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to bootstrap.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ManagementRouter",
+            "pattern": "^ManagementRouter$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ManagementRouter",
               "ui-visible-if": "false"
             }
           },

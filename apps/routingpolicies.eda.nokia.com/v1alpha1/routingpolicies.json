@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "routingpolicies.eda.nokia.com/v1alpha1",
+            "pattern": "^routingpolicies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routingpolicies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ASPathSet",
+            "pattern": "^ASPathSet$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ASPathSet",
               "ui-visible-if": "false"
             }
           },
@@ -804,15 +808,19 @@
         "properties": {
           "apiVersion": {
             "default": "routingpolicies.eda.nokia.com/v1alpha1",
+            "pattern": "^routingpolicies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routingpolicies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "CommunitySet",
+            "pattern": "^CommunitySet$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to CommunitySet",
               "ui-visible-if": "false"
             }
           },
@@ -1030,15 +1038,19 @@
         "properties": {
           "apiVersion": {
             "default": "routingpolicies.eda.nokia.com/v1alpha1",
+            "pattern": "^routingpolicies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routingpolicies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Policy",
+            "pattern": "^Policy$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Policy",
               "ui-visible-if": "false"
             }
           },
@@ -1855,15 +1867,19 @@
         "properties": {
           "apiVersion": {
             "default": "routingpolicies.eda.nokia.com/v1alpha1",
+            "pattern": "^routingpolicies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routingpolicies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "PrefixSet",
+            "pattern": "^PrefixSet$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to PrefixSet",
               "ui-visible-if": "false"
             }
           },

@@ -681,15 +681,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "AggregateRoute",
+            "pattern": "^AggregateRoute$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to AggregateRoute",
               "ui-visible-if": "false"
             }
           },
@@ -954,15 +958,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "BGPGroup",
+            "pattern": "^BGPGroup$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to BGPGroup",
               "ui-visible-if": "false"
             }
           },
@@ -1857,15 +1865,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "BGPPeer",
+            "pattern": "^BGPPeer$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to BGPPeer",
               "ui-visible-if": "false"
             }
           },
@@ -2760,15 +2772,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "BGPPeerState",
+            "pattern": "^BGPPeerState$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to BGPPeerState",
               "ui-visible-if": "false"
             }
           },
@@ -3122,15 +3138,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "CheckDefaultBgpPeers",
+            "pattern": "^CheckDefaultBgpPeers$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to CheckDefaultBgpPeers",
               "ui-visible-if": "false"
             }
           },
@@ -3288,15 +3308,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultAggregateRoute",
+            "pattern": "^DefaultAggregateRoute$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultAggregateRoute",
               "ui-visible-if": "false"
             }
           },
@@ -3548,15 +3572,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultBGPGroup",
+            "pattern": "^DefaultBGPGroup$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultBGPGroup",
               "ui-visible-if": "false"
             }
           },
@@ -4577,15 +4605,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultBGPPeer",
+            "pattern": "^DefaultBGPPeer$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultBGPPeer",
               "ui-visible-if": "false"
             }
           },
@@ -5749,15 +5781,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultRouteReflector",
+            "pattern": "^DefaultRouteReflector$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultRouteReflector",
               "ui-visible-if": "false"
             }
           },
@@ -6667,15 +6703,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultRouteReflectorClient",
+            "pattern": "^DefaultRouteReflectorClient$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultRouteReflectorClient",
               "ui-visible-if": "false"
             }
           },
@@ -7857,15 +7897,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultStaticRoute",
+            "pattern": "^DefaultStaticRoute$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultStaticRoute",
               "ui-visible-if": "false"
             }
           },
@@ -8286,15 +8330,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "RouteReflector",
+            "pattern": "^RouteReflector$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to RouteReflector",
               "ui-visible-if": "false"
             }
           },
@@ -9092,15 +9140,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "RouteReflectorClient",
+            "pattern": "^RouteReflectorClient$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to RouteReflectorClient",
               "ui-visible-if": "false"
             }
           },
@@ -9909,15 +9961,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "RouteReflectorClientState",
+            "pattern": "^RouteReflectorClientState$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to RouteReflectorClientState",
               "ui-visible-if": "false"
             }
           },
@@ -10250,15 +10306,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "RouteReflectorState",
+            "pattern": "^RouteReflectorState$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to RouteReflectorState",
               "ui-visible-if": "false"
             }
           },
@@ -10569,15 +10629,19 @@
         "properties": {
           "apiVersion": {
             "default": "protocols.eda.nokia.com/v1",
+            "pattern": "^protocols\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to protocols.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "StaticRoute",
+            "pattern": "^StaticRoute$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to StaticRoute",
               "ui-visible-if": "false"
             }
           },

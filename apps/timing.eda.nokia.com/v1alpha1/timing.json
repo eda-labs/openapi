@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "timing.eda.nokia.com/v1alpha1",
+            "pattern": "^timing\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to timing.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "NTPClient",
+            "pattern": "^NTPClient$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to NTPClient",
               "ui-visible-if": "false"
             }
           },

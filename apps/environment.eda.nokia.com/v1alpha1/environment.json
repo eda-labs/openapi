@@ -174,15 +174,19 @@
         "properties": {
           "apiVersion": {
             "default": "environment.eda.nokia.com/v1alpha1",
+            "pattern": "^environment\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to environment.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "CliPlugin",
+            "pattern": "^CliPlugin$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to CliPlugin",
               "ui-visible-if": "false"
             }
           },
@@ -332,15 +336,19 @@
         "properties": {
           "apiVersion": {
             "default": "environment.eda.nokia.com/v1alpha1",
+            "pattern": "^environment\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to environment.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "SetupEnv",
+            "pattern": "^SetupEnv$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to SetupEnv",
               "ui-visible-if": "false"
             }
           },

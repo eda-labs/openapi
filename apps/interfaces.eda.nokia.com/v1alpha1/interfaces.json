@@ -681,15 +681,19 @@
         "properties": {
           "apiVersion": {
             "default": "interfaces.eda.nokia.com/v1alpha1",
+            "pattern": "^interfaces\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to interfaces.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Breakout",
+            "pattern": "^Breakout$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Breakout",
               "ui-visible-if": "false"
             }
           },
@@ -950,15 +954,19 @@
         "properties": {
           "apiVersion": {
             "default": "interfaces.eda.nokia.com/v1alpha1",
+            "pattern": "^interfaces\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to interfaces.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "CheckInterfaces",
+            "pattern": "^CheckInterfaces$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to CheckInterfaces",
               "ui-visible-if": "false"
             }
           },
@@ -1123,15 +1131,19 @@
         "properties": {
           "apiVersion": {
             "default": "interfaces.eda.nokia.com/v1alpha1",
+            "pattern": "^interfaces\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to interfaces.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Interface",
+            "pattern": "^Interface$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Interface",
               "ui-visible-if": "false"
             }
           },
@@ -1873,15 +1885,19 @@
         "properties": {
           "apiVersion": {
             "default": "interfaces.eda.nokia.com/v1alpha1",
+            "pattern": "^interfaces\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to interfaces.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "InterfaceState",
+            "pattern": "^InterfaceState$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to InterfaceState",
               "ui-visible-if": "false"
             }
           },

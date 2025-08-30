@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "topologies.eda.nokia.com/v1alpha1",
+            "pattern": "^topologies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to topologies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DeviationOverlay",
+            "pattern": "^DeviationOverlay$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DeviationOverlay",
               "ui-visible-if": "false"
             }
           },
@@ -816,15 +820,19 @@
         "properties": {
           "apiVersion": {
             "default": "topologies.eda.nokia.com/v1alpha1",
+            "pattern": "^topologies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to topologies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "LldpOverlay",
+            "pattern": "^LldpOverlay$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to LldpOverlay",
               "ui-visible-if": "false"
             }
           },
@@ -1043,15 +1051,19 @@
         "properties": {
           "apiVersion": {
             "default": "topologies.eda.nokia.com/v1alpha1",
+            "pattern": "^topologies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to topologies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Topology",
+            "pattern": "^Topology$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Topology",
               "ui-visible-if": "false"
             }
           },
@@ -1162,15 +1174,19 @@
         "properties": {
           "apiVersion": {
             "default": "topologies.eda.nokia.com/v1alpha1",
+            "pattern": "^topologies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to topologies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "TopologyGrouping",
+            "pattern": "^TopologyGrouping$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to TopologyGrouping",
               "ui-visible-if": "false"
             }
           },
@@ -1531,15 +1547,19 @@
         "properties": {
           "apiVersion": {
             "default": "topologies.eda.nokia.com/v1alpha1",
+            "pattern": "^topologies\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to topologies.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "TrafficRateOverlay",
+            "pattern": "^TrafficRateOverlay$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to TrafficRateOverlay",
               "ui-visible-if": "false"
             }
           },

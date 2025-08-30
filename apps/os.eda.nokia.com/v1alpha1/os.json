@@ -174,15 +174,19 @@
         "properties": {
           "apiVersion": {
             "default": "os.eda.nokia.com/v1alpha1",
+            "pattern": "^os\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to os.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DeployImage",
+            "pattern": "^DeployImage$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DeployImage",
               "ui-visible-if": "false"
             }
           },

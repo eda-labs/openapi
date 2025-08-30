@@ -3237,6 +3237,95 @@
         ]
       }
     },
+    "/core/store/v1/file/catalog/{catalog}/app/{appId}/{path}": {
+      "get": {
+        "description": "The version should be specified by one or the other (not both) of the semVer and commitHash\nquery parameters.",
+        "operationId": "storeGetAppFile",
+        "parameters": [
+          {
+            "description": "The catalog where the application version resides",
+            "in": "path",
+            "name": "catalog",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "application ID of the application version",
+            "in": "path",
+            "name": "appId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The semantic version for the application version.",
+            "in": "query",
+            "name": "semVer",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The commit hash for the application version.",
+            "in": "query",
+            "name": "commitHash",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the path in the application for the requested file",
+            "in": "path",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested file"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Response for errors."
+          }
+        },
+        "summary": "retrieves the contents of the file in the application version specified by the arguments to the request.",
+        "tags": [
+          "coreStore"
+        ]
+      }
+    },
     "/core/store/v1/installedsettings/app/{appId}": {
       "get": {
         "operationId": "storeGetAppInstalledSettings",
@@ -5419,95 +5508,6 @@
         "summary": "Get workflows across all groups, versions, and kinds.",
         "tags": [
           "coreWorkflows"
-        ]
-      }
-    },
-    "/store/v1/file/catalog/{catalog}/app/{appId}/{path}": {
-      "get": {
-        "description": "The version should be specified by one or the other (not both) of the semVer and commitHash\nquery parameters.",
-        "operationId": "storeGetAppFile",
-        "parameters": [
-          {
-            "description": "The catalog where the application version resides",
-            "in": "path",
-            "name": "catalog",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "application ID of the application version",
-            "in": "path",
-            "name": "appId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The semantic version for the application version.",
-            "in": "query",
-            "name": "semVer",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The commit hash for the application version.",
-            "in": "query",
-            "name": "commitHash",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "the path in the application for the requested file",
-            "in": "path",
-            "name": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              },
-              "application/octet-stream": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              }
-            },
-            "description": "The binary content of the requested file"
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/octet-stream": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Response for errors."
-          }
-        },
-        "summary": "retrieves the contents of the file in the application version specified by the arguments to the request.",
-        "tags": [
-          "coreStore"
         ]
       }
     }
@@ -8401,7 +8401,17 @@
             "$ref": "#/components/schemas/Identifier"
           },
           "state": {
-            "$ref": "#/components/schemas/WorkflowResult"
+            "enum": [
+              "OK",
+              "Failed",
+              "Terminated",
+              "WaitingForInput",
+              "Running",
+              "WaitingToStart",
+              "SubflowWaitingForInput",
+              "Completed"
+            ],
+            "type": "string"
           },
           "username": {
             "type": "string"

@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Chassis",
+            "pattern": "^Chassis$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Chassis",
               "ui-visible-if": "false"
             }
           },
@@ -897,15 +901,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Component",
+            "pattern": "^Component$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Component",
               "ui-visible-if": "false"
             }
           },
@@ -1166,15 +1174,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ControlModule",
+            "pattern": "^ControlModule$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ControlModule",
               "ui-visible-if": "false"
             }
           },
@@ -1552,15 +1564,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "FabricModule",
+            "pattern": "^FabricModule$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to FabricModule",
               "ui-visible-if": "false"
             }
           },
@@ -1924,15 +1940,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Fan",
+            "pattern": "^Fan$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Fan",
               "ui-visible-if": "false"
             }
           },
@@ -2227,15 +2247,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "InterfaceModule",
+            "pattern": "^InterfaceModule$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to InterfaceModule",
               "ui-visible-if": "false"
             }
           },
@@ -2599,15 +2623,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Monitor",
+            "pattern": "^Monitor$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Monitor",
               "ui-visible-if": "false"
             }
           },
@@ -3085,15 +3113,19 @@
         "properties": {
           "apiVersion": {
             "default": "components.eda.nokia.com/v1",
+            "pattern": "^components\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to components.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "PowerSupply",
+            "pattern": "^PowerSupply$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to PowerSupply",
               "ui-visible-if": "false"
             }
           },

@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "siteinfo.eda.nokia.com/v1alpha1",
+            "pattern": "^siteinfo\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to siteinfo.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Banner",
+            "pattern": "^Banner$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Banner",
               "ui-visible-if": "false"
             }
           },

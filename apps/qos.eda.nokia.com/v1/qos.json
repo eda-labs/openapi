@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "EgressPolicy",
+            "pattern": "^EgressPolicy$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to EgressPolicy",
               "ui-visible-if": "false"
             }
           },
@@ -1274,15 +1278,19 @@
         "properties": {
           "apiVersion": {
             "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ForwardingClass",
+            "pattern": "^ForwardingClass$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ForwardingClass",
               "ui-visible-if": "false"
             }
           },
@@ -1460,15 +1468,19 @@
         "properties": {
           "apiVersion": {
             "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "IngressPolicy",
+            "pattern": "^IngressPolicy$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to IngressPolicy",
               "ui-visible-if": "false"
             }
           },
@@ -2926,15 +2938,19 @@
         "properties": {
           "apiVersion": {
             "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "PolicyAttachment",
+            "pattern": "^PolicyAttachment$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to PolicyAttachment",
               "ui-visible-if": "false"
             }
           },
@@ -3221,15 +3237,19 @@
         "properties": {
           "apiVersion": {
             "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "PolicyDeployment",
+            "pattern": "^PolicyDeployment$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to PolicyDeployment",
               "ui-visible-if": "false"
             }
           },
@@ -3530,15 +3550,19 @@
         "properties": {
           "apiVersion": {
             "default": "qos.eda.nokia.com/v1",
+            "pattern": "^qos\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to qos.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Queue",
+            "pattern": "^Queue$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Queue",
               "ui-visible-if": "false"
             }
           },

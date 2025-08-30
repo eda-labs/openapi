@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "security.eda.nokia.com/v1alpha1",
+            "pattern": "^security\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to security.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Keychain",
+            "pattern": "^Keychain$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Keychain",
               "ui-visible-if": "false"
             }
           },
@@ -669,15 +673,19 @@
         "properties": {
           "apiVersion": {
             "default": "security.eda.nokia.com/v1alpha1",
+            "pattern": "^security\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to security.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "KeychainDeployment",
+            "pattern": "^KeychainDeployment$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to KeychainDeployment",
               "ui-visible-if": "false"
             }
           },

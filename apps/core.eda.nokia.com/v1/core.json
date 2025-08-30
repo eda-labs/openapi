@@ -584,20 +584,116 @@
       "UIResult": {
         "type": "string"
       },
+      "WorkflowGetInputsRespElem": {
+        "properties": {
+          "ackPrompt": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "schemaPrompt": {
+            "properties": {},
+            "type": "object"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowId": {
+        "properties": {
+          "id": {
+            "description": "A workflow identifier; these are assigned by the system to a posted workflow.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "WorkflowIdentifier": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "name",
+          "version"
+        ],
+        "type": "object"
+      },
+      "WorkflowInputData": {
+        "items": {
+          "$ref": "#/components/schemas/WorkflowInputDataElem"
+        },
+        "type": "array"
+      },
+      "WorkflowInputDataElem": {
+        "properties": {
+          "ack": {
+            "description": "acknowledge or reject the input request",
+            "type": "boolean"
+          },
+          "input": {
+            "description": "provide a json blob to the workflow",
+            "properties": {},
+            "type": "object"
+          },
+          "subflow": {
+            "$ref": "#/components/schemas/WorkflowIdentifier"
+          }
+        },
+        "type": "object"
+      },
       "com.nokia.eda.core.v1.ClusterRole": {
         "description": "ClusterRole is the Schema for the clusterroles API",
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "ClusterRole",
+            "pattern": "^ClusterRole$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to ClusterRole",
               "ui-visible-if": "false"
             }
           },
@@ -874,15 +970,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Deviation",
+            "pattern": "^Deviation$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Deviation",
               "ui-visible-if": "false"
             }
           },
@@ -1022,15 +1122,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DeviationAction",
+            "pattern": "^DeviationAction$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DeviationAction",
               "ui-visible-if": "false"
             }
           },
@@ -1384,15 +1488,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "EdgeInterface",
+            "pattern": "^EdgeInterface$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to EdgeInterface",
               "ui-visible-if": "false"
             }
           },
@@ -1661,15 +1769,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "HttpProxy",
+            "pattern": "^HttpProxy$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to HttpProxy",
               "ui-visible-if": "false"
             }
           },
@@ -1851,15 +1963,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "IPAllocationPool",
+            "pattern": "^IPAllocationPool$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to IPAllocationPool",
               "ui-visible-if": "false"
             }
           },
@@ -2159,15 +2275,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "IPInSubnetAllocationPool",
+            "pattern": "^IPInSubnetAllocationPool$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to IPInSubnetAllocationPool",
               "ui-visible-if": "false"
             }
           },
@@ -2467,15 +2587,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "IndexAllocationPool",
+            "pattern": "^IndexAllocationPool$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to IndexAllocationPool",
               "ui-visible-if": "false"
             }
           },
@@ -2783,15 +2907,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "License",
+            "pattern": "^License$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to License",
               "ui-visible-if": "false"
             }
           },
@@ -2998,15 +3126,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Namespace",
+            "pattern": "^Namespace$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Namespace",
               "ui-visible-if": "false"
             }
           },
@@ -3175,15 +3307,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "NodeProfile",
+            "pattern": "^NodeProfile$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to NodeProfile",
               "ui-visible-if": "false"
             }
           },
@@ -3909,15 +4045,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "NodeUser",
+            "pattern": "^NodeUser$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to NodeUser",
               "ui-visible-if": "false"
             }
           },
@@ -4229,15 +4369,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Role",
+            "pattern": "^Role$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Role",
               "ui-visible-if": "false"
             }
           },
@@ -4532,15 +4676,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "SubnetAllocationPool",
+            "pattern": "^SubnetAllocationPool$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to SubnetAllocationPool",
               "ui-visible-if": "false"
             }
           },
@@ -4844,15 +4992,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "TopoBreakout",
+            "pattern": "^TopoBreakout$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to TopoBreakout",
               "ui-visible-if": "false"
             }
           },
@@ -5076,15 +5228,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "TopoLink",
+            "pattern": "^TopoLink$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to TopoLink",
               "ui-visible-if": "false"
             }
           },
@@ -5474,15 +5630,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "TopoNode",
+            "pattern": "^TopoNode$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to TopoNode",
               "ui-visible-if": "false"
             }
           },
@@ -6001,15 +6161,19 @@
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "UdpProxy",
+            "pattern": "^UdpProxy$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to UdpProxy",
               "ui-visible-if": "false"
             }
           },
@@ -6207,20 +6371,103 @@
           "ui-title-key": "metadata"
         }
       },
+      "com.nokia.eda.core.v1.Workflow": {
+        "description": "Workflow is the Schema for the workflows API",
+        "properties": {
+          "apiVersion": {
+            "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
+              "ui-visible-if": "false"
+            }
+          },
+          "kind": {
+            "default": "Workflow",
+            "pattern": "^Workflow$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Workflow",
+              "ui-visible-if": "false"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/com.nokia.eda.core.v1.Workflow_metadata"
+          },
+          "spec": {
+            "description": "WorkflowSpec defines the desired state of Flow",
+            "properties": {
+              "input": {
+                "description": "Input to this flow, adhering to the JSON schema defined in the referenced WorkflowDefinition.",
+                "format": "json",
+                "title": "Input",
+                "x-eda-nokia-com": {
+                  "ui-order-priority": 200
+                }
+              },
+              "type": {
+                "description": "Select the WorkflowDefinition to execute.",
+                "title": "Type",
+                "type": "string",
+                "x-eda-nokia-com": {
+                  "ui-column-span": 2,
+                  "ui-order-priority": 100
+                }
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "title": "Specification",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 30
+            }
+          },
+          "status": {
+            "description": "WorkflowStatus defines the observed state of Flow",
+            "properties": {
+              "output": {
+                "description": "Output from this flow, adhering to the JSON schema defined in the referenced FlowDefinition",
+                "format": "json",
+                "title": "Output"
+              }
+            },
+            "readOnly": true,
+            "title": "Status",
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 20
+            }
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind",
+          "metadata",
+          "spec"
+        ],
+        "type": "object"
+      },
       "com.nokia.eda.core.v1.WorkflowDefinition": {
         "description": "WorkflowDefinition is the Schema for the workflowdefinitions API",
         "properties": {
           "apiVersion": {
             "default": "core.eda.nokia.com/v1",
+            "pattern": "^core\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to core.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "WorkflowDefinition",
+            "pattern": "^WorkflowDefinition$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to WorkflowDefinition",
               "ui-visible-if": "false"
             }
           },
@@ -6444,6 +6691,94 @@
         },
         "required": [
           "name"
+        ],
+        "type": "object",
+        "x-eda-nokia-com": {
+          "ui-order-priority": 10,
+          "ui-title": "Metadata",
+          "ui-title-key": "metadata"
+        }
+      },
+      "com.nokia.eda.core.v1.WorkflowList": {
+        "description": "WorkflowList is a list of workflows",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/com.nokia.eda.core.v1.Workflow"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "com.nokia.eda.core.v1.Workflow_metadata": {
+        "properties": {
+          "annotations": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-order-priority": 40,
+              "ui-title": "Annotations",
+              "ui-title-key": "annotations"
+            }
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "x-eda-nokia-com": {
+              "ui-auto-completes": [
+                {
+                  "condition": "true",
+                  "group": "core.eda.nokia.com",
+                  "kind": "Workflow",
+                  "type": "label",
+                  "version": "v1"
+                }
+              ],
+              "ui-order-priority": 30,
+              "ui-title": "Labels",
+              "ui-title-key": "labels"
+            }
+          },
+          "name": {
+            "maxLength": 253,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 10,
+              "ui-pattern-error": "A valid name is made up of one or more components where each component is separated by period characters.  Each component must start and end with a lower case alphanumeric character and the body of the component is made up of zero or more lower case alphanumeric and hyphen characters.",
+              "ui-title": "Name",
+              "ui-title-key": "name"
+            }
+          },
+          "namespace": {
+            "type": "string",
+            "x-eda-nokia-com": {
+              "immutable": true,
+              "ui-order-priority": 20,
+              "ui-title": "Namespace",
+              "ui-title-key": "namespace"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
         ],
         "type": "object",
         "x-eda-nokia-com": {
@@ -18649,6 +18984,604 @@
         "summary": "Get the topology for the specified non-namespaced WorkflowDefinition.",
         "tags": [
           "apps"
+        ]
+      }
+    },
+    "/workflows/v1/core.eda.nokia.com/v1/namespaces/{namespace}/workflows": {
+      "get": {
+        "operationId": "wfListCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.WorkflowList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.core.v1.WorkflowList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all Workflow instances in this namespace.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "post": {
+        "description": "create a Workflow",
+        "operationId": "wfCreateCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "the namespace scope in which to create the Workflow",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.nokia.eda.core.v1.Workflow"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowId"
+                }
+              }
+            },
+            "description": "The response for a successful POST workflows request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/core.eda.nokia.com/v1/namespaces/{namespace}/workflows/{name}": {
+      "delete": {
+        "operationId": "wfDeleteCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "name of the Workflow",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no data is returned for this response type."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Delete a Workflow workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "get": {
+        "operationId": "wfReadCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "name of the Workflow",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.Workflow"
+                }
+              }
+            },
+            "description": "com.nokia.eda.core.v1.Workflow"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read the specified Workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/core.eda.nokia.com/v1/namespaces/{namespace}/workflows/{name}/_artifacts": {
+      "get": {
+        "operationId": "wfListArtifactsCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "name of the Workflow",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "The response for a successful list artifacts request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read list of artifacts generated by a Workflow workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/core.eda.nokia.com/v1/namespaces/{namespace}/workflows/{name}/_artifacts/{artifact}": {
+      "get": {
+        "operationId": "wfReadArtifactCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "name of the Workflow",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "name of the artifact to download",
+            "in": "path",
+            "name": "artifact",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The binary content of the requested artifact."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read artifact generated by a Workflow workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/core.eda.nokia.com/v1/namespaces/{namespace}/workflows/{name}/_input": {
+      "get": {
+        "operationId": "wfListInputCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "name of the Workflow",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkflowGetInputsRespElem"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List containing specifications for this flow & subflow's requested input."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Get inputs requested by the Workflow.",
+        "tags": [
+          "workflows"
+        ]
+      },
+      "put": {
+        "operationId": "wfSubmitInputCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "name of the Workflow",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowInputData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {},
+            "description": ""
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Submit input requested by the Workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/core.eda.nokia.com/v1/namespaces/{namespace}/workflows/{name}/_logs": {
+      "get": {
+        "operationId": "wfReadLogsCoreEdaNokiaComV1NamespaceWorkflows",
+        "parameters": [
+          {
+            "description": "name of the Workflow",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "the namespace scope in which to operate",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The response for a successful GET logs request."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "Read logs output by the Workflow.",
+        "tags": [
+          "workflows"
+        ]
+      }
+    },
+    "/workflows/v1/core.eda.nokia.com/v1/workflows": {
+      "get": {
+        "operationId": "wfListCoreEdaNokiaComV1Workflows",
+        "parameters": [
+          {
+            "description": "client information for streaming request",
+            "in": "query",
+            "name": "eventclient",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "stream information for streaming request",
+            "in": "query",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a comma-separated list of resource fields to fetch/return.  If unspecified, all fields are fetched.  If empty, only key-fields are fetched.",
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "an EQL \"where\" expression that will be used to filter the set of resources returned.",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "a label selector string to filter the results based on CR labels",
+            "in": "query",
+            "name": "label-selector",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.nokia.eda.core.v1.WorkflowList"
+                }
+              }
+            },
+            "description": "com.nokia.eda.core.v1.WorkflowList"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Details of an error in response to an API REST request."
+          }
+        },
+        "summary": "List all Workflow instances.",
+        "tags": [
+          "workflows"
         ]
       }
     }

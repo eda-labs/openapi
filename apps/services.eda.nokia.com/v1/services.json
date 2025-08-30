@@ -681,15 +681,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "BridgeDomain",
+            "pattern": "^BridgeDomain$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to BridgeDomain",
               "ui-visible-if": "false"
             }
           },
@@ -1365,15 +1369,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "BridgeInterface",
+            "pattern": "^BridgeInterface$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to BridgeInterface",
               "ui-visible-if": "false"
             }
           },
@@ -2006,15 +2014,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DHCPRelay",
+            "pattern": "^DHCPRelay$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DHCPRelay",
               "ui-visible-if": "false"
             }
           },
@@ -2276,15 +2288,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "EdgePing",
+            "pattern": "^EdgePing$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to EdgePing",
               "ui-visible-if": "false"
             }
           },
@@ -2452,15 +2468,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "IRBInterface",
+            "pattern": "^IRBInterface$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to IRBInterface",
               "ui-visible-if": "false"
             }
           },
@@ -3616,15 +3636,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "RoutedInterface",
+            "pattern": "^RoutedInterface$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to RoutedInterface",
               "ui-visible-if": "false"
             }
           },
@@ -4558,15 +4582,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Router",
+            "pattern": "^Router$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Router",
               "ui-visible-if": "false"
             }
           },
@@ -5415,15 +5443,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "VLAN",
+            "pattern": "^VLAN$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to VLAN",
               "ui-visible-if": "false"
             }
           },
@@ -6087,15 +6119,19 @@
         "properties": {
           "apiVersion": {
             "default": "services.eda.nokia.com/v1",
+            "pattern": "^services\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to services.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "VirtualNetwork",
+            "pattern": "^VirtualNetwork$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to VirtualNetwork",
               "ui-visible-if": "false"
             }
           },

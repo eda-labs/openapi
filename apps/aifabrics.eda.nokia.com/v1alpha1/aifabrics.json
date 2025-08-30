@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "aifabrics.eda.nokia.com/v1alpha1",
+            "pattern": "^aifabrics\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to aifabrics.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Backend",
+            "pattern": "^Backend$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Backend",
               "ui-visible-if": "false"
             }
           },

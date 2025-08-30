@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "aaa.eda.nokia.com/v1alpha1",
+            "pattern": "^aaa\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to aaa.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "NodeGroup",
+            "pattern": "^NodeGroup$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to NodeGroup",
               "ui-visible-if": "false"
             }
           },

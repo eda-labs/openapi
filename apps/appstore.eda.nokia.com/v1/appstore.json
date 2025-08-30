@@ -681,15 +681,19 @@
         "properties": {
           "apiVersion": {
             "default": "appstore.eda.nokia.com/v1",
+            "pattern": "^appstore\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to appstore.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "AppInstaller",
+            "pattern": "^AppInstaller$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to AppInstaller",
               "ui-visible-if": "false"
             }
           },
@@ -710,8 +714,7 @@
                     "appSettings": {
                       "description": "AppSettings defines a list of variables and their value. Only variables that are customised need to be mentioned.\nIf AppSettings are not again mentioned on upgrade, values will remain as is.",
                       "format": "json",
-                      "title": "App Settings",
-                      "type": "object"
+                      "title": "App Settings"
                     },
                     "catalog": {
                       "description": "Catalog of the app to be installed.\nThis is where app manifest is retrieved from, along with some other metadata.",
@@ -900,15 +903,19 @@
         "properties": {
           "apiVersion": {
             "default": "appstore.eda.nokia.com/v1",
+            "pattern": "^appstore\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to appstore.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Catalog",
+            "pattern": "^Catalog$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Catalog",
               "ui-visible-if": "false"
             }
           },
@@ -1134,15 +1141,19 @@
         "properties": {
           "apiVersion": {
             "default": "appstore.eda.nokia.com/v1",
+            "pattern": "^appstore\\.eda\\.nokia\\.com/v1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to appstore.eda.nokia.com/v1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Registry",
+            "pattern": "^Registry$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Registry",
               "ui-visible-if": "false"
             }
           },

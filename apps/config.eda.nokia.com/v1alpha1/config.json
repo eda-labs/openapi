@@ -589,15 +589,19 @@
         "properties": {
           "apiVersion": {
             "default": "config.eda.nokia.com/v1alpha1",
+            "pattern": "^config\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to config.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Configlet",
+            "pattern": "^Configlet$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Configlet",
               "ui-visible-if": "false"
             }
           },

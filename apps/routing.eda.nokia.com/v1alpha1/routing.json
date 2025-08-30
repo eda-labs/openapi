@@ -681,15 +681,19 @@
         "properties": {
           "apiVersion": {
             "default": "routing.eda.nokia.com/v1alpha1",
+            "pattern": "^routing\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routing.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "AttachmentLookup",
+            "pattern": "^AttachmentLookup$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to AttachmentLookup",
               "ui-visible-if": "false"
             }
           },
@@ -891,15 +895,19 @@
         "properties": {
           "apiVersion": {
             "default": "routing.eda.nokia.com/v1alpha1",
+            "pattern": "^routing\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routing.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultInterface",
+            "pattern": "^DefaultInterface$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultInterface",
               "ui-visible-if": "false"
             }
           },
@@ -1352,15 +1360,19 @@
         "properties": {
           "apiVersion": {
             "default": "routing.eda.nokia.com/v1alpha1",
+            "pattern": "^routing\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routing.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "DefaultRouter",
+            "pattern": "^DefaultRouter$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to DefaultRouter",
               "ui-visible-if": "false"
             }
           },
@@ -2092,15 +2104,19 @@
         "properties": {
           "apiVersion": {
             "default": "routing.eda.nokia.com/v1alpha1",
+            "pattern": "^routing\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routing.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "Drain",
+            "pattern": "^Drain$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to Drain",
               "ui-visible-if": "false"
             }
           },
@@ -2338,15 +2354,19 @@
         "properties": {
           "apiVersion": {
             "default": "routing.eda.nokia.com/v1alpha1",
+            "pattern": "^routing\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routing.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "RouteLookup",
+            "pattern": "^RouteLookup$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to RouteLookup",
               "ui-visible-if": "false"
             }
           },
@@ -2625,15 +2645,19 @@
         "properties": {
           "apiVersion": {
             "default": "routing.eda.nokia.com/v1alpha1",
+            "pattern": "^routing\\.eda\\.nokia\\.com/v1alpha1$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The apiVersion must be set to routing.eda.nokia.com/v1alpha1",
               "ui-visible-if": "false"
             }
           },
           "kind": {
             "default": "SystemInterface",
+            "pattern": "^SystemInterface$",
             "type": "string",
             "x-eda-nokia-com": {
+              "ui-pattern-error": "The kind must be set to SystemInterface",
               "ui-visible-if": "false"
             }
           },
